@@ -1,18 +1,25 @@
 {
   "name": "visual-kg-histroy",
   "version": "1.0.0",
-  "description": "",
+  "description": "A historical knowledge map of the Spring and Autumn Period and the Warring States Period supported by the graph database Neo4j",
   "main": "index.js",
   "scripts": {
+    "start": "node ",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "CCP101",
   "license": "ISC",
   "dependencies": {
+    "@antv/g6": "^4.6.4",
+    "express": "^4.17.3",
     "koa": "^2.13.4",
     "koa-router": "^10.1.1",
     "koa2-cors": "^2.0.6",
     "neo4j-driver": "^4.4.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://https://github.com/CCP101/visual-kg-histroy.git"
   }
 }

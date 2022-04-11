@@ -1,9 +1,9 @@
-const Koa = require('koa')
-const router = require('koa-router')
-const cors = require('koa2-cors')
-const neo4j = require('neo4j-driver')
-const os = require('os')
-const app = new Koa()
+const Koa = require('koa');
+const router = require('koa-router')();
+const cors = require('koa2-cors');
+const neo4jc = require('./neo4j');
+const os = require('os');
+const app = new Koa();
 let myHost = '';
 
 function getIPAdd() {
@@ -15,20 +15,20 @@ function getIPAdd() {
     }
     ifaces[dev].forEach(function(details) {
         if (details.family === 'IPv4') {
-            let adr = details.address
-            myHost = adr
-            return adr
+            let adr = details.address;
+            myHost = adr;
+            return adr;
         }
     })
 }
 
 getIPAdd()
 
-router.get('/all', (ctx, next) => {
-    console.log(myHost);
-    let client_list = new Set()
-    let clientHost = ctx.req.connection.remoteAddress.slice(7, )
-    let query
+router.get('/query', (ctx, next) => {
+    // console.log(myHost);
+    let client_list = new Set();
+    let clientHost = ctx.req.connection.remoteAddress.slice(7, );
+    let query;
     // 从主页访问的情况
 
     if (ctx.req.headers.origin) {
@@ -46,9 +46,9 @@ router.get('/all', (ctx, next) => {
         console.log(clientHost + '正在访问3000端口并请求，已返回空');
         query = {query: 'MATCH (n:Error) RETURN n'};
     }
-
+    // 打印当前查询
     console.log(query);
-    return neo4j.neo4jConnect(query.query).then(nodes => {
+    return neo4jc.neo4jConnect(query.query).then(nodes => {
         ctx.body = nodes
     })
 });
@@ -63,7 +63,7 @@ app.use(async(ctx, next) => {
 });
 
 
-app.use(cors())
-app.use(router.routes())
-app.use(router.allowedMethods())
-app.listen(3000)
+app.use(cors());
+app.use(router.routes());
+app.use(router.allowedMethods());
+app.listen(3000);

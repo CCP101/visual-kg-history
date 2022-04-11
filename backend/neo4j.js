@@ -1,6 +1,6 @@
-function neo4jConnect(query) {
-    return new Promise((resolve) => {
-        console.log(resolve);
+function neo4jConnect(query,rec) {
+    return new Promise((resolve,reject) => {
+        // console.log(resolve);
         let neo4j = require('neo4j-driver');
         let driver = neo4j.driver(
             'neo4j://localhost',
@@ -10,10 +10,11 @@ function neo4jConnect(query) {
             .run(query)
             .subscribe({
                 onKeys: keys => {
-                    console.log(keys)
+                    // console.log(keys)
                 },
+                // 打印查询结果 需要根据内容更改筛选器
                 onNext: record => {
-                    console.log(record.get('n.name'))
+                    // console.log(record.get(rec))
                 },
                 onCompleted: (result) => {
                     resolve(result);

@@ -16,6 +16,7 @@
 <script type="text/javascript" src="js/src/axios.min.js"></script>
 <script type="text/javascript" src="js/src/jquery.autocomplete.js"></script>
 <script type="text/javascript" src="js/formattrans.js"></script>
+<script type="text/javascript" src="js/homepage.js"></script>
 
 <!-- /* 图的画布容器 */ -->
 <div id="banner">
@@ -43,7 +44,6 @@
         <div id="property">
             <h3>Show Properties</h3>
             <div id="proul">
-
             </div>
         </div>
     </div>
@@ -58,155 +58,71 @@
 </div>
 
 <script>
-    const config = {
-        ip: 'http://' + window.location.hostname.toString(),
-        port: 3000,
 
-    }
-    console.log(config)
-
-    const color_set = ["#dd6b66",
-        "#759aa0",
-        "#e69d87",
-        "#8dc1a9",
-        "#ea7e53",
-        "#eedd78",
-        "#73a373",
-        "#73b9bc",
-        "#7289ab",
-        "#91ca8c",
-        "#f49f42"
-    ]
-
-    // autocomplete
-    window.onload = async function() {
-        const person_info = {
-            category: 'Person',
-            search_type: 'name',
-        }
-        const movie_info = {
-            category: 'Movie',
-            search_type: 'name',
-        }
-
-        const Person_Teams = await getData(`MATCH (n:${person_info.category}) RETURN n.${person_info.search_type}`);
-        const Movie_Teams = await getData(`MATCH (n:${movie_info.category}) RETURN n.${movie_info.search_type}`);
-        var p = $.map(Person_Teams, function(team) {
-            return {
-                value: team,
-                data: person_info
-            };
-        });
-        var m = $.map(Movie_Teams, function(team) {
-            return {
-                value: team,
-                data: movie_info
-            };
-        });
-        var teams = p.concat(m);
-        // Initialize autocomplete with local lookup:
-        $('#autocomplete').devbridgeAutocomplete({
-            lookup: teams,
-
-            minChars: 1,
-            onSelect: function(suggestion) {
-                console.log(suggestion.data);
-                readNeo4j(suggestion, 3);
-
-            },
-            showNoSuggestionNotice: true,
-            noSuggestionNotice: 'Sorry.. Try other keywords...',
-            groupBy: 'category'
-        });
-
-        var entity_list = await getData(`MATCH(n) RETURN distinct labels(n), count(n)`);
-        var rela_list = await getData(`MATCH p=()-[r]->() RETURN distinct type(r), count(r)`);
-        // console.log(entity_list);
-        for (let entity in entity_list) {
-
-            $('#entity').append(`<button class="entity_btn" onclick="readNeo4j(this,0)" name='${entity_list[entity][0]}'><b>${entity_list[entity][0]}</b> (${entity_list[entity][1]})</button>`);
-            $('#entity_rela').append(`<button class="entity_rela_btn" onclick="readNeo4j(this,1)" name='${entity_list[entity][0]}'><b>${entity_list[entity][0]}</b> (${entity_list[entity][1]})</button>`);
-        }
-        for (let relation in rela_list) {
-            $('#relation').append(`<button class="rela_btn" onclick="readNeo4j(this,4)" name='${rela_list[relation][0]}'><b>${rela_list[relation][0]}</b> (${rela_list[relation][1]})</button>`);
-        }
-    };
+    // function readNeo4j(node, mode) {
+    //     console.log(node);
+    //     // show entities
+    //     if (mode === 0) {
+    //         console.log(node);
+    //         var q = `MATCH p=(n:${node.name}) RETURN n,labels(n) LIMIT 100`;
+    //         // show relationships of entity
+    //     } else if (mode == 1) {
+    //         var q = `MATCH p=(n:${node.name})-[a]-(x) RETURN n,labels(n),a,type(a),x,labels(x) LIMIT 100`;
+    //         // show relationships
+    //     } else if (mode == 4) {
+    //         var q = `MATCH p=(n)-[r:${node.name}]->(x) RETURN n,labels(n),r,type(r),x,labels(x) LIMIT 25`;
+    //         // Doble click to expand
+    //     } else if (mode == 2) {
+    //         var q = `MATCH (n)-[a]-(x) WHERE id(n)=${node.id} RETURN n,labels(n),a,type(a),x,labels(x) LIMIT 100`;
+    //         $('#autocomplete').val(node.label);
+    //         //Search from Search Box
+    //     } else if (mode == 3) {
+    //         var q = `MATCH (n:${node.data.category}{${node.data.search_type}:'${node.value}'})-[a]-(x) RETURN n,labels(n),a,type(a),x,labels(x)`;
+    //         // console.log(q);
+    //         $('#autocomplete').val(node.value);
+    //
+    //     }
+    //     return new Promise((resolve, reject) => {
+    //         // console.log(`${config.ip}:${config.port}/all`);
+    //         axios.get(`${config.ip}:${config.port}/all`, {
+    //             params: {
+    //                 query: q
+    //             }
+    //         }).then(res => {
+    //             console.log(res.data)
+    //             content = nodesFoldToD3(res.data);
+    //
+    //             // console.log(content)
+    //             content = JSON.parse(content);
+    //             var data = content;
+    //             // console.log(data);
+    //             changeStyle(data)
+    //             graph.data(data);
+    //             graph.render();
+    //             //  console.log(content);
+    //
+    //
+    //         }).catch(err => {
+    //             console.log(err)
+    //         })
+    //     });
+    // }
+    //
+    // function toggleSidebar() {
+    //
+    //     $("body").toggleClass("big-page");
+    //     var obj = this;
+    //     $(obj).toggleClass("selected");
+    //
+    //
+    //     return false;
+    // }
+    //
+    //
+    //
+    // $("#side_change").click(toggleSidebar);
 
 
-    function readNeo4j(node, mode) {
-        console.log(node);
-        // show entities
-        if (mode == 0) {
-            console.log(node);
-            var q = `MATCH p=(n:${node.name}) RETURN n,labels(n) LIMIT 100`;
-            // show relationships of entity
-        } else if (mode == 1) {
-            var q = `MATCH p=(n:${node.name})-[a]-(x) RETURN n,labels(n),a,type(a),x,labels(x) LIMIT 100`;
-            // show relationships
-        } else if (mode == 4) {
-            var q = `MATCH p=(n)-[r:${node.name}]->(x) RETURN n,labels(n),r,type(r),x,labels(x) LIMIT 25`;
-            // Doble click to expand
-        } else if (mode == 2) {
-            var q = `MATCH (n)-[a]-(x) WHERE id(n)=${node.id} RETURN n,labels(n),a,type(a),x,labels(x) LIMIT 100`;
-            $('#autocomplete').val(node.label);
-            //Search from Search Box
-        } else if (mode == 3) {
-            var q = `MATCH (n:${node.data.category}{${node.data.search_type}:'${node.value}'})-[a]-(x) RETURN n,labels(n),a,type(a),x,labels(x)`;
-            // console.log(q);
-            $('#autocomplete').val(node.value);
-
-        }
-        return new Promise((resolve, reject) => {
-            // console.log(`${config.ip}:${config.port}/all`);
-            axios.get(`${config.ip}:${config.port}/all`, {
-                params: {
-                    query: q
-                }
-            }).then(res => {
-                console.log(res.data)
-                content = nodesFoldToD3(res.data);
-
-                // console.log(content)
-                content = JSON.parse(content);
-                var data = content;
-                // console.log(data);
-                changeStyle(data)
-                graph.data(data);
-                graph.render();
-                //  console.log(content);
-
-
-            }).catch(err => {
-                console.log(err)
-            })
-        });
-    }
-
-    function toggleSidebar() {
-
-        $("body").toggleClass("big-page");
-        var obj = this;
-        $(obj).toggleClass("selected");
-
-
-        return false;
-    }
-
-
-
-    $("#side_change").click(toggleSidebar);
-
-    async function getFromNeo4j(para) {
-
-        return await axios.get(`${config.ip}:${config.port}/all?query=${para}`)
-    }
-
-    async function getData(para) {
-        let neo4jData = await getFromNeo4j(para);
-        return neo4jData.data.data
-
-        // return group_Teams
-    }
 </script>
 <script>
     // G6 action
