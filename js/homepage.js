@@ -26,17 +26,17 @@ window.onload = async function() {
         search_type: 'title'
     };
 
-    var Person_Teams = await getData(`MATCH (n:${person_info.category}) RETURN n.${person_info.search_type}`);
-    var Movie_Teams = await getData(`MATCH (n:${movie_info.category}) RETURN n.${movie_info.search_type}`);
+    let Person_Teams = await getData(`MATCH (n:${person_info.category}) RETURN n.${person_info.search_type}`,person_info.search_type);
+    console.log(Person_Teams)
+    let Movie_Teams = await getData(`MATCH (n:${movie_info.category}) RETURN n.${movie_info.search_type}`,movie_info.search_type);
+    console.log(Movie_Teams)
     var p = $.map(Person_Teams, function(team) {
         return {
             value: team,
             data: person_info
         };
     });
-    for (var key in Movie_Teams) {
-        console.log(key);
-    }
+
 
     var m = $.map(Movie_Teams, function(team) {
         return {
@@ -47,7 +47,6 @@ window.onload = async function() {
     var teams = p.concat(m);
     console.log(teams)
     // Initialize autocomplete with local lookup:
-    // sss
     $('#autocomplete').devbridgeAutocomplete({
         lookup: teams,
 
@@ -62,23 +61,30 @@ window.onload = async function() {
         groupBy: 'category'
     });
 
-    var entity_list = await getData(`MATCH(n) RETURN distinct labels(n), count(n)`);
-    var rela_list = await getData(`MATCH p=()-[r]->() RETURN distinct type(r), count(r)`);
+    // var entity_list = await getData(`MATCH(n) RETURN distinct labels(n), count(n)`);
+    // var rela_list = await getData(`MATCH p=()-[r]->() RETURN distinct type(r), count(r)`);
 
-    for (let entity in entity_list) {
-        $('#entity').append(`<button class="entity_btn" onclick="readNeo4j(this,0)" name='${entity_list[entity][0]}'><b>${entity_list[entity][0]}</b> (${entity_list[entity][1]})</button>`);
-        $('#entity_rela').append(`<button class="entity_rela_btn" onclick="readNeo4j(this,1)" name='${entity_list[entity][0]}'><b>${entity_list[entity][0]}</b> (${entity_list[entity][1]})</button>`);
-    }
-    for (let relation in rela_list) {
-        $('#relation').append(`<button class="rela_btn" onclick="readNeo4j(this,4)" name='${rela_list[relation][0]}'><b>${rela_list[relation][0]}</b> (${rela_list[relation][1]})</button>`);
-    }
+    // for (let entity in entity_list) {
+    //     $('#entity').append(`<button class="entity_btn" onclick="readNeo4j(this,0)" name='${entity_list[entity][0]}'><b>${entity_list[entity][0]}</b> (${entity_list[entity][1]})</button>`);
+    //     $('#entity_rela').append(`<button class="entity_rela_btn" onclick="readNeo4j(this,1)" name='${entity_list[entity][0]}'><b>${entity_list[entity][0]}</b> (${entity_list[entity][1]})</button>`);
+    // }
+    // for (let relation in rela_list) {
+    //     $('#relation').append(`<button class="rela_btn" onclick="readNeo4j(this,4)" name='${rela_list[relation][0]}'><b>${rela_list[relation][0]}</b> (${rela_list[relation][1]})</button>`);
+    // }
 };
 
-async function getFromNeo4j(para) {
-    return await axios.get(`${config.ip}:${config.port}/query?query=${para}`)
-}
 
-async function getData(para) {
-    let neo4jData = await getFromNeo4j(para);
-    return neo4jData.data.data
+async function getData(para,key) {
+    return new Promise((resolve, reject) => {
+        let novelist = []
+        axios.get(`${config.ip}:${config.port}/node?query=${para}&key=${key}`)
+            .then(function(response){
+                novelist = response.data
+                // console.log(novelist);
+                resolve(novelist);
+            })
+            .catch(function(err){
+                console.log(err);
+            });
+    });
 }
