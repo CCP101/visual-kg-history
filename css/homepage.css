@@ -175,7 +175,8 @@ canvas {
     background-color: #0b2838;
     text-decoration: none;
     border: 2px solid transparent;
-    cursor: pointer
+    cursor: pointer;
+
 }
 
 .banner_btn {

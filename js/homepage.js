@@ -25,19 +25,23 @@ window.onload = async function() {
         category: 'Movie',
         search_type: 'title'
     };
+    const person_history = {
+        category: 'DPerson',
+        search_type: 'name'
+    };
 
     let Person_Teams = await getData(`MATCH (n:${person_info.category}) RETURN n.${person_info.search_type}`,person_info.search_type);
-    console.log(Person_Teams)
+    // console.log(Person_Teams)
     let Movie_Teams = await getData(`MATCH (n:${movie_info.category}) RETURN n.${movie_info.search_type}`,movie_info.search_type);
-    console.log(Movie_Teams)
+    // console.log(Movie_Teams)
+    let HPerson_Teams = await getData(`MATCH (n:${person_history.category}) RETURN n.${person_history.search_type}`,person_history.search_type);
+    // console.log(HPerson_Teams)
     var p = $.map(Person_Teams, function(team) {
         return {
             value: team,
             data: person_info
         };
     });
-
-
     var m = $.map(Movie_Teams, function(team) {
         return {
             value: team,
@@ -46,24 +50,30 @@ window.onload = async function() {
     });
     var teams = p.concat(m);
     console.log(teams)
-    // Initialize autocomplete with local lookup:
-    $('#autocomplete').devbridgeAutocomplete({
-        lookup: teams,
+    for (let person in HPerson_Teams){
+        console.log(HPerson_Teams[person])
+        $('#entity').append(`<button class="entity_btn" name='${HPerson_Teams[person]}'>'${HPerson_Teams[person]}'<b>`);
+    }
 
-        minChars: 1,
-        onSelect: function(suggestion) {
-            console.log(suggestion.data);
-            readNeo4j(suggestion, 3);
 
-        },
-        showNoSuggestionNotice: true,
-        noSuggestionNotice: 'Sorry.. Try other keywords...',
-        groupBy: 'category'
-    });
+    //  Initialize autocomplete with local lookup:
+    // $('#autocomplete').devbridgeAutocomplete({
+    //     lookup: teams,
+    //
+    //     minChars: 1,
+    //     onSelect: function(suggestion) {
+    //         console.log(suggestion.data);
+    //         readNeo4j(suggestion, 3);
+    //
+    //     },
+    //     showNoSuggestionNotice: true,
+    //     noSuggestionNotice: 'Sorry.. Try other keywords...',
+    //     groupBy: 'category'
+    // });
 
     // var entity_list = await getData(`MATCH(n) RETURN distinct labels(n), count(n)`);
     // var rela_list = await getData(`MATCH p=()-[r]->() RETURN distinct type(r), count(r)`);
-
+    //
     // for (let entity in entity_list) {
     //     $('#entity').append(`<button class="entity_btn" onclick="readNeo4j(this,0)" name='${entity_list[entity][0]}'><b>${entity_list[entity][0]}</b> (${entity_list[entity][1]})</button>`);
     //     $('#entity_rela').append(`<button class="entity_rela_btn" onclick="readNeo4j(this,1)" name='${entity_list[entity][0]}'><b>${entity_list[entity][0]}</b> (${entity_list[entity][1]})</button>`);
