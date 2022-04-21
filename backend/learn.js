@@ -1,3 +1,5 @@
+// 后端调试用，不起实际作用
+
 let m = new Map([['Michael', 95], ['Bob', 75], ['Tracy', 85]]);
 console.log(m.get('Michael')); // 95
 

@@ -7,6 +7,9 @@ const driver = neo4j.driver('neo4j://localhost', neo4j.auth.basic('neo4j', 'neo4
 const app = new Koa();
 let myHost = '';
 
+/**
+ * 对本地IP进行过滤及修改
+ */
 function getIPAdd() {
     let ifaces = os.networkInterfaces()
     for (var dev in ifaces) {
@@ -25,6 +28,13 @@ function getIPAdd() {
 
 getIPAdd()
 
+
+/**
+ * Neo4j普通查询实现
+ * @param query Cypher语句
+ * @param key 查询关键字段
+ * @return {Promise<any>} 以期约方式返回Neo4j查询结果
+ */
 function NodesPromise(query,key) {
     return new Promise((resolve, reject) => {
         let session = driver.session({defaultAccessMode: neo4j.session.READ});
@@ -51,6 +61,10 @@ function NodesPromise(query,key) {
     });
 }
 
+/**
+ * 对node请求进行监听
+ * @return NodesPromise 调用函数
+ */
 router.get('/node', (ctx) => {
     // console.log(myHost);
     let client_list = new Set();
@@ -99,6 +113,6 @@ app.use(router.routes());
 app.use(router.allowedMethods());
 app.listen(3000);
 
-process.on("UnhandledRejection",(reason, promise)=>{
+process.on("unhandledrejection",(reason, promise)=>{
     console.log(reason, promise)
 })

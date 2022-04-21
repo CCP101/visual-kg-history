@@ -19,6 +19,12 @@ const color_set = ["#dd6b66",
     "#f49f42"
 ]
 
+/**
+ * 异步实现Neo4j查询
+ * @param para 查询语句
+ * @param key 查询关键字段
+ * @return {Promise<any>} 以期约方式返回Neo4j查询结果
+ */
 async function getData(para, key) {
     return new Promise((resolve, reject) => {
         let novelist = []
@@ -35,6 +41,9 @@ async function getData(para, key) {
     });
 }
 
+/**
+ * 异步实现网页首次启动时的默认查询
+ */
 async function getDatabaseFirst() {
     const person_history = {
         category: 'DPerson',
@@ -42,6 +51,7 @@ async function getDatabaseFirst() {
     };
     let HPerson_Teams = await getData(`MATCH (n:${person_history.category}) RETURN n LIMIT 200`,`n`);
     let HPerson_Relation = await getData(`MATCH (P1:DPerson)-[r]-(P2:DPerson) RETURN r LIMIT 200`,"r");
+    //Neo4j查询结果转换为G6的数据格式
     for (let node of HPerson_Teams){
         nodes.push({
             id: "node-" + node.identity.low,
@@ -67,16 +77,6 @@ async function getDatabaseFirst() {
     }
 }
 
-window.onload = async function() {
-    await getDatabaseFirst();
-    console.log(edges);
-    graph.data({
-        "nodes": nodes,
-        "edges": edges
-    });
-    graph.render();
-};
-
 G6.registerBehavior('node-activate', {
     getDefaultCfg() {
         return {
@@ -89,23 +89,21 @@ G6.registerBehavior('node-activate', {
             'node:dblclick': 'onDblclick'
         };
     },
-    // onMouseenter(e) {
-    //
-    //     $('#proul').children().remove();
-    //     var pros = $.extend({}, e.item.getModel().properties);
-    //
-    //     for (var p in pros) {
-    //         $('#proul').append(
-    //             '<ul class="pro_slider"><li><b>' + p + ' : </b> ' + pros[p] + '</li>')
-    //     }
-    // },
+    onMouseenter(e) {
+        $('#proul').children().remove();
+        let pros = $.extend({}, e.item.getModel().properties);
+
+        for (let p in pros) {
+            $('#proul').append(
+                '<ul class="pro_slider"><li><b>' + p + ' : </b> ' + pros[p] + '</li>')
+        }
+    },
     //
     // onDblclick(e) {
     //     readNeo4j(e.item.getModel(), 2)
     //     // console.log(e.item.getModel());
     // }
 });
-
 
 const graph = new G6.Graph({
     container: 'mountNode',
@@ -151,8 +149,15 @@ const graph = new G6.Graph({
     }
 });
 
-
-
-
-
-
+/**
+ * 查询实现顶部入口
+ */
+window.onload = async function() {
+    await getDatabaseFirst();
+    console.log(edges);
+    graph.data({
+        "nodes": nodes,
+        "edges": edges
+    });
+    graph.render();
+};

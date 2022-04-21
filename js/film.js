@@ -1,3 +1,5 @@
+// 前端调试用，不起实际作用
+
 window.onload = async function() {
     const person_info = {
         category: 'Person',
