@@ -1,6 +1,3 @@
-function random(l, u) {
-    return Math.floor(Math.random() * (u - l + 1)) + l
-}
 
 function nodesFoldToD3(d) {
     let data;

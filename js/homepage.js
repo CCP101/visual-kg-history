@@ -1,3 +1,6 @@
+let nodes = [];
+let edges = [];
+
 const config = {
     ip: 'http://' + window.location.hostname.toString(),
     port: 3000,
@@ -37,9 +40,8 @@ async function getDatabaseFirst() {
         category: 'DPerson',
         search_type: 'name'
     };
-    let HPerson_Teams = await getData(`MATCH (n:${person_history.category}) RETURN n`,`n`);
-    let HPerson_Relation = await getData(`MATCH (P1:DPerson)-[r]-(P2:DPerson) RETURN r `,"r");
-    console.log(HPerson_Relation)
+    let HPerson_Teams = await getData(`MATCH (n:${person_history.category}) RETURN n LIMIT 200`,`n`);
+    let HPerson_Relation = await getData(`MATCH (P1:DPerson)-[r]-(P2:DPerson) RETURN r LIMIT 200`,"r");
     for (let node of HPerson_Teams){
         nodes.push({
             id: "node-" + node.identity.low,
@@ -65,29 +67,91 @@ async function getDatabaseFirst() {
     }
 }
 
-let nodes = [];
-let edges = [];
-
 window.onload = async function() {
     await getDatabaseFirst();
-    // console.log(nodes)
-    console.log(edges)
-
-
-
-
-
-
-
-
-    // for (let entity in entity_list) {
-    //     $('#entity').append(`<button class="entity_btn" onclick="readNeo4j(this,0)" name='${entity_list[entity][0]}'><b>${entity_list[entity][0]}</b> (${entity_list[entity][1]})</button>`);
-    //     $('#entity_rela').append(`<button class="entity_rela_btn" onclick="readNeo4j(this,1)" name='${entity_list[entity][0]}'><b>${entity_list[entity][0]}</b> (${entity_list[entity][1]})</button>`);
-    // }
-    // for (let relation in rela_list) {
-    //     $('#relation').append(`<button class="rela_btn" onclick="readNeo4j(this,4)" name='${rela_list[relation][0]}'><b>${rela_list[relation][0]}</b> (${rela_list[relation][1]})</button>`);
-    // }
+    console.log(edges);
+    graph.data({
+        "nodes": nodes,
+        "edges": edges
+    });
+    graph.render();
 };
+
+G6.registerBehavior('node-activate', {
+    getDefaultCfg() {
+        return {
+            multiple: true
+        };
+    },
+    getEvents() {
+        return {
+            'node:mouseenter': 'onMouseenter',
+            'node:dblclick': 'onDblclick'
+        };
+    },
+    // onMouseenter(e) {
+    //
+    //     $('#proul').children().remove();
+    //     var pros = $.extend({}, e.item.getModel().properties);
+    //
+    //     for (var p in pros) {
+    //         $('#proul').append(
+    //             '<ul class="pro_slider"><li><b>' + p + ' : </b> ' + pros[p] + '</li>')
+    //     }
+    // },
+    //
+    // onDblclick(e) {
+    //     readNeo4j(e.item.getModel(), 2)
+    //     // console.log(e.item.getModel());
+    // }
+});
+
+
+const graph = new G6.Graph({
+    container: 'mountNode',
+    width: window.screen.availWidth,
+    height: 800,
+    modes: {
+        default: ['drag-node', 'node-activate'],
+    },
+    layout: {
+        type: 'force',
+        center: [window.screen.availWidth * 0.45, document.body.clientHeight * 0.4],
+        preventOverlap: true,
+        linkDistance: 180,
+    },
+
+    defaultNode: {
+        size: 28,
+        color: '#5B8FF9',
+        style: {
+            lineWidth: 2,
+            fill: '',
+            stroke: '',
+        },
+        label: 'node-label',
+        labelCfg: {
+            position: 'top',
+            style: {
+                fill: '#ddd',
+            },
+        }
+
+    },
+    defaultEdge: {
+        size: 1,
+        color: '#aaa',
+        label: 'node-label',
+        labelCfg: {
+            style: {
+                fill: '#ddd',
+                stroke: '',
+            },
+        },
+    }
+});
+
+
 
 
 
