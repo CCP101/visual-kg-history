@@ -56,73 +56,7 @@
 
 </div>
 
-<script>
 
-    // function readNeo4j(node, mode) {
-    //     console.log(node);
-    //     // show entities
-    //     if (mode === 0) {
-    //         console.log(node);
-    //         var q = `MATCH p=(n:${node.name}) RETURN n,labels(n) LIMIT 100`;
-    //         // show relationships of entity
-    //     } else if (mode == 1) {
-    //         var q = `MATCH p=(n:${node.name})-[a]-(x) RETURN n,labels(n),a,type(a),x,labels(x) LIMIT 100`;
-    //         // show relationships
-    //     } else if (mode == 4) {
-    //         var q = `MATCH p=(n)-[r:${node.name}]->(x) RETURN n,labels(n),r,type(r),x,labels(x) LIMIT 25`;
-    //         // Doble click to expand
-    //     } else if (mode == 2) {
-    //         var q = `MATCH (n)-[a]-(x) WHERE id(n)=${node.id} RETURN n,labels(n),a,type(a),x,labels(x) LIMIT 100`;
-    //         $('#autocomplete').val(node.label);
-    //         //Search from Search Box
-    //     } else if (mode == 3) {
-    //         var q = `MATCH (n:${node.data.category}{${node.data.search_type}:'${node.value}'})-[a]-(x) RETURN n,labels(n),a,type(a),x,labels(x)`;
-    //         // console.log(q);
-    //         $('#autocomplete').val(node.value);
-    //
-    //     }
-    //     return new Promise((resolve, reject) => {
-    //         // console.log(`${config.ip}:${config.port}/all`);
-    //         axios.get(`${config.ip}:${config.port}/all`, {
-    //             params: {
-    //                 query: q
-    //             }
-    //         }).then(res => {
-    //             console.log(res.data)
-    //             content = nodesFoldToD3(res.data);
-    //
-    //             // console.log(content)
-    //             content = JSON.parse(content);
-    //             var data = content;
-    //             // console.log(data);
-    //             changeStyle(data)
-    //             graph.data(data);
-    //             graph.render();
-    //             //  console.log(content);
-    //
-    //
-    //         }).catch(err => {
-    //             console.log(err)
-    //         })
-    //     });
-    // }
-    //
-    // function toggleSidebar() {
-    //
-    //     $("body").toggleClass("big-page");
-    //     var obj = this;
-    //     $(obj).toggleClass("selected");
-    //
-    //
-    //     return false;
-    // }
-    //
-    //
-    //
-    // $("#side_change").click(toggleSidebar);
-
-
-</script>
 <script>
     G6.registerBehavior('node-activate', {
         getDefaultCfg() {
@@ -136,23 +70,22 @@
                 'node:dblclick': 'onDblclick'
             };
         },
-        onMouseenter(e) {
-
-            $('#proul').children().remove();
-            var pros = $.extend({}, e.item.getModel().properties);
-
-            for (var p in pros) {
-                $('#proul').append(
-                    '<ul class="pro_slider"><li><b>' + p + ' : </b> ' + pros[p] + '</li>')
-            }
-        },
-
-        onDblclick(e) {
-            readNeo4j(e.item.getModel(), 2)
-            // console.log(e.item.getModel());
-        }
+        // onMouseenter(e) {
+        //
+        //     $('#proul').children().remove();
+        //     var pros = $.extend({}, e.item.getModel().properties);
+        //
+        //     for (var p in pros) {
+        //         $('#proul').append(
+        //             '<ul class="pro_slider"><li><b>' + p + ' : </b> ' + pros[p] + '</li>')
+        //     }
+        // },
+        //
+        // onDblclick(e) {
+        //     readNeo4j(e.item.getModel(), 2)
+        //     // console.log(e.item.getModel());
+        // }
     });
-
 
 
     const graph = new G6.Graph({

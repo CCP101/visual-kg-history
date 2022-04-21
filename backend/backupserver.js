@@ -29,12 +29,11 @@ function NodesPromise(query,key) {
     return new Promise((resolve, reject) => {
         let session = driver.session({defaultAccessMode: neo4j.session.READ});
         let res = [];
-        key = "n.".concat(key)
         session
             .run(query)
             .subscribe({
                 onKeys: keys => {
-                    console.log(keys)
+                    // console.log(keys)
                 },
                 // 打印查询结果 需要根据内容更改筛选器
                 onNext: record => {
@@ -44,7 +43,6 @@ function NodesPromise(query,key) {
                 onCompleted: (result) => {
                     resolve(res);
                     session.close(); // returns a Promise
-                    // console.log(res)
                 },
                 onError: error => {
                     console.log(error)
@@ -81,7 +79,7 @@ router.get('/node', (ctx) => {
     console.log(query);
     return NodesPromise(query, key)
         .then(res => {
-        console.log(res)
+        // console.log(res)
         ctx.body = res
     })
 });
@@ -100,3 +98,7 @@ app.use(cors());
 app.use(router.routes());
 app.use(router.allowedMethods());
 app.listen(3000);
+
+process.on("UnhandledRejection",(reason, promise)=>{
+    console.log(reason, promise)
+})
