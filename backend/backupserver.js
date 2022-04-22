@@ -45,7 +45,6 @@ function NodesPromise(query,key) {
                 onKeys: keys => {
                     // console.log(keys)
                 },
-                // 打印查询结果 需要根据内容更改筛选器
                 onNext: record => {
                     res.push(record.get(key))
                     // console.log(key + "  " + record.get(key))

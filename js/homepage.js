@@ -49,6 +49,7 @@ async function getDatabaseFirst() {
         category: 'DPerson',
         search_type: 'name'
     };
+    let set = new Set();
     let HPerson_Teams = await getData(`MATCH (n:${person_history.category}) RETURN n LIMIT 200`,`n`);
     let HPerson_Relation = await getData(`MATCH (P1:DPerson)-[r]-(P2:DPerson) RETURN r LIMIT 200`,"r");
     //Neo4j查询结果转换为G6的数据格式
@@ -66,6 +67,13 @@ async function getDatabaseFirst() {
         })
     }
     for (let relation of HPerson_Relation) {
+        //TODO：重复边关系临时解决方案,可能是数据库问题
+        let edgeName = "edge-" + relation.start.low + "-" + relation.end.low;
+        if (set.has(edgeName)) {
+            continue;
+        }else{
+            set.add(edgeName);
+        }
         edges.push({
             id: "edge-" + relation.start.low + "-" + relation.end.low,
             source: "node-" + relation.start.low,
