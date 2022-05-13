@@ -115,3 +115,5 @@ app.listen(3000);
 process.on("unhandledrejection",(reason, promise)=>{
     console.log(reason, promise)
 })
+
+module.exports = NodesPromise;

@@ -50,8 +50,8 @@ async function getDatabaseFirst() {
         search_type: 'name'
     };
     let set = new Set();
-    let HPerson_Teams = await getData(`MATCH (n:${person_history.category}) RETURN n LIMIT 200`,`n`);
-    let HPerson_Relation = await getData(`MATCH (P1:DPerson)-[r]-(P2:DPerson) RETURN r LIMIT 200`,"r");
+    let HPerson_Teams = await getData(`MATCH (n:${person_history.category}) RETURN n LIMIT 100`,`n`);
+    let HPerson_Relation = await getData(`MATCH (P1:${person_history.category})-[r]-(P2:${person_history.category}) RETURN r `,"r");
     //Neo4j查询结果转换为G6的数据格式
     for (let node of HPerson_Teams){
         nodes.push({
@@ -122,7 +122,7 @@ const graph = new G6.Graph({
     },
     layout: {
         type: 'force',
-        center: [window.screen.availWidth * 0.45, document.body.clientHeight * 0.4],
+        center: [window.screen.availWidth * 0.45, document.body.clientHeight * 0.45],
         preventOverlap: true,
         linkDistance: 180,
     },
@@ -162,7 +162,6 @@ const graph = new G6.Graph({
  */
 window.onload = async function() {
     await getDatabaseFirst();
-    console.log(edges);
     graph.data({
         "nodes": nodes,
         "edges": edges

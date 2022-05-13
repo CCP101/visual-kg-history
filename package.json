@@ -12,10 +12,13 @@
   "license": "ISC",
   "dependencies": {
     "@antv/g6": "^4.6.4",
+    "csv": "^6.0.5",
+    "csv-parse": "^5.0.4",
     "express": "^4.17.3",
     "koa": "^2.13.4",
     "koa-router": "^10.1.1",
     "koa2-cors": "^2.0.6",
+    "mysql": "^2.18.1",
     "neo4j-driver": "^4.4.5"
   },
   "repository": {
