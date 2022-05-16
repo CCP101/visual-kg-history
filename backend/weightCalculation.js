@@ -5,7 +5,16 @@ const fs = require("fs");
 const { parse } = require("csv-parse");
 const ExcelJS = require('exceljs');
 
-
+/**
+ * JS连接MySQL数据库实现(本代码由Github Copilot提供)
+ * @param query Cypher语句
+ * @return {Promise<any>} 以期约方式返回数据库查询结果
+ * JS的MySQL连接模块未实现对于MySQL8认证的支持，因此需要自行在MySQL安装目录下找到mysql_config_editor.exe文件，并执行如下命令：
+ * mysql_config_editor set --login-path=local --host=localhost --user=root --password
+ * 如果没有找到mysql_config_editor.exe文件，则可以通过以下方式安装：
+ * https://dev.mysql.com/downloads/connector/nodejs/
+ * TODO：本地MySQL数据库认证方式被降级，需要验证以上方案的可行性
+ */
 async function ConnectMysql(query) {
     return new Promise(function (resolve, reject) {
         let connection = mysql.createConnection({
@@ -26,7 +35,10 @@ async function ConnectMysql(query) {
     });
 }
 
-
+/**
+ * CSV文件读取实现
+ * @return {Promise<{Set,Set}>} 以期约方式返回Neo4j查询结果{结点结果，关系结果}
+ */
 async function importInitData(){
     let set = new Set();
     let set2 = new Set();
@@ -61,6 +73,14 @@ async function importInitData(){
     });
 }
 
+/**
+ * Neo4j数据库查询实现
+ * 实现查询数字结果，无法复现和直接重用
+ * TODO：或获得结果后在下游进行对于数据的处理
+ * @param query Cypher语句
+ * @param key 关键字
+ * @return {Promise<[]>} 以期约方式返回数据库查询结果
+ */
 function NodesPromise(query,key) {
     return new Promise((resolve, reject) => {
         let session = driver.session({defaultAccessMode: neo4j.session.READ});
@@ -85,6 +105,9 @@ function NodesPromise(query,key) {
     });
 }
 
+/**
+ * 单次调用，将数据写入MySQL数据库
+ */
 async function DataToMysql(){
     let result = await importInitData();
     console.log(result.size);
@@ -95,6 +118,9 @@ async function DataToMysql(){
 }
 // DataToMysql();
 
+/**
+ * 单次调用，计算权重后写入MySQL数据库
+ */
 async function calWeight(){
     let result = await importInitData();
     for(let node of result){
@@ -107,6 +133,10 @@ async function calWeight(){
 }
 // calWeight();
 
+/**
+ * 打包CSV数据并返回
+ * @return {Promise<[]>} 以期约方式返回数据库查询结果
+ */
 async function QuizGenerate(){
     return new Promise(async function (resolve, reject) {
         let result = [];
@@ -132,7 +162,9 @@ async function QuizGenerate(){
     });
 }
 
-
+/**
+ * 生成试题并输出
+ */
 async function generateText(){
     let result = await importInitData();
     let node = result.set;
@@ -154,5 +186,9 @@ async function generateText(){
     }
 
 }
-generateText();
+generateText().then(r => {
+    console.log(r)
+});
+
+//TODO: Excel实现
 const workbook = new ExcelJS.Workbook();
