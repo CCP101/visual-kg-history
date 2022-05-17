@@ -4,6 +4,7 @@ const mysql = require('mysql');
 const fs = require("fs");
 const { parse } = require("csv-parse");
 const ExcelJS = require('exceljs');
+const workbook = new ExcelJS.Workbook();
 
 /**
  * JS连接MySQL数据库实现(本代码由Github Copilot提供)
@@ -13,7 +14,7 @@ const ExcelJS = require('exceljs');
  * mysql_config_editor set --login-path=local --host=localhost --user=root --password
  * 如果没有找到mysql_config_editor.exe文件，则可以通过以下方式安装：
  * https://dev.mysql.com/downloads/connector/nodejs/
- * TODO：本地MySQL数据库认证方式被降级，需要验证以上方案的可行性
+ * 本地MySQL数据库认证方式被降级，暂未认证该方案
  */
 async function ConnectMysql(query) {
     return new Promise(function (resolve, reject) {
@@ -76,7 +77,6 @@ async function importInitData(){
 /**
  * Neo4j数据库查询实现
  * 实现查询数字结果，无法复现和直接重用
- * TODO：或获得结果后在下游进行对于数据的处理
  * @param query Cypher语句
  * @param key 关键字
  * @return {Promise<[]>} 以期约方式返回数据库查询结果
@@ -91,12 +91,15 @@ function NodesPromise(query,key) {
                     // console.log(keys)
                 },
                 onNext: record => {
-                    let result = record._fields[0].low;
-                    resolve(result);
+                    // 建议传参最后获得的结果，方便本函数的复用
+                    // let result = record._fields[0].low;
+                    // resolve(result);
                     session.close();
                 },
                 onCompleted: (result) => {
                     // console.log(result);
+                    resolve(result);
+
                 },
                 onError: error => {
                     console.log(error)
@@ -123,9 +126,10 @@ async function DataToMysql(){
  */
 async function calWeight(){
     let result = await importInitData();
-    for(let node of result){
+    for(let node of result.set){
         let NeoQuery = `match ((n:DPerson{name:'${node}'})-[]-(x:DPerson)) return count(x)`;
         let NeoResult = await NodesPromise(NeoQuery, "count(x)");
+        console.log(NeoResult.resultConsumedAfter.low);
         let query = `UPDATE people SET weight = ${NeoResult} WHERE name = "${node}"`;
         console.log(query)
         await ConnectMysql(query);
@@ -164,12 +168,14 @@ async function QuizGenerate(){
 
 /**
  * 生成试题并输出
+ * @return [] 返回生成的试题
  */
 async function generateText(){
     let result = await importInitData();
     let node = result.set;
     let relation = result.set2;
     let resultCSV = await QuizGenerate();
+    let quizList = [];
     for (let i = 0; i < 100; i++) {
         let p1 = resultCSV[i].p1;
         let p2 = resultCSV[i].p2;
@@ -183,12 +189,45 @@ async function generateText(){
         let p2v = weight2[0].weight;
         let quiz = `${p1}与${p2}的关系是(?)，答案是（${rel}），${p1}的权重是${p1v}，${p2}的权重是${p2v}`;
         console.log(quiz);
+        quizList.push(quiz);
     }
-
+    return quizList;
 }
-generateText().then(r => {
+// generateText().then(r => {
+//     console.log(r)
+// });
+
+/**
+ * 对生成的试题进行处理并将结果存入Excel文件
+ */
+async function ExcelOutput(){
+    let quizResult = await generateText();
+    workbook.creator = 'Me';
+    workbook.created = new Date(2022, 5, 17);
+    workbook.modified = new Date();
+    const sheet = workbook.addWorksheet('Quiz');
+    sheet.columns = [
+        {header: 'qui', key: 'qui', width: 25},
+        {header: 'ans', key: 'ans', width: 25},
+        {header: 'wei1', key: 'wei1', width: 25},
+        {header: 'wei2', key: 'wei2', width: 25},
+    ];
+    for (let quiz in quizResult) {
+        let quizSplit = quizResult[quiz].split("，");
+        console.log(quizSplit);
+        let qui = quizSplit[0];
+        let ans = quizSplit[1];
+        let wei1 = quizSplit[2];
+        let wei2 = quizSplit[3];
+        sheet.addRow({qui: qui, ans: ans, wei1: wei1, wei2: wei2});
+    }
+    workbook.xlsx.writeFile('../data/Quiz.xlsx').then(function () {
+        console.log("done");
+    });
+    return "done";
+}
+ExcelOutput().then(r => {
     console.log(r)
 });
 
-//TODO: Excel实现
-const workbook = new ExcelJS.Workbook();
+
