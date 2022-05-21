@@ -29,12 +29,12 @@ async function getData(para, key) {
     return new Promise((resolve, reject) => {
         let novelist = []
         axios.get(`${config.ip}:${config.port}/node?query=${para}&key=${key}`)
-            .then(function(response){
+            .then(function (response) {
                 novelist = response.data
                 // console.log(novelist);
                 resolve(novelist);
             })
-            .catch(function(err){
+            .catch(function (err) {
                 console.log(err);
                 reject(new Error(err));
             });
@@ -50,14 +50,14 @@ async function getDatabaseFirst() {
         search_type: 'name'
     };
     let set = new Set();
-    let HPerson_Teams = await getData(`MATCH (n:${person_history.category}) RETURN n LIMIT 100`,`n`);
-    let HPerson_Relation = await getData(`MATCH (P1:${person_history.category})-[r]-(P2:${person_history.category}) RETURN r `,"r");
+    let HPerson_Teams = await getData(`MATCH (n:${person_history.category}) RETURN n LIMIT 100`, `n`);
+    let HPerson_Relation = await getData(`MATCH (P1:${person_history.category})-[r]-(P2:${person_history.category}) RETURN r `, "r");
     //Neo4j查询结果转换为G6的数据格式
-    for (let node of HPerson_Teams){
+    for (let node of HPerson_Teams) {
         nodes.push({
             id: "node-" + node.identity.low,
             value: {
-                type:node.labels[0],
+                type: node.labels[0],
                 ...node.properties
             },
             label: node.properties.name.length > 4 ? node.properties.name.substring(0, 4) + "..." : node.properties.name,
@@ -71,7 +71,7 @@ async function getDatabaseFirst() {
         let edgeName = "edge-" + relation.start.low + "-" + relation.end.low;
         if (set.has(edgeName)) {
             continue;
-        }else{
+        } else {
             set.add(edgeName);
         }
         edges.push({
@@ -160,7 +160,7 @@ const graph = new G6.Graph({
 /**
  * 查询实现顶部入口
  */
-window.onload = async function() {
+window.onload = async function () {
     await getDatabaseFirst();
     graph.data({
         "nodes": nodes,

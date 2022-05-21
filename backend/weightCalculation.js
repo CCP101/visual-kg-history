@@ -1,6 +1,6 @@
+const { ConnectMysql, NodesPromise, csvRead } = require('./databaseConnect');
 const ExcelJS = require('exceljs');
 const workbook = new ExcelJS.Workbook();
-const {ConnectMysql, NodesPromise, csvRead} = require('./databaseConnect');
 
 
 /**
@@ -8,11 +8,11 @@ const {ConnectMysql, NodesPromise, csvRead} = require('./databaseConnect');
  * @param
  * @return {Promise<{Set,Set}>} 以期约方式返回Neo4j查询结果{结点结果，关系结果}
  */
-async function importInitData(file_path){
+async function importInitData(file_path) {
     let result = await csvRead(file_path);
     console.log(result[0]);
-    for (let row in result){
-        console.log(result[row][0]+"  "+result[row][1]);
+    for (let row in result) {
+        console.log(result[row][0] + "  " + result[row][1]);
     }
 }
 
@@ -20,10 +20,10 @@ async function importInitData(file_path){
 /**
  * 单次调用，将数据写入MySQL数据库
  */
-async function DataToMysql(){
+async function DataToMysql() {
     let result = await importInitData();
     console.log(result.size);
-    for(let node of result){
+    for (let node of result) {
         let query = `INSERT INTO people (\`name\`, \`weight\`) VALUES ('${node}',0)`;
         await ConnectMysql(query);
     }
@@ -33,9 +33,9 @@ async function DataToMysql(){
 /**
  * 单次调用，计算权重后写入MySQL数据库
  */
-async function calWeight(){
+async function calWeight() {
     let result = await importInitData();
-    for(let node of result.set){
+    for (let node of result.set) {
         let NeoQuery = `match ((n:DPerson{name:'${node}'})-[]-(x:DPerson)) return count(x)`;
         let NeoResult = await NodesPromise(NeoQuery, "count(x)");
         console.log(NeoResult.resultConsumedAfter.low);
@@ -50,11 +50,11 @@ async function calWeight(){
  * 生成试题并输出
  * @return [] 返回生成的试题
  */
-async function generateText(){
+async function generateText() {
     let file_path = "../data/PeopleRelation.csv";
     let quizList = [];
     let result = await csvRead(file_path);
-    for (let row in result){
+    for (let row in result) {
         let p1 = result[row][0];
         let p2 = result[row][1];
         let rel = result[row][2];
@@ -75,17 +75,17 @@ async function generateText(){
 /**
  * 对生成的试题进行处理并将结果存入Excel文件
  */
-async function ExcelOutput(){
+async function ExcelOutput() {
     let quizResult = await generateText();
     workbook.creator = 'Me';
     workbook.created = new Date(2022, 5, 17);
     workbook.modified = new Date();
     const sheet = workbook.addWorksheet('Quiz');
     sheet.columns = [
-        {header: 'qui', key: 'qui', width: 25},
-        {header: 'ans', key: 'ans', width: 25},
-        {header: 'wei1', key: 'wei1', width: 25},
-        {header: 'wei2', key: 'wei2', width: 25},
+        { header: 'qui', key: 'qui', width: 25 },
+        { header: 'ans', key: 'ans', width: 25 },
+        { header: 'wei1', key: 'wei1', width: 25 },
+        { header: 'wei2', key: 'wei2', width: 25 },
     ];
     for (let quiz in quizResult) {
         let quizSplit = quizResult[quiz].split("，");
@@ -94,7 +94,7 @@ async function ExcelOutput(){
         let ans = quizSplit[1];
         let wei1 = quizSplit[2];
         let wei2 = quizSplit[3];
-        sheet.addRow({qui: qui, ans: ans, wei1: wei1, wei2: wei2});
+        sheet.addRow({ qui: qui, ans: ans, wei1: wei1, wei2: wei2 });
     }
     workbook.xlsx.writeFile('../data/Quiz.xlsx').then(function () {
         console.log("done");

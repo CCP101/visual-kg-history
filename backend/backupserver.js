@@ -17,7 +17,7 @@ function getIPAdd() {
             break
         }
     }
-    ifaces[dev].forEach(function(details) {
+    ifaces[dev].forEach(function (details) {
         if (details.family === 'IPv4') {
             let adr = details.address;
             myHost = adr;
@@ -35,9 +35,9 @@ getIPAdd()
  * @param key 查询关键字段
  * @return {Promise<any>} 以期约方式返回Neo4j查询结果
  */
-function NodesPromise(query,key) {
+function NodesPromise(query, key) {
     return new Promise((resolve, reject) => {
-        let session = driver.session({defaultAccessMode: neo4j.session.READ});
+        let session = driver.session({ defaultAccessMode: neo4j.session.READ });
         let res = [];
         session
             .run(query)
@@ -67,7 +67,7 @@ function NodesPromise(query,key) {
 router.get('/node', (ctx) => {
     // console.log(myHost);
     let client_list = new Set();
-    let clientHost = ctx.req.connection.remoteAddress.slice(7, );
+    let clientHost = ctx.req.connection.remoteAddress.slice(7,);
     let query;
     let key;
     // 从主页访问的情况
@@ -86,19 +86,19 @@ router.get('/node', (ctx) => {
         key = ctx.query.key;
     } else {
         console.log(clientHost + '正在访问3000端口并请求，已返回空');
-        query = {query: 'MATCH (n:Error) RETURN n'};
+        query = { query: 'MATCH (n:Error) RETURN n' };
     }
     // 打印当前查询
     console.log(query);
     return NodesPromise(query, key)
         .then(res => {
-        // console.log(res)
-        ctx.body = res
-    })
+            // console.log(res)
+            ctx.body = res
+        })
 });
 
 
-app.use(async(ctx, next) => {
+app.use(async (ctx, next) => {
     try {
         await next();
     } catch (e) {
@@ -112,7 +112,7 @@ app.use(router.routes());
 app.use(router.allowedMethods());
 app.listen(3000);
 
-process.on("unhandledrejection",(reason, promise)=>{
+process.on("unhandledrejection", (reason, promise) => {
     console.log(reason, promise)
 })
 

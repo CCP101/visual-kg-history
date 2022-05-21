@@ -42,9 +42,9 @@ async function ConnectMysql(query) {
  * @param key 关键字
  * @return {Promise<[]>} 以期约方式返回数据库查询结果
  */
-async function NodesPromise(query,key) {
+async function NodesPromise(query, key) {
     return new Promise((resolve, reject) => {
-        let session = driver.session({defaultAccessMode: neo4j.session.READ});
+        let session = driver.session({ defaultAccessMode: neo4j.session.READ });
         session
             .run(query)
             .subscribe({
@@ -74,11 +74,11 @@ async function NodesPromise(query,key) {
  * CSV文件读取实现，代码重用交由下游处理
  * @return {Promise<>} 以期约方式返回CSV文件结果
  */
-async function csvRead(file_path){
+async function csvRead(file_path) {
     return new Promise(function (resolve, reject) {
         let result = [];
         fs.createReadStream(file_path)
-            .pipe(parse({delimiter: ",", from_line: 2}))
+            .pipe(parse({ delimiter: ",", from_line: 2 }))
             .on("data", function (row) {
                 // console.log(row);
                 result.push(row);

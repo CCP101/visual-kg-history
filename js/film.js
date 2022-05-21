@@ -1,6 +1,6 @@
 // 前端调试用，不起实际作用
 
-window.onload = async function() {
+window.onload = async function () {
     const person_info = {
         category: 'Person',
         search_type: 'name'
@@ -10,15 +10,15 @@ window.onload = async function() {
         search_type: 'title'
     };
     // 电影数据
-    let Person_Teams = await getData(`MATCH (n:${person_info.category}) RETURN n.${person_info.search_type}`,person_info.search_type);
-    let Movie_Teams = await getData(`MATCH (n:${movie_info.category}) RETURN n.${movie_info.search_type}`,movie_info.search_type);
-    let p = $.map(Person_Teams, function(team) {
+    let Person_Teams = await getData(`MATCH (n:${person_info.category}) RETURN n.${person_info.search_type}`, person_info.search_type);
+    let Movie_Teams = await getData(`MATCH (n:${movie_info.category}) RETURN n.${movie_info.search_type}`, movie_info.search_type);
+    let p = $.map(Person_Teams, function (team) {
         return {
             value: team,
             data: person_info
         };
     });
-    let m = $.map(Movie_Teams, function(team) {
+    let m = $.map(Movie_Teams, function (team) {
         return {
             value: team,
             data: movie_info

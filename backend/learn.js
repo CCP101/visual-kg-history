@@ -42,7 +42,7 @@ s.forEach(function (element, sameElement, set) {
 
 var m = new Map([[1, 'x'], [2, 'y'], [3, 'z']]);
 m.forEach(function (value, key, map) {
-    console.log(key,"  ",value);
+    console.log(key, "  ", value);
 });
 
 function abs(x) {
@@ -60,7 +60,7 @@ console.log(abs(-965))
 
 function foo(x) {
     console.log('x = ' + x); // 10
-    for (let i=0; i<arguments.length; i++) {
+    for (let i = 0; i < arguments.length; i++) {
         console.log('arg ' + i + ' = ' + arguments[i]); // 10, 20, 30
     }
 }
@@ -69,7 +69,7 @@ foo(10, 20, 30);
 function foo(a, b) {
     var i = 0, rest = [];
     if (arguments.length > 2) {
-        for (i = 2; i<arguments.length; i++) {
+        for (i = 2; i < arguments.length; i++) {
             rest.push(arguments[i]);
         }
     }
@@ -77,7 +77,7 @@ function foo(a, b) {
     console.log('b = ' + b);
     console.log(rest);
 }
-foo(3,6,9)
+foo(3, 6, 9)
 
 function foo2(a, b, ...rest) {
     console.log('a = ' + a);
@@ -129,7 +129,7 @@ arr.sort(function (x, y) {
 console.log(arr); // [1, 2, 10, 20]
 
 
-var arr = ['Apple', 'pear', 'orange',""];
+var arr = ['Apple', 'pear', 'orange', ""];
 console.log(arr.every(function (s) {
     return s.length > 0;
 }));
