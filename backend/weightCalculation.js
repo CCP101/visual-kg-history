@@ -5,7 +5,7 @@ const workbook = new ExcelJS.Workbook();
 
 /**
  * CSV文件传值处理
- * @param
+ * @param file_path 文件地址
  * @return {Promise<{Set,Set}>} 以期约方式返回Neo4j查询结果{结点结果，关系结果}
  */
 async function importInitData(file_path) {
@@ -19,6 +19,7 @@ async function importInitData(file_path) {
 
 /**
  * 单次调用，将数据写入MySQL数据库
+ * 注意：25行数据格式变化，需要重写
  */
 async function DataToMysql() {
     let result = await importInitData();
@@ -28,10 +29,10 @@ async function DataToMysql() {
         await ConnectMysql(query);
     }
 }
-// DataToMysql();
 
 /**
  * 单次调用，计算权重后写入MySQL数据库
+ * 注意：25行数据格式变化，需要重写
  */
 async function calWeight() {
     let result = await importInitData();
@@ -44,10 +45,39 @@ async function calWeight() {
         await ConnectMysql(query);
     }
 }
-// calWeight();
+
+/**
+ * 将数据写入Neo4j数据库内
+ */
+async function ImportDataToNeo4j() {
+    let result = await importInitData("../data/PeopleRelationV2.csv");
+    for (let row in result) {
+        let p1 = result[row][0];
+        let p2 = result[row][1];
+        let rel = result[row][2];
+        let direction = result[row][3];
+        let begin = result[row][4];
+        if (direction === "单向") {
+            if (begin === "1"){
+                let query = `MATCH (p1:DPerson{name:'${p1}'}),(p2:DPerson{name:'${p2}'}) CREATE (p1)-[r:${rel}]->(p2)`;
+                await NodesPromise(query, "result");
+            }else{
+                let query = `MATCH (n:DPerson{name:'${p1}'}),(m:DPerson{name:'${p2}'}) CREATE (n)-[r:${rel}]->(m)`;
+                await NodesPromise(query, "result");
+            }
+        } else {
+            let query1 = `MATCH (p1:DPerson{name:'${p1}'}),(p2:DPerson{name:'${p2}'}) CREATE (p1)<-[r:${rel}]-(p2)`;
+            let query2 = `MATCH (p1:DPerson{name:'${p1}'}),(p2:DPerson{name:'${p2}'}) CREATE (p1)<-[r:${rel}]-(p2)`;
+            await NodesPromise(query1, "result");
+            await NodesPromise(query2, "result");
+        }
+    }
+}
+ImportDataToNeo4j();
 
 /**
  * 生成试题并输出
+ * TODO：生成混淆项目存入excel中
  * @return [] 返回生成的试题
  */
 async function generateText() {
@@ -101,6 +131,6 @@ async function ExcelOutput() {
     });
     return "done";
 }
-ExcelOutput().then(r => {
-    console.log(r)
-});
+// ExcelOutput().then(r => {
+//     console.log(r)
+// });
