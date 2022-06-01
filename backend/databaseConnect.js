@@ -44,7 +44,7 @@ async function ConnectMysql(query) {
  */
 async function NodesPromise(query, key) {
     return new Promise((resolve, reject) => {
-        let session = driver.session({ defaultAccessMode: neo4j.session.READ });
+        let session = driver.session({ defaultAccessMode: neo4j.session.WRITE });
         session
             .run(query)
             .subscribe({
@@ -58,7 +58,7 @@ async function NodesPromise(query, key) {
                     session.close();
                 },
                 onCompleted: (result) => {
-                    console.log("Neo4j finished");
+                    // console.log("Neo4j finished");
                     // console.log(result);
                     resolve(result);
 
