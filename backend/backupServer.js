@@ -4,6 +4,7 @@ const cors = require('koa2-cors');
 const os = require('os');
 const neo4j = require("neo4j-driver");
 const driver = neo4j.driver('neo4j://localhost', neo4j.auth.basic('neo4j', 'neo4j'));
+// const { ConnectMysql, NodesPromise, csvRead } = require('./databaseConnect');
 const app = new Koa();
 let myHost = '';
 
@@ -11,13 +12,13 @@ let myHost = '';
  * 对本地IP进行过滤及修改
  */
 function getIPAdd() {
-    let ifaces = os.networkInterfaces()
-    for (var dev in ifaces) {
+    let ifAces = os.networkInterfaces()
+    for (var dev in ifAces) {
         if (dev.includes('WLAN')) {
             break
         }
     }
-    ifaces[dev].forEach(function (details) {
+    ifAces[dev].forEach(function (details) {
         if (details.family === 'IPv4') {
             let adr = details.address;
             myHost = adr;
@@ -29,36 +30,7 @@ function getIPAdd() {
 getIPAdd()
 
 
-/**
- * Neo4j普通查询实现
- * @param query Cypher语句
- * @param key 查询关键字段
- * @return {Promise<any>} 以期约方式返回Neo4j查询结果
- */
-function NodesPromise(query, key) {
-    return new Promise((resolve, reject) => {
-        let session = driver.session({ defaultAccessMode: neo4j.session.READ });
-        let res = [];
-        session
-            .run(query)
-            .subscribe({
-                onKeys: keys => {
-                    // console.log(keys)
-                },
-                onNext: record => {
-                    res.push(record.get(key))
-                    // console.log(key + "  " + record.get(key))
-                },
-                onCompleted: (result) => {
-                    resolve(res);
-                    session.close(); // returns a Promise
-                },
-                onError: error => {
-                    console.log(error)
-                }
-            })
-    });
-}
+
 
 /**
  * 对node请求进行监听
@@ -92,7 +64,7 @@ router.get('/node', (ctx) => {
     console.log(query);
     return NodesPromise(query, key)
         .then(res => {
-            // console.log(res)
+            console.log(res)
             ctx.body = res
         })
 });
@@ -115,5 +87,3 @@ app.listen(3000);
 process.on("unhandledrejection", (reason, promise) => {
     console.log(reason, promise)
 })
-
-module.exports = NodesPromise;

@@ -1,4 +1,4 @@
-const { ConnectMysql, NodesPromise, csvRead } = require('./databaseConnect');
+const { ConnectMysql, NodesWrite, csvRead } = require('./util');
 const ExcelJS = require('exceljs');
 const workbook = new ExcelJS.Workbook();
 
@@ -47,7 +47,7 @@ async function DataToMysql() {
  */
 async function ImportDataToNeo4j() {
     let deleteTable = 'match (n:DPerson) detach delete n';
-    await NodesPromise(deleteTable, "result");
+    await NodesWrite(deleteTable, "result");
     let result = await importInitData("../data/PeopleRelation2.csv");
     let set = new Set();
     for (let row in result) {
@@ -57,7 +57,7 @@ async function ImportDataToNeo4j() {
     // 创建节点
     for (let people of set) {
         let query = `CREATE (n:DPerson {name: '${people}'})`;
-        await NodesPromise(query, "result");
+        await NodesWrite(query, "result");
     }
     for (let row of result) {
         let p1 = row[0];

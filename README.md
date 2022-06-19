@@ -56,7 +56,7 @@
 7. 运行服务端程序，在当前目录下输入以下代码，并保证3000端口无程序占用
 
    ```
-   node .\backend\backupserver.js
+   node .\backend\backupServer.js
    ```
 
 8. 在浏览器输入以下地址，即可打开本项目

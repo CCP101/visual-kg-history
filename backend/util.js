@@ -2,7 +2,14 @@ const mysql = require('mysql');
 const neo4j = require("neo4j-driver");
 const fs = require("fs");
 const { parse } = require("csv-parse");
+//在此配置数据库连接参数
 const driver = neo4j.driver('neo4j://localhost', neo4j.auth.basic('neo4j', 'neo4j'));
+const mysqlConnect = {
+    host: 'localhost',
+    user: 'root',
+    password: 'ROOT',
+    database: 'cq_history'
+}
 
 /**
  * JS连接MySQL数据库实现(本代码由Github Copilot提供)
@@ -16,13 +23,8 @@ const driver = neo4j.driver('neo4j://localhost', neo4j.auth.basic('neo4j', 'neo4
  */
 async function ConnectMysql(query) {
     return new Promise(function (resolve, reject) {
-        let connection = mysql.createConnection({
-            host: 'localhost',
-            user: 'root',
-            password: 'ROOT',
-            database: 'cq_history'
-        });
-        connection.connect();
+        let connection = mysql.createConnection(mysqlConnect);
+        connection.connect("", undefined);
         // console.log(query);
         connection.query(query, function (error, results, fields) {
             if (error) {
@@ -36,13 +38,13 @@ async function ConnectMysql(query) {
 }
 
 /**
- * Neo4j数据库查询实现
- * 已解决：实现查询数字结果，无法复现和直接重用
+ * Neo4j数据库写入实现
+ * 不带查询的写入/删除等操作
  * @param query Cypher语句
  * @param key 关键字
- * @return {Promise<[]>} 以期约方式返回数据库查询结果
+ * @return {Promise<[]>} 以期约方式返回写入结果
  */
-async function NodesPromise(query, key) {
+async function NodesWrite(query, key) {
     return new Promise((resolve, reject) => {
         let session = driver.session({ defaultAccessMode: neo4j.session.WRITE });
         session
@@ -61,7 +63,41 @@ async function NodesPromise(query, key) {
                     // console.log("Neo4j finished");
                     // console.log(result);
                     resolve(result);
+                },
+                onError: error => {
+                    console.log(error)
+                }
+            })
+    });
+}
 
+/**
+ * Neo4j数据库查询返回实现
+ * 全部返回仅返回数据库查询状态，必须分次拦截处理后返回
+ * @param query Cypher语句
+ * @param key 关键字
+ * @return {Promise<[]>} 以期约方式返回查询结果
+ */
+async function NodesRead(query, key) {
+    return new Promise((resolve, reject) => {
+        let session = driver.session({ defaultAccessMode: neo4j.session.READ });
+        let res = [];
+        session
+            .run(query)
+            .subscribe({
+                onKeys: keys => {
+                    // console.log(keys)
+                },
+                onNext: record => {
+                    // console.log(record)
+                    res.push(record.get(key))
+                    // console.log(key + "  " + record.get(key))
+                },
+                onCompleted: (result) => {
+                    // console.log(res);
+                    // console.log(result);
+                    resolve(res);
+                    session.close(); // returns a Promise
                 },
                 onError: error => {
                     console.log(error)
@@ -95,5 +131,6 @@ async function csvRead(file_path) {
 }
 
 exports.ConnectMysql = ConnectMysql;
-exports.NodesPromise = NodesPromise;
+exports.NodesWrite = NodesWrite;
+exports.NodesRead = NodesRead;
 exports.csvRead = csvRead;

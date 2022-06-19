@@ -50,7 +50,7 @@ async function getDatabaseFirst() {
         search_type: 'name'
     };
     let set = new Set();
-    let HPerson_Teams = await getData(`MATCH (n:${person_history.category}) RETURN n LIMIT 100`, `n`);
+    let HPerson_Teams = await getData(`MATCH (n:${person_history.category}) RETURN n LIMIT 20`, `n`);
     let HPerson_Relation = await getData(`MATCH (P1:${person_history.category})-[r]-(P2:${person_history.category}) RETURN r `, "r");
     //Neo4j查询结果转换为G6的数据格式
     for (let node of HPerson_Teams) {
