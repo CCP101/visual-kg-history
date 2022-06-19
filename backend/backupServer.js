@@ -2,9 +2,7 @@ const Koa = require('koa');
 const router = require('koa-router')();
 const cors = require('koa2-cors');
 const os = require('os');
-const neo4j = require("neo4j-driver");
-const driver = neo4j.driver('neo4j://localhost', neo4j.auth.basic('neo4j', 'neo4j'));
-// const { ConnectMysql, NodesPromise, csvRead } = require('./databaseConnect');
+const { NodesRead } = require('./util');
 const app = new Koa();
 let myHost = '';
 
@@ -12,7 +10,7 @@ let myHost = '';
  * 对本地IP进行过滤及修改
  */
 function getIPAdd() {
-    let ifAces = os.networkInterfaces()
+    let ifAces = os.networkInterfaces();
     for (var dev in ifAces) {
         if (dev.includes('WLAN')) {
             break
@@ -27,13 +25,10 @@ function getIPAdd() {
     })
 }
 
-getIPAdd()
-
-
-
+getIPAdd();
 
 /**
- * 对node请求进行监听
+ * 对/node请求进行监听
  * @return NodesPromise 调用函数
  */
 router.get('/node', (ctx) => {
@@ -62,9 +57,8 @@ router.get('/node', (ctx) => {
     }
     // 打印当前查询
     console.log(query);
-    return NodesPromise(query, key)
+    return NodesRead(query, key)
         .then(res => {
-            console.log(res)
             ctx.body = res
         })
 });
@@ -74,7 +68,7 @@ app.use(async (ctx, next) => {
     try {
         await next();
     } catch (e) {
-        console.log(e)
+        console.log(e);
     }
 });
 
@@ -85,5 +79,5 @@ app.use(router.allowedMethods());
 app.listen(3000);
 
 process.on("unhandledrejection", (reason, promise) => {
-    console.log(reason, promise)
+    console.log(reason, promise);
 })

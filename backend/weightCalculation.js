@@ -67,15 +67,15 @@ async function ImportDataToNeo4j() {
         if (direction !== "") {
             if (direction === "1"){
                 let query = `MATCH (p1:DPerson{name:'${p1}'}),(p2:DPerson{name:'${p2}'}) CREATE (p1)-[r:${rel}]->(p2)`;
-                await NodesPromise(query, "result");
+                await NodesWrite(query, "result");
             }else{
                 let query = `MATCH (p1:DPerson{name:'${p1}'}),(p2:DPerson{name:'${p2}'}) CREATE (p1)<-[r:${rel}]-(p2)`;
-                await NodesPromise(query, "result");
+                await NodesWrite(query, "result");
             }
         } else {
             let query1 = `MATCH (p1:DPerson{name:'${p1}'}),(p2:DPerson{name:'${p2}'}) CREATE (p1)-[r:${rel}]->(p2)`;
             // let query2 = `MATCH (p1:DPerson{name:'${p1}'}),(p2:DPerson{name:'${p2}'}) CREATE (p1)-[r:${rel}]->(p2)`;
-            await NodesPromise(query1, "result");
+            await NodesWrite(query1, "result");
             // await NodesPromise(query2, "result");
         }
     }

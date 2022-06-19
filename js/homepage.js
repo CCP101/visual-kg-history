@@ -6,18 +6,6 @@ const config = {
     port: 3000,
 }
 
-const color_set = ["#dd6b66",
-    "#759aa0",
-    "#e69d87",
-    "#8dc1a9",
-    "#ea7e53",
-    "#eedd78",
-    "#73a373",
-    "#73b9bc",
-    "#7289ab",
-    "#91ca8c",
-    "#f49f42"
-]
 
 /**
  * 异步实现Neo4j查询
@@ -50,7 +38,7 @@ async function getDatabaseFirst() {
         search_type: 'name'
     };
     let set = new Set();
-    let HPerson_Teams = await getData(`MATCH (n:${person_history.category}) RETURN n LIMIT 20`, `n`);
+    let HPerson_Teams = await getData(`MATCH (n:${person_history.category}) RETURN n LIMIT 100`, `n`);
     let HPerson_Relation = await getData(`MATCH (P1:${person_history.category})-[r]-(P2:${person_history.category}) RETURN r `, "r");
     //Neo4j查询结果转换为G6的数据格式
     for (let node of HPerson_Teams) {
@@ -67,7 +55,6 @@ async function getDatabaseFirst() {
         })
     }
     for (let relation of HPerson_Relation) {
-        //TODO：重复边关系临时解决方案,可能是数据库问题
         let edgeName = "edge-" + relation.start.low + "-" + relation.end.low;
         if (set.has(edgeName)) {
             continue;
@@ -85,69 +72,41 @@ async function getDatabaseFirst() {
     }
 }
 
-G6.registerBehavior('node-activate', {
-    getDefaultCfg() {
-        return {
-            multiple: true
-        };
-    },
-    getEvents() {
-        return {
-            'node:mouseenter': 'onMouseenter',
-            'node:dblclick': 'onDblclick'
-        };
-    },
-    onMouseenter(e) {
-        $('#proul').children().remove();
-        let pros = $.extend({}, e.item.getModel().properties);
-
-        for (let p in pros) {
-            $('#proul').append(
-                '<ul class="pro_slider"><li><b>' + p + ' : </b> ' + pros[p] + '</li>')
-        }
-    },
-    //
-    // onDblclick(e) {
-    //     readNeo4j(e.item.getModel(), 2)
-    //     // console.log(e.item.getModel());
-    // }
-});
-
 const graph = new G6.Graph({
     container: 'mountNode',
     width: window.screen.availWidth,
     height: 800,
     modes: {
-        default: ['drag-node', 'node-activate'],
+        default: ['click-select', 'drag-canvas', 'drag-node', 'zoom-canvas'],
     },
     layout: {
         type: 'force',
-        center: [window.screen.availWidth * 0.45, document.body.clientHeight * 0.45],
+        center: [window.screen.availWidth * 0.45, document.body.clientHeight * 0.4],
         preventOverlap: true,
         linkDistance: 180,
     },
-
     defaultNode: {
-        size: 28,
+        size: 42,
         color: '#5B8FF9',
-        style: {
-            lineWidth: 2,
-            fill: '',
-            stroke: '',
-        },
-        label: 'node-label',
-        labelCfg: {
-            position: 'top',
-            style: {
-                fill: '#ddd',
-            },
-        }
-
+        //TODO: 后期实现边和点的美化
+        //
+        // style: {
+        //     lineWidth: 2,
+        //     fill: '',
+        //     stroke: '',
+        // },
+        // label: 'node-label',
+        // labelCfg: {
+        //     position: 'top',
+        //     style: {
+        //         fill: '#ddd',
+        //     },
+        // }
     },
     defaultEdge: {
-        size: 1,
-        color: '#aaa',
-        label: 'node-label',
+        size: 3,
+        color: '#4561d3',
+        // label: 'node-label',
         labelCfg: {
             style: {
                 fill: '#ddd',
@@ -158,13 +117,71 @@ const graph = new G6.Graph({
 });
 
 /**
- * 查询实现顶部入口
+ * 官方文档中存在，但实际不可用，原因未知，使用单独绑定方法替代
  */
+// G6.registerBehavior('node-activate', {
+//     getDefaultCfg() {
+//         return {
+//             multiple: true
+//         };
+//     },
+//     getEvents() {
+//         return {
+//             'node:mouseenter': 'onMouseenter',
+//             'node:dblclick': 'onDblclick',
+//             'node:click': 'onNodeClick'
+//         };
+//     },
+//     onNodeClick(e) {
+//         const graph = this.graph;
+//         const item = e.item;
+//         console.log(item);
+//         if (item.hasState('active')) {
+//             graph.setItemState(item, 'active', false);
+//             return;
+//         }
+//         // this 上即可取到配置，如果不允许多个 'active'，先取消其他节点的 'active' 状态
+//         if (!this.multiple) {
+//             this.removeNodesState();
+//         }
+//         // 置点击的节点状态 'active' 为 true
+//         graph.setItemState(item, 'active', true);
+//     },
+//     removeNodesState() {
+//         graph.findAllByState('node', 'active').forEach(node => {
+//             graph.setItemState(node, 'active', false);
+//         });
+//     }
+// });
+
+
+/**
+ * 在图上绑定事件点击事件
+ */
+graph.on('node:click', (e) => {
+    const item = e.item;
+    console.log(item._cfg.id);
+})
+
+
 window.onload = async function () {
     await getDatabaseFirst();
+    //过滤无用边
+    let nodeList = [];
+    for (let node of nodes) {
+        nodeList.push(node.id.toString().replace('node-', ''));
+    }
+    let edgesReal = [];
+    for (let edge of edges) {
+        let leftNode = edge.source.toString().replace('node-', '');
+        let rightNode = edge.target.toString().replace('node-', '');
+        if (nodeList.includes(leftNode) && nodeList.includes(rightNode)) {
+            edgesReal.push(edge);
+        }
+    }
     graph.data({
         "nodes": nodes,
-        "edges": edges
+        "edges": edgesReal
     });
     graph.render();
-};
+}
