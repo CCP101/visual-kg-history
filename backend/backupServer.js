@@ -71,8 +71,6 @@ app.use(async (ctx, next) => {
         console.log(e);
     }
 });
-
-
 app.use(cors());
 app.use(router.routes());
 app.use(router.allowedMethods());

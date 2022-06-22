@@ -43,7 +43,7 @@ async function getDatabaseFirst() {
     //Neo4j查询结果转换为G6的数据格式
     for (let node of HPerson_Teams) {
         nodes.push({
-            id: "node-" + node.identity.low,
+            id: "node-" + node.identity,
             value: {
                 type: node.labels[0],
                 ...node.properties
@@ -55,16 +55,17 @@ async function getDatabaseFirst() {
         })
     }
     for (let relation of HPerson_Relation) {
-        let edgeName = "edge-" + relation.start.low + "-" + relation.end.low;
+        console.log(relation)
+        let edgeName = "edge-" + relation.start + "-" + relation.end;
         if (set.has(edgeName)) {
             continue;
         } else {
             set.add(edgeName);
         }
         edges.push({
-            id: "edge-" + relation.start.low + "-" + relation.end.low,
-            source: "node-" + relation.start.low,
-            target: "node-" + relation.end.low,
+            id: "edge-" + relation.start + "-" + relation.end,
+            source: "node-" + relation.start,
+            target: "node-" + relation.end,
             label: relation.type.length > 4 ? relation.type.substring(0, 4) + "..." : relation.type,
             name: relation.type,
             // ...edgeConfig[relation.type]
@@ -72,6 +73,9 @@ async function getDatabaseFirst() {
     }
 }
 
+/**
+ * 配置图属性
+ */
 const graph = new G6.Graph({
     container: 'mountNode',
     width: window.screen.availWidth,
@@ -163,7 +167,9 @@ graph.on('node:click', (e) => {
     console.log(item._cfg.id);
 })
 
-
+/**
+ * 首次加载载入
+ */
 window.onload = async function () {
     await getDatabaseFirst();
     //过滤无用边

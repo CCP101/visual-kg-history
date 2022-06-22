@@ -2,8 +2,9 @@ const mysql = require('mysql');
 const neo4j = require("neo4j-driver");
 const fs = require("fs");
 const { parse } = require("csv-parse");
-//在此配置数据库连接参数
-const driver = neo4j.driver('neo4j://localhost', neo4j.auth.basic('neo4j', 'neo4j'));
+//在此配置数据库连接参数,config配置解决JS关于数字类型的转换问题
+const driver = neo4j.driver('neo4j://localhost', neo4j.auth.basic('neo4j', 'neo4j'),
+    { disableLosslessIntegers: true });
 const mysqlConnect = {
     host: 'localhost',
     user: 'root',
