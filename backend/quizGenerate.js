@@ -91,6 +91,7 @@ async function ExcelOutput() {
 
 /**
  * main函数入口，dataInit为初始化权重计算，ExcelOutput为生成试题并输出
+ * 两条指令同时执行需指定时序，否则会出现异常
  */
 // dataInit().then(r => {
 //     console.log(r);

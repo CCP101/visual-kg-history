@@ -19,8 +19,17 @@ async function importInitData(file_path) {
  * 单次调用，将数据写入MySQL数据库
  */
 async function DataToMysql() {
-    let deleteTable = 'delete * from people;';
-    await ConnectMysql(deleteTable);
+    let deleteTable1 = `DROP TABLE IF EXISTS \`people\``;
+    let deleteTable2 = `CREATE TABLE \`people\`(
+        \`name\`   varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+        \`weight\` double                                                        NULL DEFAULT NULL,
+        PRIMARY KEY (\`name\`) USING BTREE
+    ) ENGINE = InnoDB
+      CHARACTER SET = utf8mb4
+      COLLATE = utf8mb4_0900_ai_ci
+      ROW_FORMAT = Dynamic;`;
+    await ConnectMysql(deleteTable1);
+    await ConnectMysql(deleteTable2);
     let result = await importInitData('../data/PeopleRelation2.csv');
     let set = new Set();
     for (let row in result) {

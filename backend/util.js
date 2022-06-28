@@ -26,7 +26,7 @@ async function ConnectMysql(query) {
     return new Promise(function (resolve, reject) {
         let connection = mysql.createConnection(mysqlConnect);
         connection.connect("", undefined);
-        // console.log(query);
+        console.log(query);
         connection.query(query, function (error, results, fields) {
             if (error) {
                 reject(error);
@@ -55,7 +55,7 @@ async function NodesWrite(query, key) {
                     // console.log(keys)
                 },
                 onNext: record => {
-                    // 建议传参最后获得的结果，方便本函数的复用
+                    // 已解决，统一返回查询结果后处理，不在中间过程处理
                     // let result = record._fields[0].low;
                     // resolve(result);
                     session.close();

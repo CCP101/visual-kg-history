@@ -8,18 +8,18 @@ const config = {
 
 
 /**
- * 异步实现Neo4j查询
- * @param para 查询语句
+ * 异步实现后端访问
+ * @param link 后台访问地址
+ * @param para 查询语句(Neo4j/SQL)
  * @param key 查询关键字段
- * @return {Promise<any>} 以期约方式返回Neo4j查询结果
+ * @return {Promise<any>} 以期约方式返回查询结果
  */
-async function getData(para, key) {
+async function getData(link, para, key) {
     return new Promise((resolve, reject) => {
         let novelist = []
-        axios.get(`${config.ip}:${config.port}/node?query=${para}&key=${key}`)
+        axios.get(`${config.ip}:${config.port}/${link}?query=${para}&key=${key}`)
             .then(function (response) {
                 novelist = response.data
-                // console.log(novelist);
                 resolve(novelist);
             })
             .catch(function (err) {
@@ -38,8 +38,13 @@ async function getDatabaseFirst() {
         search_type: 'name'
     };
     let set = new Set();
-    let HPerson_Teams = await getData(`MATCH (n:${person_history.category}) RETURN n LIMIT 100`, `n`);
-    let HPerson_Relation = await getData(`MATCH (P1:${person_history.category})-[r]-(P2:${person_history.category}) RETURN r `, "r");
+    let getWeight = await getData("sql",`SELECT * FROM \`people\``, 'weight');
+    let HPerson_weight = {};
+    for (let person of getWeight) {
+        HPerson_weight[person.name] = person.weight;
+    }
+    let HPerson_Teams = await getData("node",`MATCH (n:${person_history.category}) RETURN n LIMIT 100`, `n`);
+    let HPerson_Relation = await getData("node",`MATCH (P1:${person_history.category})-[r]-(P2:${person_history.category}) RETURN r `, "r");
     //Neo4j查询结果转换为G6的数据格式
     for (let node of HPerson_Teams) {
         nodes.push({
@@ -48,14 +53,15 @@ async function getDatabaseFirst() {
                 type: node.labels[0],
                 ...node.properties
             },
-            label: node.properties.name.length > 4 ? node.properties.name.substring(0, 4) + "..." : node.properties.name,
+            // label: node.properties.name.length > 4 ? node.properties.name.substring(0, 4) + "..." : node.properties.name,
+            label: node.properties.name + ":" + HPerson_weight[node.properties.name],
             name: node.properties.name,
             type: node.labels[0],
             // ...nodeConfig[node.labels[0]]
         })
     }
     for (let relation of HPerson_Relation) {
-        console.log(relation)
+        // 边去重
         let edgeName = "edge-" + relation.start + "-" + relation.end;
         if (set.has(edgeName)) {
             continue;
@@ -90,7 +96,7 @@ const graph = new G6.Graph({
         linkDistance: 180,
     },
     defaultNode: {
-        size: 42,
+        size: 60,
         color: '#5B8FF9',
         //TODO: 后期实现边和点的美化
         //
@@ -108,7 +114,7 @@ const graph = new G6.Graph({
         // }
     },
     defaultEdge: {
-        size: 3,
+        size: 10,
         color: '#4561d3',
         // label: 'node-label',
         labelCfg: {
