@@ -1,4 +1,4 @@
-# 春秋战国历史图谱项目
+# 春秋战国历史图谱项目 [![wakatime](https://wakatime.com/badge/user/b5b6ac2c-550f-4e67-902a-a3d1fc690e9c/project/3904750b-5f53-4459-9925-cfbefab615cd.svg)](https://wakatime.com/badge/user/b5b6ac2c-550f-4e67-902a-a3d1fc690e9c/project/3904750b-5f53-4459-9925-cfbefab615cd)
 
 ## 安装教程
 
