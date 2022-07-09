@@ -2,7 +2,7 @@
 
 ## 安装教程
 
-1. 安装Java SDK 11，下载前需要登录Oracle账号，[下载链接](https://www.oracle.com/java/technologies/javase/jdk11-archive-downloads.html#license-lightbox)，安装完成后测试是否能在命令行工具调用java
+1. 安装Java SDK 11，下载前需要登录Oracle账号，[下载链接](https://www.oracle.com/java/technologies/javase/jdk11-archive-downloads.html#license-lightbox)，[安装教程](https://www.runoob.com/java/java-environment-setup.html)，测试是否能在命令行工具调用java
 
    ```
    java --version
@@ -22,9 +22,11 @@
    详细信息: Neo4j Database Mode is ''
    ```
 
-3. 安装Apache HTTP服务器，搭建本地服务器，[下载地址](https://www.apachehaus.com/cgi-bin/download.plx)，安装方法及参数配置请参考其他资料，默认开机自启服务，并将本项目拷入配置文件中DocumentRoot指向的文件夹地址
+3. 安装Apache HTTP服务器，搭建本地服务器，[下载地址](https://www.apachehaus.com/cgi-bin/download.plx)，[安装教程](https://www.php.cn/apache/427457.html)，默认开机自启服务，并将本项目拷入配置文件中DocumentRoot指向的文件夹地址
 
-4. 安装Node.js版本管理服务nvm，[Windows版本链接](https://github.com/coreybutler/nvm-windows)，[源代码链接](https://github.com/nvm-sh/nvm)，使用方法及换源方法请参考其他资料，配置完成后即可在命令行工具内控制多个Node版本
+   或安装http-server包，使用Node进行安装，安装命令“npm i http-server”，使用命令“http-server [path] [options]”激活本地服务器
+
+4. 安装Node.js版本管理服务nvm，[Windows版本链接](https://github.com/coreybutler/nvm-windows)，[安装及使用教程](https://www.runoob.com/w3cnote/nvm-manager-node-versions.html)，配置完成后即可在命令行工具内控制多个Node版本
 
    ```
    nvm list
