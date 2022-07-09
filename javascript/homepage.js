@@ -1,33 +1,7 @@
 let nodes = [];
 let edges = [];
+import getData from './function.js';
 
-const config = {
-    ip: 'http://' + window.location.hostname.toString(),
-    port: 3000,
-}
-
-
-/**
- * 异步实现后端访问
- * @param link 后台访问地址
- * @param para 查询语句(Neo4j/SQL)
- * @param key 查询关键字段
- * @return {Promise<any>} 以期约方式返回查询结果
- */
-async function getData(link, para, key) {
-    return new Promise((resolve, reject) => {
-        let novelist = []
-        axios.get(`${config.ip}:${config.port}/${link}?query=${para}&key=${key}`)
-            .then(function (response) {
-                novelist = response.data
-                resolve(novelist);
-            })
-            .catch(function (err) {
-                console.log(err);
-                reject(new Error(err));
-            });
-    });
-}
 
 /**
  * 异步实现网页首次启动时的默认查询
@@ -98,7 +72,7 @@ const graph = new G6.Graph({
     defaultNode: {
         size: 60,
         color: '#5B8FF9',
-        //TODO: 后期实现边和点的美化
+        //TODO: 后期实现边和点的美化 需要实现持久的动画效果
         //
         // style: {
         //     lineWidth: 2,

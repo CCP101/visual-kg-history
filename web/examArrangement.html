@@ -24,6 +24,7 @@
   <script src="../javascript/js/jquery.countdown.js"></script>
   <script src="../javascript/js/popper.min.js"></script>
   <script src="../javascript/js/bootstrap.min.js"></script>
+  <script src="../javascript/js/axios.min.js"></script>
 </head>
 <body>
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark "><!--顶部导航栏-->
@@ -58,7 +59,7 @@
     </div>
   </div>
   <br>
-  <table class="table table-hover table-bordered table-responsive-xl text-center vertical-alignment" style="background-color: white">
+  <table id="table" class="table table-hover table-bordered table-responsive-xl text-center vertical-alignment" style="background-color: white">
     <thead class="thead-light text-center">
     <tr>
       <th>测试名称</th>
@@ -70,51 +71,57 @@
     </tr>
     </thead>
     <tbody>
-        <tr>
-          <td><?php echo $row['exam_name'] ?></td>
-          <td><?php echo $course_id ?></td>
-          <td><?php echo $time ?></td>
-          <td>
-              <div id="getting-started">
-            </div>
-              <script>
-                  function cuntdown(time) {
-                    $('#getting-started').countdown(time)
-                      .on('update.countdown', function (event) {
-                          var format = '%H 小时 %M 分钟 %S 秒 ';
-                          if (event.offset.totalDays > 0) {
-                            format = '%-d 天 ' + format;
-                          }
-                          if (event.offset.weeks > 0) {
-                            format = '%-w 周 ' + format;
-                          }
-                          $(this).html(event.strftime(format));
-                      })
-                      .on('finish.countdown', function (event) {
-                        if (<? echo $if_exam ?> === 1) {
-                          $(this).html('已完成考试').parent().addClass('disabled');
-                          $("#<?php echo $button_name?>").attr("disabled",true);
-                        }else{
-                          $(this).html('开始考试').parent().addClass('disabled');
-                          $("#<?php echo $button_name?>").attr("disabled",false);
-                        }
-                      });
-                  }
-                  var time = "<?php echo $time ?>";
-                  cuntdown(time);
-              </script>
-          </td>
-          <td class="view">
-              <button id = "<?php echo $button_name?>" class="btn btn-primary btn-sm" >参加考试</button>
-<!--              <script>-->
-<!--                  $("#<?php echo $button_name?>").bind("click",function() {-->
-<!--                      window.location.href="<?php echo $cjump ?>"-->
-<!--                  });-->
-<!--                  $("#<?php echo $button_name?>").attr("disabled",true);-->
-<!--              </script>-->
-          </td>
-            <?}}?>
-        </tr>
+    <script type="module">
+      import getData from '../javascript/function.js';
+      import {countdown} from "../javascript/function.js";
+      let getWeight = await getData("sql",`SELECT * FROM \`exam_arrangement\``, 'weight');
+      let tbody = document.querySelector('tbody');
+      for (let i=0; i < getWeight.length ;i++)
+      {
+        let tr = document.createElement('tr');
+        tbody.appendChild(tr);
+        let data = getWeight[i];
+        let td1 = document.createElement('td');
+        td1.innerHTML = data['exam_name'];
+        tr.appendChild(td1);
+        let td2 = document.createElement('td');
+        td2.innerHTML = data['exam_id'];
+        tr.appendChild(td2);
+        let td3 = document.createElement('td');
+        if (data['exam_setting'] === 'N')
+        {
+          td3.innerHTML = "未指定时间";
+        }
+        else
+        {
+          td3.innerHTML = new Date(data['exam_begin']).toLocaleString();
+        }
+        tr.appendChild(td3);
+        let td4 = document.createElement('td');
+        td4.innerHTML = data['exam_time'] + "分钟";
+        tr.appendChild(td4);
+        let td5 = document.createElement('td');
+        let cd = "ct" + i;
+        td5.innerHTML = "<td>\n" +
+                "<div id="+cd+">\n" +
+                "</div></td>";
+        tr.appendChild(td5);
+
+        //设置1s刷新一次获取最新倒计时
+        function getCountdown(){
+          let ct = document.getElementById("ct"+i);
+          ct.innerHTML = countdown(new Date(data['exam_begin']));
+        }
+        window.setInterval(getCountdown,1000);
+
+        //todo 实现按钮功能
+        let td6 = document.createElement('td');
+        td6.innerHTML = "<td>\n" +
+                "<button id = \"bt"+i+"\" class=\"btn btn-primary btn-sm\" onclick=alert('dasdsad')>参加考试</button>\n" +
+                "</div></td>";
+        tr.appendChild(td6);
+      }
+    </script>
     </tbody>
   </table>
 </div>
