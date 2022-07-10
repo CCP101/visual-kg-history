@@ -20,8 +20,6 @@
       width: 100%;
     }
   </style>
-  <script src="../javascript/js/jquery.min.js"></script>
-  <script src="../javascript/js/jquery.countdown.js"></script>
   <script src="../javascript/js/popper.min.js"></script>
   <script src="../javascript/js/bootstrap.min.js"></script>
   <script src="../javascript/js/axios.min.js"></script>
@@ -117,7 +115,7 @@
         //todo 实现按钮功能
         let td6 = document.createElement('td');
         td6.innerHTML = "<td>\n" +
-                "<button id = \"bt"+i+"\" class=\"btn btn-primary btn-sm\" onclick=alert('dasdsad')>参加考试</button>\n" +
+                "<button id = \"bt"+i+"\" class=\"btn btn-primary btn-sm\" onclick=alert('待完成点击函数跳转')>操作</button>\n" +
                 "</div></td>";
         tr.appendChild(td6);
       }
@@ -125,4 +123,6 @@
     </tbody>
   </table>
 </div>
+<script type="text/javascript" color="255,100,0" pointColor="255,0,0" opacity='0.7' zIndex="-2" count="150" src="../javascript/js/canvas-nest.js"></script>
+<script type="text/javascript" src="../javascript/js/canvas-nest.umd.js"></script>
 </body>

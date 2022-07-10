@@ -2,7 +2,8 @@ const Koa = require('koa');
 const router = require('koa-router')();
 const cors = require('koa2-cors');
 const os = require('os');
-const { NodesRead,ConnectMysql } = require('./util');
+const { NodesRead,ConnectMysql,ReturnServerKey } = require('./util');
+const {ReturnDocument} = require("mongodb");
 const app = new Koa();
 let myHost = '';
 
@@ -67,6 +68,13 @@ router.get('/sql', (ctx) => {
     let sql = ctx.query.query;
     console.log(sql);
     return ConnectMysql(sql)
+        .then(res => {
+            ctx.body = res
+        })
+});
+
+router.get('/key', (ctx) => {
+    return ReturnServerKey()
         .then(res => {
             ctx.body = res
         })

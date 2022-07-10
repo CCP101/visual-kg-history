@@ -11,6 +11,11 @@ const mysqlConnect = {
     password: 'ROOT',
     database: 'cq_history'
 }
+const NodeRSA = require('node-rsa');
+const key = new NodeRSA({ bits: 512 }, 'pkcs1-public-pem', 'pkcs1-private-pem');
+const publicDer = key.exportKey('pkcs8-public');
+const privateDer = key.exportKey('pkcs8-private');
+console.log(publicDer)
 
 /**
  * JS连接MySQL数据库实现(本代码由Github Copilot提供)
@@ -131,7 +136,17 @@ async function csvRead(file_path) {
     });
 }
 
+function ReturnServerKey(){
+    return new Promise(function (resolve, reject) {
+        resolve(publicDer);
+    });
+}
+
+
+
+
 exports.ConnectMysql = ConnectMysql;
 exports.NodesWrite = NodesWrite;
 exports.NodesRead = NodesRead;
 exports.csvRead = csvRead;
+exports.ReturnServerKey = ReturnServerKey;
