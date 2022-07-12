@@ -5,7 +5,7 @@ const config = {
 
 
 /**
- * 异步实现后端访问
+ * 异步实现后端GET请求
  * @param link 后台访问地址
  * @param para 查询语句(Neo4j/SQL)
  * @param key 查询关键字段
@@ -26,6 +26,27 @@ async function getData(link, para, key) {
     });
 }
 
+/**
+ * 异步实现后端访问
+ * @param link 后台访问地址
+ * @param postData post请求数据
+ */
+function postData(link, postData) {
+    console.log(postData);
+    axios.post(`${config.ip}:${config.port}/${link}`, postData)
+        .then(function(res){
+            console.log(res);
+        // .then(function (response) {
+        //         novelist = response.data
+        //         resolve(novelist);
+        //     })
+        // .catch(function (err) {
+        //     console.log(err);
+        //     reject(new Error(err));
+        // });
+    });
+}
+
 
 function countdown(time) {
     if (time.getTime() === 0) {
@@ -42,4 +63,4 @@ function countdown(time) {
 
 
 export default getData;
-export { countdown };
+export { countdown, postData };

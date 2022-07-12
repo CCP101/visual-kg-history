@@ -44,7 +44,7 @@
    v12.22.7
    ```
 
-6. 切换到项目目录，安装项目的依赖模块
+6. 切换到本项目所在的文件目录，安装项目的依赖模块
 
    ```
    npm install --dependencies
@@ -55,7 +55,7 @@
      run `npm fund` for details
    ```
 
-7. 运行服务端程序，在当前目录下输入以下代码，并保证3000端口无程序占用
+7. 运行服务端程序，在当前目录下输入以下代码，并保证3000端口无程序占用，并保持持久化运行
 
    ```
    node .\backend\backupServer.js
@@ -64,5 +64,8 @@
 8. 在浏览器输入以下地址，即可打开本项目
 
    ```
-   http://localhost/visual-kg-histroy/
+   项目主页
+   http://localhost/visual-kg-histroy/web/
+   知识图谱页面
+   http://localhost/visual-kg-histroy/web/kg/
    ```
