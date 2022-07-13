@@ -4,6 +4,7 @@ const bodyParser = require('koa-bodyparser');
 const cors = require('koa2-cors');
 const os = require('os');
 const { NodesRead,ConnectMysql,ReturnServerKey } = require('./util');
+const {registerCheck} = require("./userSetting");
 const app = new Koa();
 let myHost = '';
 
@@ -98,7 +99,15 @@ router.get('/key', (ctx) => {
 
 router.post('/router', (ctx) => {
     let data = ctx.request.body;
-    console.log(data);
+    let returnCode = registerCheck(data);
+
+    // console.log(returnCode);
+
+    //不能直接拿await里的东西 需要时序
+
+
+
+
     //todo: 发送数据到服务器
     ctx.body = "200000";
 });

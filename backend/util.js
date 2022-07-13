@@ -12,10 +12,11 @@ const mysqlConnect = {
     database: 'cq_history'
 }
 const NodeRSA = require('node-rsa');
-const key = new NodeRSA({ bits: 512 }, 'pkcs1-public-pem', 'pkcs1-private-pem');
+const key = new NodeRSA({b: 512});
+key.setOptions({ encryptionScheme: 'pkcs1' });
 const publicDer = key.exportKey('pkcs8-public');
 const privateDer = key.exportKey('pkcs8-private');
-console.log(publicDer)
+console.log(publicDer);
 
 /**
  * JS连接MySQL数据库实现(本代码由Github Copilot提供)
@@ -142,6 +143,14 @@ function ReturnServerKey(){
     });
 }
 
+//后期实现密匙导出到本地，不然函数到处飞
+function decrypt(pwd){
+    return new Promise(function (resolve, reject) {
+        let real_pwd = key.decrypt(pwd, 'utf8');
+        resolve(real_pwd);
+    });
+}
+
 
 
 
@@ -150,3 +159,4 @@ exports.NodesWrite = NodesWrite;
 exports.NodesRead = NodesRead;
 exports.csvRead = csvRead;
 exports.ReturnServerKey = ReturnServerKey;
+exports.decrypt = decrypt;

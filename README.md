@@ -69,3 +69,4 @@
    知识图谱页面
    http://localhost/visual-kg-histroy/web/kg/
    ```
+   项目首次启动后服务端需要显示公匙后才能操作

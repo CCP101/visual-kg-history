@@ -32,7 +32,6 @@ async function getData(link, para, key) {
  * @param postData post请求数据
  */
 function postData(link, postData) {
-    console.log(postData);
     axios.post(`${config.ip}:${config.port}/${link}`, postData)
         .then(function(res){
             console.log(res);
