@@ -4,11 +4,7 @@ let publicKey = await getData("key", "publicKey", "get");
 encryptor.setPublicKey(publicKey);
 
 
-function register() {
-    window.location.href = "register.html";
-}
-
-function login(){
+async function login(){
     let username = $("#username").val();
     let password = $("#password").val();
     const encryptedPassword = encryptor.encrypt(password);
@@ -22,7 +18,23 @@ function login(){
         password: encryptedPassword,
         rememberCheck: rememberCheck
     };
-    postData("router", data);
+    let getData = await postData("router", data);
+    console.log(getData);
 }
 
-export { register, login };
+async function register(){
+    let username = $("#username").val();
+    let password = $("#password").val();
+    let checkPassword = $("#checkPassword").val();
+    if(username === "" || password === "" || checkPassword === ""){
+        alert("用户名或密码不能为空");
+        return;
+    }
+    if(password !== checkPassword){
+        alert("两次密码不一致");
+        return;
+    }
+    const encryptedPassword = encryptor.encrypt(password);
+    let checkUsername = await getData("userCheck", username, "username");
+}
+export { login,register };

@@ -32,17 +32,16 @@ async function getData(link, para, key) {
  * @param postData post请求数据
  */
 function postData(link, postData) {
-    axios.post(`${config.ip}:${config.port}/${link}`, postData)
-        .then(function(res){
-            console.log(res);
-        // .then(function (response) {
-        //         novelist = response.data
-        //         resolve(novelist);
-        //     })
-        // .catch(function (err) {
-        //     console.log(err);
-        //     reject(new Error(err));
-        // });
+    return new Promise((resolve, reject) => {
+        axios.post(`${config.ip}:${config.port}/${link}`, postData)
+            .then(function (res) {
+                let data = res.data;
+                resolve(data);
+            })
+            .catch(function (err) {
+                console.log(err);
+                reject(new Error(err));
+            });
     });
 }
 

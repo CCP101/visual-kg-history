@@ -1,9 +1,9 @@
 const Koa = require('koa');
-const router = require('koa-router')();
 const bodyParser = require('koa-bodyparser');
 const cors = require('koa2-cors');
+const router = require('koa-router')();
 const os = require('os');
-const { NodesRead,ConnectMysql,ReturnServerKey } = require('./util');
+const { NodesRead, ConnectMysql, ReturnServerKey, UsernameCheck} = require('./util');
 const {registerCheck} = require("./userSetting");
 const app = new Koa();
 let myHost = '';
@@ -82,8 +82,9 @@ router.get('/node', (ctx) => {
 });
 
 router.get('/sql', (ctx) => {
-    let sql = ctx.query.query;
-    console.log(sql);
+    let sql_list = [];
+    let sql_select = ctx.query.query;
+    let sql = sql_list[sql_select];
     return ConnectMysql(sql)
         .then(res => {
             ctx.body = res
@@ -97,19 +98,19 @@ router.get('/key', (ctx) => {
         })
 });
 
-router.post('/router', (ctx) => {
+router.get('/userCheck', (ctx) => {
+    let username = ctx.query.query;
+    return UsernameCheck(username)
+        .then(res => {
+            ctx.body = res
+        })
+});
+
+//需要async控制，内部有时序控制
+router.post('/router', async (ctx) => {
     let data = ctx.request.body;
     let returnCode = registerCheck(data);
-
-    // console.log(returnCode);
-
-    //不能直接拿await里的东西 需要时序
-
-
-
-
-    //todo: 发送数据到服务器
-    ctx.body = "200000";
+    ctx.body = await returnCode;
 });
 
 

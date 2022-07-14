@@ -1,5 +1,6 @@
 const mysql = require('mysql');
 const neo4j = require("neo4j-driver");
+const NodeRSA = require('node-rsa');
 const fs = require("fs");
 const { parse } = require("csv-parse");
 //在此配置数据库连接参数,config配置解决JS关于数字类型的转换问题
@@ -11,7 +12,7 @@ const mysqlConnect = {
     password: 'ROOT',
     database: 'cq_history'
 }
-const NodeRSA = require('node-rsa');
+
 const key = new NodeRSA({b: 512});
 key.setOptions({ encryptionScheme: 'pkcs1' });
 const publicDer = key.exportKey('pkcs8-public');
@@ -137,12 +138,21 @@ async function csvRead(file_path) {
     });
 }
 
+/**
+ * 像前端发送服务器的公匙
+ * @return {Promise<>} 以期约方式返回公匙
+ */
 function ReturnServerKey(){
     return new Promise(function (resolve, reject) {
         resolve(publicDer);
     });
 }
 
+/**
+ * 解密前端发送的密文
+ * @return {Promise<>} 以期约方式返回解密结果
+ * todo：后期考虑对加密解密模块进行精简
+ */
 //后期实现密匙导出到本地，不然函数到处飞
 function decrypt(pwd){
     return new Promise(function (resolve, reject) {
@@ -151,7 +161,14 @@ function decrypt(pwd){
     });
 }
 
-
+async function UsernameCheck(username){
+    return new Promise(async function (resolve, reject) {
+        let query = "SELECT * FROM users WHERE username = '" + username + "'";
+        let result = await ConnectMysql(query);
+        console.log(result);
+        resolve(result);
+    });
+}
 
 
 exports.ConnectMysql = ConnectMysql;
@@ -160,3 +177,4 @@ exports.NodesRead = NodesRead;
 exports.csvRead = csvRead;
 exports.ReturnServerKey = ReturnServerKey;
 exports.decrypt = decrypt;
+exports.UsernameCheck = UsernameCheck;

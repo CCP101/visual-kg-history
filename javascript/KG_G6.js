@@ -17,6 +17,7 @@ async function getDatabaseFirst() {
     for (let person of getWeight) {
         HPerson_weight[person.name] = person.weight;
     }
+    //todo:前端不要直接发送请求，会暴露数据库，使用后端解决
     let HPerson_Teams = await getData("node",`MATCH (n:${person_history.category}) RETURN n LIMIT 100`, `n`);
     let HPerson_Relation = await getData("node",`MATCH (P1:${person_history.category})-[r]-(P2:${person_history.category}) RETURN r `, "r");
     //Neo4j查询结果转换为G6的数据格式

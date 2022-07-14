@@ -97,15 +97,13 @@
             </div>
           </div>
           <div class="col-12 center-block text-center">
-            <button class="btn btn btn-primary pull-left center-block d-block" type="button" id="register">注册</button>
-            <button class="btn btn btn-primary pull-right center-block d-block" type="button" id="login">登录</button>
+            <button class="btn btn btn-primary center-block" type="button" id="login">登录</button>
+          </div>
+          <div class="col-12 font-weight-normal">
+            没有帐户？<a href="register.html">注册</a>
           </div>
           <script type="module">
             //前端对JS模组功能支持极差，按钮的onclick会拿不到函数，需要jQuery进行强制绑定函数,后期进行技术迭代
-            import {register} from '../javascript/homepage.js';
-            $("#register").click(function(){
-              register();
-            });
             import {login} from '../javascript/homepage.js';
             $("#login").click(function(){
               login();
