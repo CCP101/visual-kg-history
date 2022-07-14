@@ -36,5 +36,20 @@ async function register(){
     }
     const encryptedPassword = encryptor.encrypt(password);
     let checkUsername = await getData("userCheck", username, "username");
+    if (checkUsername.length === 0) {
+        let data = {
+            username: username,
+            password: encryptedPassword
+        };
+        let getData = await postData("register", data);
+        if (getData === 200){
+            alert("注册成功");
+            window.location.href = "index.html";
+        }else{
+            alert("注册失败");
+        }
+    }else{
+        alert("用户名已存在");
+    }
 }
 export { login,register };

@@ -9,3 +9,8 @@ const encrypted = key.encrypt(text, 'base64');
 console.log('encrypted: ', encrypted);
 const decrypted = key.decrypt(encrypted, 'utf8');
 console.log('decrypted: ', decrypted);
+
+const crytpo = require('crypto');
+let hmac = crytpo.createHmac("sha256", "TUST");
+let encryptPassword = hmac.update("asdsdf&^*555").digest("Base64");
+console.log(encryptPassword);

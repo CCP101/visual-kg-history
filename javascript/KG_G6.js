@@ -13,7 +13,6 @@ async function getDatabaseFirst() {
     for (let person of getWeight) {
         HPerson_weight[person.name] = person.weight;
     }
-    //todo:前端不要直接发送请求，会暴露数据库，使用后端解决
     let HPerson_Teams = await getData("node","selectPeople","n");
     let HPerson_Relation = await getData("node","selectRelation","r");
     //Neo4j查询结果转换为G6的数据格式

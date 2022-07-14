@@ -4,7 +4,7 @@ const cors = require('koa2-cors');
 const router = require('koa-router')();
 const os = require('os');
 const { NodesRead, ConnectMysql, ReturnServerKey, UsernameCheck} = require('./util');
-const {registerCheck} = require("./userSetting");
+const {registerCheck, registerUser} = require("./userSetting");
 const app = new Koa();
 let myHost = '';
 
@@ -45,8 +45,9 @@ app.use(async (ctx, next) => {
 });
 
 /**
- * 对/node请求进行监听
- * @return NodesPromise 调用函数
+ * 对/node GET请求进行监听，实现对Neo4j数据库的包装访问
+ * 通过ctx.query解析GET请求
+ * @return res Neo4j查询结果
  */
 router.get('/node', (ctx) => {
     // console.log(myHost);
@@ -85,9 +86,17 @@ router.get('/node', (ctx) => {
         })
 });
 
+/**
+ * 对/sql GET请求进行监听，实现对MySQL数据库的包装访问
+ * 通过ctx.query解析GET请求
+ * @return res MySQL查询结果
+ */
 router.get('/sql', (ctx) => {
     let sql_list = {
         'getAllUsers': 'SELECT * FROM people',
+        'getUserByName': 'SELECT * FROM users WHERE username = ?',
+        'getUserByID': 'SELECT * FROM users WHERE id = ?',
+        'getExamArrangement': 'SELECT * FROM exam_arrangement',
     };
     let sql_select = ctx.query.query;
     let sql = sql_list[sql_select];
@@ -97,6 +106,10 @@ router.get('/sql', (ctx) => {
         })
 });
 
+/**
+ * 对/key GET请求进行监听，发送服务器生成的公匙
+ * @return res RSA公匙
+ */
 router.get('/key', (ctx) => {
     return ReturnServerKey()
         .then(res => {
@@ -104,6 +117,10 @@ router.get('/key', (ctx) => {
         })
 });
 
+/**
+ * 对/userCheck GET请求进行监听，检查注册ID是否可用
+ * @return res 检查结果
+ */
 router.get('/userCheck', (ctx) => {
     let username = ctx.query.query;
     return UsernameCheck(username)
@@ -112,13 +129,27 @@ router.get('/userCheck', (ctx) => {
         })
 });
 
-//需要async控制，内部有时序控制
+/**
+ * 对/router POST请求进行监听，检查注册ID是否可用
+ * 通过ctx.body解析POST内容
+ * @return res 检查结果
+ */
 router.post('/router', async (ctx) => {
     let data = ctx.request.body;
     let returnCode = registerCheck(data);
     ctx.body = await returnCode;
 });
 
+/**
+ * 对/register POST请求进行监听，注册账户事务
+ * 通过ctx.body解析POST内容
+ * @return res 检查结果
+ */
+router.post('/register', async (ctx) => {
+    let data = ctx.request.body;
+    let returnCode = registerUser(data);
+    ctx.body = await returnCode;
+});
 
 
 
