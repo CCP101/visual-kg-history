@@ -7,19 +7,15 @@ import getData from './function.js';
  * 异步实现网页首次启动时的默认查询
  */
 async function getDatabaseFirst() {
-    const person_history = {
-        category: 'DPerson',
-        search_type: 'name'
-    };
     let set = new Set();
-    let getWeight = await getData("sql",`SELECT * FROM \`people\``, 'weight');
+    let getWeight = await getData("sql", "getAllUsers","user");
     let HPerson_weight = {};
     for (let person of getWeight) {
         HPerson_weight[person.name] = person.weight;
     }
     //todo:前端不要直接发送请求，会暴露数据库，使用后端解决
-    let HPerson_Teams = await getData("node",`MATCH (n:${person_history.category}) RETURN n LIMIT 100`, `n`);
-    let HPerson_Relation = await getData("node",`MATCH (P1:${person_history.category})-[r]-(P2:${person_history.category}) RETURN r `, "r");
+    let HPerson_Teams = await getData("node","selectPeople","n");
+    let HPerson_Relation = await getData("node","selectRelation","r");
     //Neo4j查询结果转换为G6的数据格式
     for (let node of HPerson_Teams) {
         nodes.push({

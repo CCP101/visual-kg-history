@@ -52,37 +52,43 @@ router.get('/node', (ctx) => {
     // console.log(myHost);
     let client_list = new Set();
     let clientHost = ctx.req.connection.remoteAddress.slice(7,);
-    let query;
+    let cypherQuery;
     let key;
+    let cypher_list = {
+        "selectPeople": "MATCH (n:DPerson) RETURN n LIMIT 100",
+        "selectRelation": "MATCH (P1:DPerson)-[r]-(P2:DPerson) RETURN r ",
+    };
     // 从主页访问的情况
-
     if (ctx.req.headers.origin) {
         if (client_list.has(clientHost) === false) {
             client_list.add(clientHost);
         }
-        query = ctx.query.query;
+        cypherQuery = ctx.query.query;
         key = ctx.query.key;
     }
-    // 限制访问范围，如只允许本地访问需修正else内的代码
+    // 限制访问范围，生产环境可以用来拦截外部来的访问
+    // 开发环境建议不修改方便调试，如只允许本机访问需修正else内的代码
     else if (clientHost.includes(myHost) || clientHost === '::1') {
         console.log(clientHost + '正在访问3000端口并请求');
-        query = ctx.query.query;
+        cypherQuery = ctx.query.query;
         key = ctx.query.key;
     } else {
         console.log(clientHost + '正在从外部访问3000端口并请求');
-        query = ctx.query.query;
+        cypherQuery = ctx.query.query;
         key = ctx.query.key;
     }
     // 打印当前查询
-    console.log(query);
-    return NodesRead(query, key)
+    console.log(cypher_list[cypherQuery]);
+    return NodesRead(cypher_list[cypherQuery], key)
         .then(res => {
             ctx.body = res
         })
 });
 
 router.get('/sql', (ctx) => {
-    let sql_list = [];
+    let sql_list = {
+        'getAllUsers': 'SELECT * FROM people',
+    };
     let sql_select = ctx.query.query;
     let sql = sql_list[sql_select];
     return ConnectMysql(sql)
