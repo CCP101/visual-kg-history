@@ -13,8 +13,12 @@ const config = {
  */
 async function getData(link,para,key) {
     return new Promise((resolve, reject) => {
-        let novelist = []
-        axios.get(`${config.ip}:${config.port}/${link}?query=${para}&key=${key}`)
+        let novelist = [];
+        axios.defaults.withCredentials = true;
+        axios.get(`${config.ip}:${config.port}/${link}?query=${para}&key=${key}`,{
+            headers: {
+                "withCredentials":true
+            }})
             .then(function (response) {
                 novelist = response.data
                 resolve(novelist);
@@ -33,9 +37,14 @@ async function getData(link,para,key) {
  */
 function postData(link, postData) {
     return new Promise((resolve, reject) => {
-        axios.post(`${config.ip}:${config.port}/${link}`, postData)
+        axios.defaults.withCredentials = true;
+        axios.post(`${config.ip}:${config.port}/${link}`, postData,{
+            headers: {
+                "withCredentials":true
+            }})
             .then(function (res) {
                 let data = res.data;
+                console.log(res);
                 resolve(data);
             })
             .catch(function (err) {

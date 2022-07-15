@@ -29,12 +29,18 @@ function getIPAdd() {
 
 getIPAdd();
 
+//CORS配置，允许跨域
+app.use(cors({
+    credentials: true,
+    origin: 'http://localhost', // web前端服务器地址
+}));
 //请注意 app配置工具的顺序不能错，否则bodyParser无法正常工作
-app.use(cors());
 app.use(bodyParser());
+app.keys = ['TUST'];
 app.use(router.routes());
 app.use(router.allowedMethods());
 app.listen(3000);
+
 
 app.use(async (ctx, next) => {
     try {
@@ -123,6 +129,9 @@ router.get('/key', (ctx) => {
  */
 router.get('/userCheck', (ctx) => {
     let username = ctx.query.query;
+    // console.log(ctx);
+    // let userLogin = ctx.cookies.get("userLogin") || "No userLogin";
+    // console.log(userLogin);
     return UsernameCheck(username)
         .then(res => {
             ctx.body = res
@@ -136,8 +145,13 @@ router.get('/userCheck', (ctx) => {
  */
 router.post('/router', async (ctx) => {
     let data = ctx.request.body;
-    let returnCode = loginCheck(data);
-    ctx.body = await returnCode;
+    let returnCode = await loginCheck(data);
+    if (returnCode === 200 && data.rememberCheck === false) {
+        ctx.cookies.set("userLogin", data.username, { maxAge: 10 * 24600, signed: true, httpOnly: false});
+    }else if (returnCode === 200 && data.rememberCheck === true) {
+        ctx.cookies.set("userLogin", data.username, { maxAge: 10 * 302400, signed: true});
+    }
+    ctx.body = returnCode;
 });
 
 /**
