@@ -1,3 +1,5 @@
+//测试代码专用文件
+
 const NodeRSA = require('node-rsa');
 const key = new NodeRSA({b: 512});
 const publicDer = key.exportKey('pkcs8-public');

@@ -3,7 +3,10 @@ let encryptor = new JSEncrypt();
 let publicKey = await getData("key", "publicKey", "get");
 encryptor.setPublicKey(publicKey);
 
-
+/**
+ * 前端登录检查
+ * 200 正常 500 用户名或密码错误 700 服务器错误
+ */
 async function login(){
     let username = $("#username").val();
     let password = $("#password").val();
@@ -19,9 +22,22 @@ async function login(){
         rememberCheck: rememberCheck
     };
     let getData = await postData("router", data);
+    if (getData === 200){
+        alert("登陆成功");
+    }
+    if (getData === 500){
+        alert("用户名或密码错误");
+    }
+    if (getData === 700){
+        alert("登陆异常");
+    }
     console.log(getData);
 }
 
+/**
+ * 前端注册功能
+ * 200 成功 500 服务器错误
+ */
 async function register(){
     let username = $("#username").val();
     let password = $("#password").val();
@@ -35,6 +51,7 @@ async function register(){
         return;
     }
     const encryptedPassword = encryptor.encrypt(password);
+    // 确认注册用户名是否可用
     let checkUsername = await getData("userCheck", username, "username");
     if (checkUsername.length === 0) {
         let data = {

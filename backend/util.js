@@ -6,13 +6,18 @@ const { parse } = require("csv-parse");
 //在此配置数据库连接参数,config配置解决JS关于数字类型的转换问题
 const driver = neo4j.driver('neo4j://localhost', neo4j.auth.basic('neo4j', 'neo4j'),
     { disableLosslessIntegers: true });
-const mysqlConnect = {
+const mysqlPool = mysql.createPool({
     host: 'localhost',
     user: 'root',
     password: 'ROOT',
     database: 'cq_history'
-}
+});
 
+/**
+ * 服务器初始化设置NodeRSA
+ * @param publicDer RSA公匙
+ * @param privateDer RSA私匙
+ */
 const key = new NodeRSA({b: 512});
 key.setOptions({ encryptionScheme: 'pkcs1' });
 const publicDer = key.exportKey('pkcs8-public');
@@ -20,28 +25,19 @@ const privateDer = key.exportKey('pkcs8-private');
 console.log(publicDer);
 
 /**
- * JS连接MySQL数据库实现(本代码由Github Copilot提供)
+ * JS连接MySQL数据库实现
  * @param query Cypher语句
  * @return {Promise<any>} 以期约方式返回数据库查询结果
- * JS的MySQL连接模块未实现对于MySQL8认证的支持，因此需要自行在MySQL安装目录下找到mysql_config_editor.exe文件，并执行如下命令：
- * mysql_config_editor set --login-path=local --host=localhost --user=root --password
- * 如果没有找到mysql_config_editor.exe文件，则可以通过以下方式安装：
- * https://dev.mysql.com/downloads/connector/nodejs/
- * 本地MySQL数据库认证方式被降级，暂未认证该方案
+ * Node.js在长期不访问数据库的情况下，可能会报错
+ * mysql Error: Connection lost The server closed the connection
+ * 需要创建MySQL连接池智能解决该问题
  */
 async function ConnectMysql(query) {
     return new Promise(function (resolve, reject) {
-        let connection = mysql.createConnection(mysqlConnect);
-        connection.connect("", undefined);
         console.log(query);
-        connection.query(query, function (error, results, fields) {
-            if (error) {
-                reject(error);
-            }
+        mysqlPool.query(query, function (error, results, fields) {
             resolve(results);
-        });
-        // console.log("MySql finished");
-        connection.end();
+        })
     });
 }
 
@@ -151,9 +147,8 @@ function ReturnServerKey(){
 /**
  * 解密前端发送的密文
  * @return {Promise<>} 以期约方式返回解密结果
- * todo：后期考虑对加密解密模块进行精简
+ * todo：后期考虑对加密解密模块进行精简,将密匙导出到本地
  */
-//后期实现密匙导出到本地，不然函数到处飞
 function decrypt(pwd){
     return new Promise(function (resolve, reject) {
         let real_pwd = key.decrypt(pwd, 'utf8');
@@ -161,6 +156,11 @@ function decrypt(pwd){
     });
 }
 
+/**
+ * @param username 检查用户名
+ * @return {Promise<>} 以期约方式返回查询结果
+ * 检查用户名是否存在
+ */
 async function UsernameCheck(username){
     return new Promise(async function (resolve, reject) {
         let query = "SELECT * FROM users WHERE username = '" + username + "'";

@@ -4,7 +4,7 @@ const cors = require('koa2-cors');
 const router = require('koa-router')();
 const os = require('os');
 const { NodesRead, ConnectMysql, ReturnServerKey, UsernameCheck} = require('./util');
-const {registerCheck, registerUser} = require("./userSetting");
+const {registerCheck, registerUser, loginCheck} = require("./userSetting");
 const app = new Koa();
 let myHost = '';
 
@@ -136,7 +136,7 @@ router.get('/userCheck', (ctx) => {
  */
 router.post('/router', async (ctx) => {
     let data = ctx.request.body;
-    let returnCode = registerCheck(data);
+    let returnCode = loginCheck(data);
     ctx.body = await returnCode;
 });
 
@@ -147,8 +147,7 @@ router.post('/router', async (ctx) => {
  */
 router.post('/register', async (ctx) => {
     let data = ctx.request.body;
-    let returnCode = registerUser(data);
-    ctx.body = await returnCode;
+    ctx.body = await registerUser(data);
 });
 
 

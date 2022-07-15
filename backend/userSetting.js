@@ -2,26 +2,31 @@ const {decrypt, ConnectMysql} = require("./util");
 const moment = require('moment')
 const crytpo = require('crypto');
 
-//todo:后期实现处理，基本是调模块
-
-async function registerCheck(data){
-    let username = data.username;
-    let password = data.password;
-    let rememberCheck = data.rememberCheck;
-    let realPassword = await decrypt(password);
-    console.log(realPassword);
-    return realPassword;
-}
 
 async function loginCheck(data){
     let username = data.username;
     let password = data.password;
     let rememberCheck = data.rememberCheck;
     let realPassword = await decrypt(password);
-    console.log(realPassword);
-    return realPassword;
+    let hmac = crytpo.createHmac("sha256", "TUST");
+    let encryptPassword = hmac.update(realPassword).digest("Base64");
+    let loginSql = `SELECT * FROM users WHERE username = '${username}' AND password = '${encryptPassword}'`;
+    let result = await ConnectMysql(loginSql);
+    console.log(result);
+    let returnCode = 700;
+    if (result.length === 0){
+        returnCode = 500;
+    }else if(result.length === 1){
+        returnCode = 200;
+    }
+    return returnCode;
 }
 
+/**
+ * 注册用户
+ * @param data 用户数据
+ * @return res MySQL查询结果
+ */
 async function registerUser(data){
     let username = data.username;
     let password = data.password;
@@ -32,12 +37,12 @@ async function registerUser(data){
     let UserInsertSql = `INSERT INTO users (username, password, auth, addTime) 
                         VALUES ('${username}', '${encryptPassword}', 1, '${addTime}')`;
     let result = await ConnectMysql(UserInsertSql);
-    if (result.affectedRows === 1){
-        return 200;
-    }else{
-        return 500;
+    let returnCode = 200;
+    if (result.affectedRows !== 1){
+        returnCode = 500;
     }
+    return returnCode;
 }
 
-exports.registerCheck = registerCheck;
+exports.loginCheck = loginCheck;
 exports.registerUser = registerUser;
