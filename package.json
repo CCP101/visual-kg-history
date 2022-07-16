@@ -23,13 +23,15 @@
     "koa": "^2.13.4",
     "koa-bodyparser": "^4.3.0",
     "koa-router": "^10.1.1",
+    "koa-session": "^6.2.0",
     "koa2-cors": "^2.0.6",
     "moment": "^2.29.4",
     "mongodb": "^4.7.0",
     "mysql": "^2.18.1",
     "neo4j-driver": "^4.4.5",
     "node-jsencrypt": "^1.0.0",
-    "node-rsa": "^1.1.1"
+    "node-rsa": "^1.1.1",
+    "uuid": "^8.3.2"
   },
   "repository": {
     "type": "git",

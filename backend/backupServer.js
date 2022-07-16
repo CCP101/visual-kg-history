@@ -1,10 +1,12 @@
 const Koa = require('koa');
 const bodyParser = require('koa-bodyparser');
 const cors = require('koa2-cors');
+const session = require("koa-session");
+const { v1: uuidv1 } = require('uuid');
 const router = require('koa-router')();
 const os = require('os');
 const { NodesRead, ConnectMysql, ReturnServerKey, UsernameCheck} = require('./util');
-const {registerCheck, registerUser, loginCheck} = require("./userSetting");
+const { registerUser, loginCheck} = require("./userSetting");
 const app = new Koa();
 let myHost = '';
 
@@ -26,14 +28,26 @@ function getIPAdd() {
         }
     })
 }
-
 getIPAdd();
 
-//CORS配置，允许跨域
+/**
+ * 本项目技术栈大坑-前端Axios默认不处理服务器端修改cookies的请求
+ * 此处要对应设置KOA的CORS配置，允许本地调试时跨域
+ * 正式服务器上线时理论上不需要考虑本问题，但仍需测试
+ */
 app.use(cors({
     credentials: true,
-    origin: 'http://localhost', // web前端服务器地址
+    // web前端服务器地址，本地调试使用
+    origin: 'http://localhost',
 }));
+/**
+ * KOA框架配置session
+ * 参考链接：https://segmentfault.com/a/1190000016707043
+ */
+app.use(session({
+    key: "TUST",
+    maxAge: 1000 * 60 * 60 * 2
+}, app));
 //请注意 app配置工具的顺序不能错，否则bodyParser无法正常工作
 app.use(bodyParser());
 app.keys = ['TUST'];
@@ -129,9 +143,9 @@ router.get('/key', (ctx) => {
  */
 router.get('/userCheck', (ctx) => {
     let username = ctx.query.query;
-    // console.log(ctx);
-    // let userLogin = ctx.cookies.get("userLogin") || "No userLogin";
-    // console.log(userLogin);
+    let userLogin = ctx.cookies.get("userLogin") || "No userLogin";
+    console.log("cookies:  " + userLogin);
+    console.log("session:  " + ctx.session.userID);
     return UsernameCheck(username)
         .then(res => {
             ctx.body = res
@@ -139,17 +153,33 @@ router.get('/userCheck', (ctx) => {
 });
 
 /**
- * 对/router POST请求进行监听，检查注册ID是否可用
+ * 对/exit GET请求进行监听，用户退出
+ * 清空cookies和session
+ * @return res 退出状态码
+ */
+
+router.get('/exit', (ctx) => {
+    ctx.cookies.set('name','',{signed:false,maxAge:0})
+    ctx.session = null;
+});
+
+/**
+ * 对/login POST请求进行监听，用户登录业务
  * 通过ctx.body解析POST内容
+ * ctx.session 创建用户session
+ * ctx.cookies 创建用户cookies
  * @return res 检查结果
  */
-router.post('/router', async (ctx) => {
+router.post('/login', async (ctx) => {
     let data = ctx.request.body;
+    let userID = uuidv1();
+    ctx.session.userID = userID;
+    ctx.session.userName = data.username;
     let returnCode = await loginCheck(data);
     if (returnCode === 200 && data.rememberCheck === false) {
-        ctx.cookies.set("userLogin", data.username, { maxAge: 10 * 24600, signed: true, httpOnly: false});
+        ctx.cookies.set("userLogin", userID, { maxAge: 1000 * 60 * 60 * 2, signed: true});
     }else if (returnCode === 200 && data.rememberCheck === true) {
-        ctx.cookies.set("userLogin", data.username, { maxAge: 10 * 302400, signed: true});
+        ctx.cookies.set("userLogin", userID, { maxAge: 1000 * 60 * 60 * 24 * 7, signed: true});
     }
     ctx.body = returnCode;
 });

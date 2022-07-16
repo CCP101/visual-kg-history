@@ -21,7 +21,7 @@ async function login(){
         password: encryptedPassword,
         rememberCheck: rememberCheck
     };
-    let getData = await postData("router", data);
+    let getData = await postData("login", data);
     if (getData === 200){
         alert("登陆成功");
     }

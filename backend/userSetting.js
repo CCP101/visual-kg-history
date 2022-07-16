@@ -2,11 +2,14 @@ const {decrypt, ConnectMysql} = require("./util");
 const moment = require('moment')
 const crytpo = require('crypto');
 
-
+/**
+ * 用户登录库
+ * @param data 用户数据
+ * @return returnCode 用户登录相应代码
+ */
 async function loginCheck(data){
     let username = data.username;
     let password = data.password;
-    let rememberCheck = data.rememberCheck;
     let realPassword = await decrypt(password);
     let hmac = crytpo.createHmac("sha256", "TUST");
     let encryptPassword = hmac.update(realPassword).digest("Base64");
@@ -25,7 +28,7 @@ async function loginCheck(data){
 /**
  * 注册用户
  * @param data 用户数据
- * @return res MySQL查询结果
+ * @return returnCode 注册用户响应代码
  */
 async function registerUser(data){
     let username = data.username;

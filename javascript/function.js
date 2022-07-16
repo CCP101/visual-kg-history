@@ -37,6 +37,7 @@ async function getData(link,para,key) {
  */
 function postData(link, postData) {
     return new Promise((resolve, reject) => {
+        //控制axios可传递cookie
         axios.defaults.withCredentials = true;
         axios.post(`${config.ip}:${config.port}/${link}`, postData,{
             headers: {

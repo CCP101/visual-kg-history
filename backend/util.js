@@ -15,6 +15,8 @@ const mysqlPool = mysql.createPool({
 
 /**
  * 服务器初始化设置NodeRSA
+ * 调试说明：每次生成的公匙不一致，服务器重启，而前端不清除缓存刷新的情况下会导致无法解密，非BUG
+ * 设计为理想情况下服务端永久不重启，或后期将公匙导出到本地文件
  * @param publicDer RSA公匙
  * @param privateDer RSA私匙
  */
@@ -31,6 +33,8 @@ console.log(publicDer);
  * Node.js在长期不访问数据库的情况下，可能会报错
  * mysql Error: Connection lost The server closed the connection
  * 需要创建MySQL连接池智能解决该问题
+ * 因此原版本代码弃用，改用连接池，问题描述见连接：
+ * https://stackoverflow.com/questions/20210522/nodejs-mysql-error-connection-lost-the-server-closed-the-connection
  */
 async function ConnectMysql(query) {
     return new Promise(function (resolve, reject) {
@@ -147,7 +151,6 @@ function ReturnServerKey(){
 /**
  * 解密前端发送的密文
  * @return {Promise<>} 以期约方式返回解密结果
- * todo：后期考虑对加密解密模块进行精简,将密匙导出到本地
  */
 function decrypt(pwd){
     return new Promise(function (resolve, reject) {
