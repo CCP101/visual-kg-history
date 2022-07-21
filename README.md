@@ -1,4 +1,4 @@
-# 春秋战国历史图谱项目 [![wakatime](https://wakatime.com/badge/user/b5b6ac2c-550f-4e67-902a-a3d1fc690e9c/project/3904750b-5f53-4459-9925-cfbefab615cd.svg)](https://wakatime.com/badge/user/b5b6ac2c-550f-4e67-902a-a3d1fc690e9c/project/3904750b-5f53-4459-9925-cfbefab615cd)
+# 学科知识图谱学习平台项目 [![wakatime](https://wakatime.com/badge/user/b5b6ac2c-550f-4e67-902a-a3d1fc690e9c/project/3904750b-5f53-4459-9925-cfbefab615cd.svg)](https://wakatime.com/badge/user/b5b6ac2c-550f-4e67-902a-a3d1fc690e9c/project/3904750b-5f53-4459-9925-cfbefab615cd)
 
 ## 安装教程
 
@@ -55,13 +55,27 @@
      run `npm fund` for details
    ```
 
-7. 运行服务端程序，在当前目录下输入以下代码，并保证3000端口无程序占用，并保持持久化运行
+## 数据导入教程
+
+1. 在MySQL数据库中创建cq_history数据库，使用sql文件夹内的cq_history.sql文件自动导入表结构与数据（使用MySQL命令行工具或Navicat可视化工具）
+
+2. 修改backend文件夹内的util.js文件，检查Neo4j与MySQL数据库连接密码
+
+3. 修改backend文件夹内的dataInit.js文件，在110行后添加内容，保存并运行该文件，请提前将CSV文件放在指定位置或修改路径，出现"Write to Neo4j Success!"，即说明写入成功
+
+   ```
+   ImportDataToNeo4j()
+   ```
+
+## 运行教程
+
+1. 运行服务端程序，在当前目录下输入以下代码，并保证3000端口无程序占用，并保持持久化运行
 
    ```
    node .\backend\backupServer.js
    ```
 
-8. 在浏览器输入以下地址，即可打开本项目
+2. 在浏览器输入以下地址，即可打开本项目
 
    ```
    项目主页
@@ -69,4 +83,4 @@
    知识图谱页面
    http://localhost/visual-kg-histroy/web/kg/
    ```
-   项目首次启动后服务端需要显示公匙后才能操作
+   项目首次启动后服务端需要显示公匙后才能操作，每次服务器重启时前端页面应亦进行清空缓存的刷新
