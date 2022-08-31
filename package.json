@@ -21,17 +21,21 @@
     "express": "^4.17.3",
     "jsencrypt": "^3.2.1",
     "koa": "^2.13.4",
+    "koa-body": "^5.0.0",
     "koa-bodyparser": "^4.3.0",
+    "koa-multer": "^1.0.2",
     "koa-router": "^10.1.1",
     "koa-session": "^6.2.0",
     "koa2-cors": "^2.0.6",
+    "koa2-formidable": "^1.0.3",
     "moment": "^2.29.4",
     "mongodb": "^4.7.0",
     "mysql": "^2.18.1",
     "neo4j-driver": "^4.4.5",
     "node-jsencrypt": "^1.0.0",
     "node-rsa": "^1.1.1",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "xlsx": "^0.18.5"
   },
   "repository": {
     "type": "git",

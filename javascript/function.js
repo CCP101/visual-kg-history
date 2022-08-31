@@ -61,6 +61,9 @@ function countdown(time) {
         return 0;
     }
     let time_now = new Date();
+    if (time_now.getTime() > time.getTime()) {
+        return "已开始";
+    }
     let left_time = time.getTime() - time_now.getTime(),  //距离结束时间的毫秒数
         left_d = Math.floor(left_time/(1000*60*60*24)),  //计算天数
         left_h = Math.floor(left_time/(1000*60*60)%24),  //计算小时数

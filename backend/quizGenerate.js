@@ -6,7 +6,6 @@ const workbook = new ExcelJS.Workbook();
 
 /**
  * 生成试题并输出
- * TODO：生成混淆项目存入excel中
  * @return [] 返回生成的试题
  */
 async function generateText() {
@@ -26,6 +25,7 @@ async function generateText() {
         let query2 = `SELECT people.weight FROM people WHERE name = "${p2}"`;
         let weight1 = await ConnectMysql(query1);
         let weight2 = await ConnectMysql(query2);
+        //MATCH (n:DPerson{name:'赵孝成王'})-[r]-(n1:DPerson) return r
         // let results = JSON.parse(JSON.stringify(weight1))
         let p1v = weight1[0].weight;
         let p2v = weight2[0].weight;
@@ -95,6 +95,6 @@ async function ExcelOutput() {
 // dataInit().then(r => {
 //     console.log(r);
 // })
-ExcelOutput().then(r => {
-    console.log(r);
-});
+// ExcelOutput().then(r => {
+//     console.log(r);
+// });

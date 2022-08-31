@@ -1,5 +1,7 @@
 const Koa = require('koa');
+const koaBody = require('koa-body')
 const bodyParser = require('koa-bodyparser');
+const formidable = require('koa2-formidable');
 const cors = require('koa2-cors');
 const session = require("koa-session");
 const { v1: uuidv1 } = require('uuid');
@@ -7,6 +9,7 @@ const router = require('koa-router')();
 const os = require('os');
 const { NodesRead, ConnectMysql, ReturnServerKey, UsernameCheck} = require('./util');
 const { registerUser, loginCheck} = require("./userSetting");
+const { saveQuiz } = require("./SaveData");
 const app = new Koa();
 let myHost = '';
 
@@ -30,6 +33,8 @@ function getIPAdd() {
 }
 getIPAdd();
 
+
+
 /**
  * 本项目技术栈大坑-前端Axios默认不处理服务器端修改cookies的请求
  * 此处要对应设置KOA的CORS配置，允许本地调试时跨域
@@ -40,6 +45,7 @@ app.use(cors({
     // web前端服务器地址，本地调试使用
     origin: 'http://localhost',
 }));
+
 /**
  * KOA框架配置session
  * 参考链接：https://segmentfault.com/a/1190000016707043
@@ -49,6 +55,7 @@ app.use(session({
     maxAge: 1000 * 60 * 60 * 2
 }, app));
 //请注意 app配置工具的顺序不能错，否则bodyParser无法正常工作
+app.use(formidable());
 app.use(bodyParser());
 app.keys = ['TUST'];
 app.use(router.routes());
@@ -64,8 +71,18 @@ app.use(async (ctx, next) => {
     }
 });
 
+app.use(koaBody({
+    // 支持文件格式
+    multipart: true,
+    formidable: {
+        maxFileSize: 200*1024*1024,   // 设置上传文件大小最大限制，默认2M
+        keepExtensions: true
+    }
+}));
+
 /**
  * 对/node GET请求进行监听，实现对Neo4j数据库的包装访问
+ * 非模板函数，仅限严格的限制请求来源的方法
  * 通过ctx.query解析GET请求
  * @return res Neo4j查询结果
  */
@@ -78,6 +95,7 @@ router.get('/node', (ctx) => {
     let cypher_list = {
         "selectPeople": "MATCH (n:DPerson) RETURN n LIMIT 100",
         "selectRelation": "MATCH (P1:DPerson)-[r]-(P2:DPerson) RETURN r ",
+        "selectRelationByName": "MATCH (P1:DPerson)-[r]-(P2:DPerson) WHERE P1.name = {name} RETURN r ",
     };
     // 从主页访问的情况
     if (ctx.req.headers.origin) {
@@ -108,6 +126,7 @@ router.get('/node', (ctx) => {
 
 /**
  * 对/sql GET请求进行监听，实现对MySQL数据库的包装访问
+ * 模板函数，理解路由器拦截后的实际作用
  * 通过ctx.query解析GET请求
  * @return res MySQL查询结果
  */
@@ -118,10 +137,13 @@ router.get('/sql', (ctx) => {
         'getUserByID': 'SELECT * FROM users WHERE id = ?',
         'getExamArrangement': 'SELECT * FROM exam_arrangement',
     };
+    //从前端访问连接中获得值
     let sql_select = ctx.query.query;
+    //包装一层，取出真正的SQL语句，防止直接将MySQL查询接口暴露给前端
     let sql = sql_list[sql_select];
     return ConnectMysql(sql)
         .then(res => {
+            //获得返回结果后将结果返回给前端
             ctx.body = res
         })
 });
@@ -144,8 +166,13 @@ router.get('/key', (ctx) => {
 router.get('/userCheck', (ctx) => {
     let username = ctx.query.query;
     let userLogin = ctx.cookies.get("userLogin") || "No userLogin";
+    let userSession = "No userSession";
+    if (userLogin !== "No userLogin") {
+        userSession = ctx.session[userLogin].name;
+    }
+    //测试设置的cookies与session是否成功
     console.log("cookies:  " + userLogin);
-    console.log("session:  " + ctx.session.userID);
+    console.log("session:  " + userSession);
     return UsernameCheck(username)
         .then(res => {
             ctx.body = res
@@ -157,7 +184,6 @@ router.get('/userCheck', (ctx) => {
  * 清空cookies和session
  * @return res 退出状态码
  */
-
 router.get('/exit', (ctx) => {
     ctx.cookies.set('name','',{signed:false,maxAge:0})
     ctx.session = null;
@@ -173,9 +199,10 @@ router.get('/exit', (ctx) => {
 router.post('/login', async (ctx) => {
     let data = ctx.request.body;
     let userID = uuidv1();
-    ctx.session.userID = userID;
-    ctx.session.userName = data.username;
+    //登陆后设置登录用户的浏览器端cookies与服务器端session信息
+    ctx.session[userID] = { name : data.username};
     let returnCode = await loginCheck(data);
+    //cookies写入ctx传回前端设置
     if (returnCode === 200 && data.rememberCheck === false) {
         ctx.cookies.set("userLogin", userID, { maxAge: 1000 * 60 * 60 * 2, signed: true});
     }else if (returnCode === 200 && data.rememberCheck === true) {
@@ -194,6 +221,12 @@ router.post('/register', async (ctx) => {
     ctx.body = await registerUser(data);
 });
 
+
+router.post('/uploadQuiz', async (ctx) => {
+    const file = ctx.request.files.file;
+    const type = ctx.request.body.type;
+    ctx.body = await saveQuiz(file,type);
+});
 
 
 process.on("unhandledrejection", (reason, promise) => {
