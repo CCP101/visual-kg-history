@@ -18,4 +18,12 @@
 // console.log(encryptPassword);
 
 const { v1: uuidv1 } = require('uuid');
+const xlsx = require("xlsx");
 console.log(uuidv1());
+
+let filePath = "D:\\WorkSpace\\WebSpace\\visual-kg-histroy\\server\\upload\\xlsx\\949e4460-2c1c-11ed-a510-73f71ac507b8_3657688.xlsx"
+const workbook = xlsx.readFile(filePath);
+const sheet_name_list = workbook.SheetNames;
+const xlData = xlsx.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
+let data = [];
+console.log(xlData)

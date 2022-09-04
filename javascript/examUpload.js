@@ -1,13 +1,14 @@
 import getData, {postData} from "../javascript/function.js";
-// todo 前端页面修改后完善 Form提交服务器处理
 
 async function uploadFile(){
     let file = $("#exampaper").prop("files")[0];
     let type = $("#validationDefault04").val();
+    let examID = $("#validationDefault03").val();
     console.log(type)
     let formData = new FormData();
     formData.append("file", file);
     formData.append("type", type);
+    formData.append("id", examID);
     console.log(formData)
     let getData = await postData("uploadQuiz", formData);
     if (getData === 200){

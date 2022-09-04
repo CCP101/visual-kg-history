@@ -173,6 +173,12 @@ async function UsernameCheck(username){
     });
 }
 
+function sleep(delay){
+    return new Promise(function (resolve, reject) {
+        setTimeout(resolve, delay);
+    });
+}
+
 
 exports.ConnectMysql = ConnectMysql;
 exports.NodesWrite = NodesWrite;
@@ -181,3 +187,4 @@ exports.csvRead = csvRead;
 exports.ReturnServerKey = ReturnServerKey;
 exports.decrypt = decrypt;
 exports.UsernameCheck = UsernameCheck;
+exports.sleep = sleep;

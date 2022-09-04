@@ -225,7 +225,8 @@ router.post('/register', async (ctx) => {
 router.post('/uploadQuiz', async (ctx) => {
     const file = ctx.request.files.file;
     const type = ctx.request.body.type;
-    ctx.body = await saveQuiz(file,type);
+    const id = ctx.request.body.id;
+    ctx.body = await saveQuiz(file,type,id);
 });
 
 

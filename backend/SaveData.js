@@ -1,13 +1,46 @@
 const fs = require("fs");
 const path = require("path");
 const xlsx = require("xlsx");
+const {v1: uuidv1} = require("uuid");
+const {ConnectMysql, sleep} = require("./util");
+const moment = require("moment/moment");
 
-async function saveQuiz(file,type){
-    let filePath = path.join(__dirname, '../server/upload/xlsx/') + `${file.name}`;
+async function saveQuiz(file,type,id){
+    let examID_uuid = uuidv1();
+    let examID = id;
+    let filename = file.name.split(".")[0];
+    let newFileName = examID_uuid + "_" + filename + "." + file.name.split(".")[1];
+    let addTime = moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
+    let save_sql = "INSERT INTO exam_upload(exam_save_name, exam_name, exam_uuid, exam_id_user, upload_time) " +
+        `VALUES ('${newFileName}','${type}','${examID_uuid}','${examID}','${addTime}')`;
+    let response = await ConnectMysql(save_sql);
+    if (response === undefined){
+        console.log("NOT SUCCESS")
+        return "500";
+    }
+    let filePath = path.join(__dirname, "../server/upload/xlsx/" + newFileName);
     const reader = fs.createReadStream(file.path);
     const upStream = fs.createWriteStream(filePath);
     reader.pipe(upStream);
-    QuizSavetoSQL(filePath,type);
+    // 考虑到这里是异步操作，需要服务器等待写入完成，否则无法正常读取表格文件，报错!ref'
+    await sleep(1000);
+    /* TODO 未处理多次上传文件的情况 后期前端适配是否覆盖文件选项
+    *   单个考试有多次考试 需要处理的是如何覆盖掉单次考试的试题 或直接将这个BUG处理为系统FEATURE
+    * */
+    function QuizSavetoSQL(Path) {
+        console.log(Path);
+        const workbook = xlsx.readFile(Path);
+        const sheet_name_list = workbook.SheetNames;
+        const xlData = workbook.Sheets[sheet_name_list[0]];
+        let data = [];
+        console.log(xlData)
+        // for (let i = 0; i < xlData.length; i++) {
+        //     let temp = {};
+        //     temp.quiz = xlData[i].
+        // }
+
+    }
+    QuizSavetoSQL(filePath);
     return "200";
 }
 
