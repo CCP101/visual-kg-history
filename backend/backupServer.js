@@ -1,11 +1,11 @@
 const Koa = require('koa');
-const koaBody = require('koa-body')
+const koaBody = require('koa-body');
 const bodyParser = require('koa-bodyparser');
 const formidable = require('koa2-formidable');
 const cors = require('koa2-cors');
 const session = require("koa-session");
-const { v1: uuidv1 } = require('uuid');
 const router = require('koa-router')();
+const { v1: uuidv1 } = require('uuid');
 const os = require('os');
 const { NodesRead, ConnectMysql, ReturnServerKey, UsernameCheck} = require('./util');
 const { registerUser, loginCheck} = require("./userSetting");

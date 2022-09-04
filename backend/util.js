@@ -173,6 +173,10 @@ async function UsernameCheck(username){
     });
 }
 
+/**
+ * @param delay 毫秒数
+ * JS没有默认的sleep函数，需要自己实现
+ */
 function sleep(delay){
     return new Promise(function (resolve, reject) {
         setTimeout(resolve, delay);

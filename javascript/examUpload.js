@@ -1,4 +1,4 @@
-import getData, {postData} from "../javascript/function.js";
+import {postData} from "./function.js";
 
 async function uploadFile(){
     let file = $("#exampaper").prop("files")[0];
