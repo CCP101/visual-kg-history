@@ -72,6 +72,19 @@ function countdown(time) {
     return left_d + "天" + left_h + ":" + left_m + ":" + left_s;  //返回倒计时的字符串
 }
 
+function getQueryVariable(variable)
+{
+    let query = window.location.search.substring(1);
+    let vars = query.split("&");
+    for (let i=0;i<vars.length;i++) {
+        let pair = vars[i].split("=");
+        if(pair[0] === variable){
+            return pair[1];
+        }
+    }
+    return false;
+}
+
 
 export default getData;
-export { countdown, postData };
+export { countdown, postData, getQueryVariable };

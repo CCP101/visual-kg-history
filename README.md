@@ -1,4 +1,4 @@
-# 学科知识图谱学习平台项目 [![wakatime](https://wakatime.com/badge/user/b5b6ac2c-550f-4e67-902a-a3d1fc690e9c/project/3904750b-5f53-4459-9925-cfbefab615cd.svg)](https://wakatime.com/badge/user/b5b6ac2c-550f-4e67-902a-a3d1fc690e9c/project/3904750b-5f53-4459-9925-cfbefab615cd)
+# 学科知识图谱学习平台项目 
 
 ## 安装教程
 

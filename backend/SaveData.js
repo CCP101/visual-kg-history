@@ -31,7 +31,7 @@ async function saveQuiz(file,type,id){
     const reader = fs.createReadStream(file.path);
     const upStream = fs.createWriteStream(filePath);
     reader.pipe(upStream);
-    // 考虑到这里是异步操作，需要服务器等待写入完成，否则无法正常读取表格文件，报错!ref'
+    //  考虑到这里是异步操作，需要服务器等待写入完成，否则无法正常读取表格文件，报错!ref'
     await sleep(100);
     /* fixme 未处理多次上传文件的情况 后期前端适配是否覆盖文件选项
     *   单个考试有多次考试 需要处理的是如何覆盖掉单次考试的试题 或直接将这个BUG处理为系统FEATURE
