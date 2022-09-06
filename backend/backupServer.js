@@ -246,6 +246,17 @@ router.post('/examSubmit', async (ctx) => {
     ctx.body = await examCheck(data);
 });
 
+router.get('/examReview', async (ctx) => {
+    let key = ctx.query.query;
+    // 多表查询
+    let sql = "SELECT \tquiz_save.quiz_A, quiz_save.quiz_id, exam_log.quiz_answer, quiz_save.quiz_question, " +
+        "quiz_save.quiz_c1, quiz_save.quiz_c2, quiz_save.quiz_c3, quiz_save.quiz_c4 FROM exam_log,quiz_save " +
+        "WHERE quiz_save.quiz_id = exam_log.quiz_id AND exam_log.exam_submit_id = " +
+        `'${key}'`;
+    let res = await ConnectMysql(sql);
+    ctx.body = res;
+});
+
 
 process.on("unhandledrejection", (reason, promise) => {
     console.log(reason, promise);

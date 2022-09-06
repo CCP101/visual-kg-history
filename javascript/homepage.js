@@ -24,6 +24,7 @@ async function login(){
     let getData = await postData("login", data);
     if (getData === 200){
         alert("登陆成功");
+        window.location.href = "examArrangement.html";
     }
     if (getData === 500){
         alert("用户名或密码错误");

@@ -23,8 +23,8 @@ for (let i=0; i < getLog.length ;i++)
 
 
     let td6 = document.createElement('td');
-    td6.innerHTML = "<button class=\"btn btn-primary\" id=\"ExamJump\" onclick=\"window.location.href='exam.html?examID=" +
-        data['exam_uuid']+
+    td6.innerHTML = "<button class=\"btn btn-primary\" id=\"ExamJump\" onclick=\"window.location.href='ReviewAnswer.html?examID=" +
+        data['log_id']+
         "'\"> \n" +
         "                  查看\n" +
         "                </button>"

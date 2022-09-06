@@ -1,4 +1,4 @@
-# 学科知识图谱学习平台项目 
+# 学科知识图谱学习平台项目 [![wakatime](https://wakatime.com/badge/user/b5b6ac2c-550f-4e67-902a-a3d1fc690e9c/project/6ea8c319-dedf-4be5-9ff9-5318027b2604.svg)](https://wakatime.com/badge/user/b5b6ac2c-550f-4e67-902a-a3d1fc690e9c/project/6ea8c319-dedf-4be5-9ff9-5318027b2604)
 
 ## 安装教程
 
@@ -22,7 +22,7 @@
    详细信息: Neo4j Database Mode is ''
    ```
 
-3. 安装Apache HTTP服务器，搭建本地服务器，[下载地址](https://www.apachehaus.com/cgi-bin/download.plx)，[安装教程](https://www.php.cn/apache/427457.html)，默认开机自启服务，并将本项目拷入配置文件中DocumentRoot指向的文件夹地址
+3. 安装Apache HTTP服务器，搭建本地服务器，[下载地址](https://www.apachehaus.com/cgi-bin/download.plx)，[安装教程](https://www.php.cn/apache/427457.html)，默认开机自启服务，并将**本项目**(Github下载后会自动在文件夹名称后添加"-master",需删除)拷入配置文件中DocumentRoot指向的文件夹地址
 
    或安装http-server包，使用Node进行安装，安装命令“npm i http-server”，使用命令“http-server [path] [options]”激活本地服务器
 
@@ -79,8 +79,8 @@
 
    ```
    项目主页
-   http://localhost/visual-kg-histroy/web/
+   http://localhost/visual-kg-history/web/
    知识图谱页面
-   http://localhost/visual-kg-histroy/web/kg/
+   http://localhost/visual-kg-history/web/kg/
    ```
    项目首次启动后服务端需要显示公匙后才能操作，每次服务器重启时前端页面应亦进行清空缓存的刷新
