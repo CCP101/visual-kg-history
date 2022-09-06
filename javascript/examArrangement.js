@@ -45,12 +45,11 @@ for (let i=0; i < getWeight.length ;i++)
     }
     window.setInterval(getCountdown,1000);
 
-    //todo 实现按钮功能
     let td6 = document.createElement('td');
     td6.innerHTML = "<button class=\"btn btn-primary\" id=\"ExamJump\" onclick=\"window.location.href='exam.html?examID=" +
         data['exam_uuid']+
         "'\"> \n" +
-        "                  提交\n" +
+        "                  测试\n" +
         "                </button>"
     tr.appendChild(td6);
 }

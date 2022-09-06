@@ -11,6 +11,7 @@ const { NodesRead, ConnectMysql, ReturnServerKey, UsernameCheck} = require('./ut
 const { registerUser, loginCheck} = require("./userSetting");
 const { saveQuiz } = require("./SaveData");
 const {examGenerateFormMysql} = require("./examCreate");
+const {examCheck} = require("./examCheck");
 const app = new Koa();
 let myHost = '';
 
@@ -138,6 +139,7 @@ router.get('/sql', (ctx) => {
         'getUserByID': 'SELECT * FROM users WHERE id = ?',
         'getExamArrangement': 'SELECT * FROM exam_arrangement',
         'getExamUpload': 'SELECT * FROM exam_upload',
+        'getExamLog': 'SELECT * FROM exam_submit_log',
     };
     //从前端访问连接中获得值
     let sql_select = ctx.query.query;
@@ -237,6 +239,11 @@ router.post('/uploadQuiz', async (ctx) => {
     const type = ctx.request.body.type;
     const id = ctx.request.body.id;
     ctx.body = await saveQuiz(file,type,id);
+});
+
+router.post('/examSubmit', async (ctx) => {
+    let data = ctx.request.body;
+    ctx.body = await examCheck(data);
 });
 
 
