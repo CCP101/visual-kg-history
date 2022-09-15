@@ -1,5 +1,8 @@
-import getData from '../javascript/function.js';
+import getData, {cookiesCheck, exitSystem} from '../javascript/function.js';
 import {countdown} from "./function.js";
+
+cookiesCheck();
+
 // let getWeight = await getData("sql","getExamArrangement", 'exam');
 let getWeight = await getData("sql","getExamUpload", 'exam');
 let tbody = document.querySelector('tbody');
@@ -53,3 +56,5 @@ for (let i=0; i < getWeight.length ;i++)
         "                </button>"
     tr.appendChild(td6);
 }
+
+document.getElementById("btn").addEventListener("click", exitSystem);

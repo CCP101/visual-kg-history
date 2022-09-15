@@ -84,7 +84,38 @@ function getQueryVariable(variable)
     }
     return false;
 }
+async function exitSystem() {
+    let response = await getData("exit");
+    if (response === 200){
+        alert("退出成功");
+        window.location.href = "index.html";
+    }else{
+        alert("退出失败");
+    }
+}
+
+
+function getCookie(cookieName){
+    let strCookie = document.cookie;
+    let arrCookie = strCookie.split("; ");
+    for(let i = 0;i < arrCookie.length;i++){
+        let arr = arrCookie[i].split("=");
+        if(cookieName === arr[0]){
+            return arr[1];
+        }
+    }
+    return "";
+}
+
+
+function cookiesCheck(){
+    let userStatus = getCookie("userLogin");
+    if (userStatus === ""){
+        alert("请先登录");
+        window.location.href = "index.html";
+    }
+}
 
 
 export default getData;
-export { countdown, postData, getQueryVariable };
+export { countdown, postData, getQueryVariable, exitSystem, cookiesCheck };

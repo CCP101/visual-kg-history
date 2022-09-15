@@ -36,7 +36,7 @@
       0.10.15
    ```
 
-5. 通过nvm切换到Node V12 LTS版本，并检查是否切换成功
+5. 通过nvm切换到Node V14/12 LTS版本(本软件需要使用await/async，至少需要12以上的版本)，并检查是否切换成功
 
    ```
    node --version

@@ -189,8 +189,12 @@ router.get('/userCheck', (ctx) => {
  * @return res 退出状态码
  */
 router.get('/exit', (ctx) => {
-    ctx.cookies.set('name','',{signed:false,maxAge:0})
+    let userLogin = ctx.cookies.get("userLogin")
+    console.log("user " + ctx.session[userLogin].name + " exit")
+    ctx.cookies.set('name','',{signed:false,maxAge:0});
+    ctx.cookies.set('userLogin','',{signed:false,maxAge:0});
     ctx.session = null;
+    ctx.body = 200;
 });
 
 router.get('/examGet', (ctx) => {
@@ -216,9 +220,9 @@ router.post('/login', async (ctx) => {
     let returnCode = await loginCheck(data);
     //cookies写入ctx传回前端设置
     if (returnCode === 200 && data.rememberCheck === false) {
-        ctx.cookies.set("userLogin", userID, { maxAge: 1000 * 60 * 60 * 2, signed: true});
+        ctx.cookies.set("userLogin", userID, { maxAge: 1000 * 60 * 60 * 2, signed: true, httpOnly:false});
     }else if (returnCode === 200 && data.rememberCheck === true) {
-        ctx.cookies.set("userLogin", userID, { maxAge: 1000 * 60 * 60 * 24 * 7, signed: true});
+        ctx.cookies.set("userLogin", userID, { maxAge: 1000 * 60 * 60 * 24 * 7, signed: true, httpOnly:false});
     }
     ctx.body = returnCode;
 });
