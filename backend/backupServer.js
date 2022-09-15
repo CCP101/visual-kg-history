@@ -7,11 +7,13 @@ const session = require("koa-session");
 const router = require('koa-router')();
 const { v1: uuidv1 } = require('uuid');
 const os = require('os');
+
 const { NodesRead, ConnectMysql, ReturnServerKey, UsernameCheck} = require('./util');
 const { registerUser, loginCheck} = require("./userSetting");
 const { saveQuiz } = require("./SaveData");
 const {examGenerateFormMysql} = require("./examCreate");
 const {examCheck} = require("./examCheck");
+
 const app = new Koa();
 let myHost = '';
 
@@ -74,7 +76,7 @@ app.use(async (ctx, next) => {
 });
 
 app.use(koaBody({
-    // 支持文件格式
+    // 支持上传文件格式
     multipart: true,
     formidable: {
         maxFileSize: 200*1024*1024,   // 设置上传文件大小最大限制，默认2M
@@ -186,7 +188,6 @@ router.get('/userCheck', (ctx) => {
 /**
  * 对/exit GET请求进行监听，用户退出
  * 清空cookies和session
- * @return res 退出状态码
  */
 router.get('/exit', (ctx) => {
     let userLogin = ctx.cookies.get("userLogin")
@@ -197,6 +198,10 @@ router.get('/exit', (ctx) => {
     ctx.body = 200;
 });
 
+/**
+ * 对/examGet GET请求进行监听，获取生成试卷
+ * @return res 生成试卷结果
+ */
 router.get('/examGet', (ctx) => {
     let examID = ctx.query.query;
     return examGenerateFormMysql(examID)
@@ -237,7 +242,9 @@ router.post('/register', async (ctx) => {
     ctx.body = await registerUser(data);
 });
 
-
+/**
+ * 对/uploadQuiz POST请求进行监听，上传试卷文件
+ */
 router.post('/uploadQuiz', async (ctx) => {
     const file = ctx.request.files.file;
     const type = ctx.request.body.type;
@@ -245,11 +252,17 @@ router.post('/uploadQuiz', async (ctx) => {
     ctx.body = await saveQuiz(file,type,id);
 });
 
+/**
+ * 对/uploadSubmit POST请求进行监听，上传学生考试作答
+ */
 router.post('/examSubmit', async (ctx) => {
     let data = ctx.request.body;
     ctx.body = await examCheck(data);
 });
 
+/**
+ * 对/examReview GET请求进行监听，获得学生考试作答情况
+ */
 router.get('/examReview', async (ctx) => {
     let key = ctx.query.query;
     // 多表查询
