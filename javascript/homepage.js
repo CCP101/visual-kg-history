@@ -5,7 +5,11 @@ encryptor.setPublicKey(publicKey);
 
 /**
  * 前端登录检查
- * 200 正常 500 用户名或密码错误 700 服务器错误
+ * 返回判断：
+ * 200 正常
+ * 500 用户名或密码错误
+ * 700 服务器错误
+ * 以上为本项目通用响应码
  */
 async function login(){
     let username = $("#username").val();
