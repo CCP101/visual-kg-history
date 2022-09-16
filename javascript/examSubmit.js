@@ -8,6 +8,7 @@ async function uploadAnswer(){
         let answer = $("input[name='optradio" + i + "']:checked").val();
         let parent = document.getElementById(point).name
         console.log(answer,parent)
+        //不使用form提交，重新包装数据提交
         data.push({
             "exam_id": examID,
             "quiz_id": parent,
