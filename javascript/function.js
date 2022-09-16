@@ -55,7 +55,10 @@ function postData(link, postData) {
     });
 }
 
-
+/**
+ * 计算倒计时
+ * @param time 考试时间
+ */
 function countdown(time) {
     if (time.getTime() === 0) {
         return 0;
@@ -72,6 +75,10 @@ function countdown(time) {
     return left_d + "天" + left_h + ":" + left_m + ":" + left_s;  //返回倒计时的字符串
 }
 
+/**
+ * 获取请求参数
+ * @param variable GET请求参数
+ */
 function getQueryVariable(variable)
 {
     let query = window.location.search.substring(1);
@@ -84,6 +91,10 @@ function getQueryVariable(variable)
     }
     return false;
 }
+
+/**
+ * 退出系统并销毁session与cookies
+ */
 async function exitSystem() {
     let response = await getData("exit");
     if (response === 200){
@@ -94,7 +105,10 @@ async function exitSystem() {
     }
 }
 
-
+/**
+ * 获取cookies
+ * @param cookieName cookies名
+ */
 function getCookie(cookieName){
     let strCookie = document.cookie;
     let arrCookie = strCookie.split("; ");
@@ -107,7 +121,9 @@ function getCookie(cookieName){
     return "";
 }
 
-
+/**
+ * 检查用户是否登录 若无登录信息跳回登录页
+ */
 function cookiesCheck(){
     let userStatus = getCookie("userLogin");
     if (userStatus === ""){

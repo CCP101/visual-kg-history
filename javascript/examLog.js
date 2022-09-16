@@ -1,6 +1,6 @@
-import getData from '../javascript/function.js';
+import getData, {cookiesCheck} from '../javascript/function.js';
 import {countdown} from "./function.js";
-
+cookiesCheck();
 let getLog = await getData("sql","getExamLog", 'exam');
 let tbody = document.querySelector('tbody');
 for (let i=0; i < getLog.length ;i++)
