@@ -1,3 +1,8 @@
+/*
+* 配套examArrangement.html
+* 实现查询用户考试安排
+* */
+
 import getData, {cookiesCheck, exitSystem} from '../javascript/function.js';
 import {countdown} from "./function.js";
 
@@ -42,7 +47,7 @@ for (let i=0; i < getWeight.length ;i++)
     function getCountdown(){
         let ct = document.getElementById("ct"+i);
 
-        let time_now = new Date(2022, 9, 10, 0, 0, 0);
+        let time_now = new Date(2022, 9, 16, 21, 0, 0);
         ct.innerHTML = countdown(time_now);
         // ct.innerHTML = countdown(new Date(data['exam_begin']));
     }

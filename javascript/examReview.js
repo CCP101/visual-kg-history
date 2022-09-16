@@ -1,3 +1,9 @@
+/*
+* 配套ReviewAnswer.html
+* 根据用户ID及考试号查看考试情况
+* TODO：严重垃圾面条代码修改
+* */
+
 import getData, {getQueryVariable} from "./function.js";
 
 window.onload = async function () {
