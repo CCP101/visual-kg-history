@@ -13,7 +13,6 @@ window.onload = async function () {
     console.log(examPaperData)
     for (let i=0; i < examPaperData.length ;i++) {
         let data = examPaperData[i];
-        console.log(data)
         let stu_A = data.quiz_answer;
         let real_A = data.quiz_A;
         let right = false;

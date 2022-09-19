@@ -7,15 +7,15 @@ const config = {
 /**
  * 异步实现后端GET请求
  * @param link 后台访问地址
- * @param para 查询语句转写(Neo4j/SQL)
+ * @param query 查询语句转写(Neo4j/SQL)
  * @param key Neo4j查询关键字
  * @return {Promise<any>} 以期约方式返回查询结果
  */
-async function getData(link,para,key) {
+async function getData(link,query,key) {
     return new Promise((resolve, reject) => {
         let novelist = [];
         axios.defaults.withCredentials = true;
-        axios.get(`${config.ip}:${config.port}/${link}?query=${para}&key=${key}`,{
+        axios.get(`${config.ip}:${config.port}/${link}?query=${query}&key=${key}`,{
             headers: {
                 "withCredentials":true
             }})

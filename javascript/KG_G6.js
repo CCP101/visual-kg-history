@@ -1,20 +1,28 @@
 let nodes = [];
 let edges = [];
-import getData from './function.js';
+import getData, {getQueryVariable} from './function.js';
 
 
 /**
  * 异步实现网页首次启动时的默认查询
  */
-async function getDatabaseFirst() {
+async function getDatabaseFirst(examID) {
     let set = new Set();
-    let getWeight = await getData("sql", "getAllUsers","user");
+    let getWeight = await getData("sql", "getAllUsers","user");;
     let HPerson_weight = {};
     for (let person of getWeight) {
         HPerson_weight[person.name] = person.weight;
     }
-    let HPerson_Teams = await getData("node","selectPeople","n");
-    let HPerson_Relation = await getData("node","selectRelation","r");
+    let HPerson_Teams;
+    let HPerson_Relation;
+    if(examID === "200"){
+        HPerson_Teams = await getData("node","selectPeople","n");
+        HPerson_Relation = await getData("node","selectRelation","r");
+    }else{
+        HPerson_Teams = await getData("WAnode",examID,"n");
+        HPerson_Relation = await getData("WAnode",examID,"r");
+    }
+
     //Neo4j查询结果转换为G6的数据格式
     for (let node of HPerson_Teams) {
         nodes.push({
@@ -147,7 +155,12 @@ graph.on('node:click', (e) => {
  * 首次加载载入
  */
 window.onload = async function () {
-    await getDatabaseFirst();
+    const examID = getQueryVariable("examID");
+    if (examID === false){
+        await getDatabaseFirst("200");
+    }else{
+        await getDatabaseFirst(examID);
+    }
     //过滤无用边
     let nodeList = [];
     for (let node of nodes) {

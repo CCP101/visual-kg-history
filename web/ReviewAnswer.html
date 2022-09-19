@@ -90,11 +90,12 @@
                             </ul>
 
                         </div>
-                        <div class="row align-items-center justify-content-center login-center"style="margin-top: 10px">
-                            <button class="btn btn-primary" id="AnswerUpload" type="button">
-                                返回
-                            </button>
-                        </div>
+                        <button class="btn btn-primary" id="AnswerUpload" type="button">
+                            返回
+                        </button>
+                        <button class="btn btn-primary" id="KGjump" type="button">
+                            错题知识图谱
+                        </button>
                         <table height="55px"><!--50像素的空格-->
                             <tr>
                                 <td></td>
@@ -171,6 +172,18 @@
 <script type="module">
     $("#AnswerUpload").click(function(){
         window.location.href="examLog.html";
+    });
+    $("#KGjump").click(function(){
+        let query = window.location.search.substring(1);
+        let vars = query.split("&");
+        let examID = ""
+        for (let i=0;i<vars.length;i++) {
+            let pair = vars[i].split("=");
+            if(pair[0] === "examID"){
+                examID =  pair[1];
+            }
+        }
+        window.location.href = "KG/index.html?examID="+examID;
     });
 </script>
 </body>

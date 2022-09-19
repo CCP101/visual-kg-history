@@ -274,6 +274,48 @@ router.get('/examReview', async (ctx) => {
     ctx.body = res;
 });
 
+router.get('/WAnode', async (ctx) => {
+    let examID = ctx.query.query;
+    let key = ctx.query.key;
+    let sql = "SELECT quiz_save.quiz_question FROM exam_log,quiz_save WHERE quiz_save.quiz_id = exam_log.quiz_id " +
+        "AND exam_log.exam_submit_id = " + `'${examID}'` +
+        "AND quiz_save.quiz_A !=exam_log.quiz_answer"
+    let res = await ConnectMysql(sql);
+    let person = [];
+    for (let i = 0; i < res.length; i++) {
+        let log = res[i]['quiz_question'];
+        let p1 = log.split("与")[0];
+        let p2 = log.split("与")[1].split("的")[0];
+        person.push([p1,p2]);
+    }
+    if (key === "n"){
+        let cypher = "MATCH (n:DPerson) WHERE"
+        for (let i = 0; i < person.length; i++) {
+            cypher += " n.name = '" + person[i][0] + "' OR n.name = '" + person[i][1];
+            if (i !== person.length - 1) {
+                cypher += "' OR"
+            }
+        }
+        cypher += "' RETURN n;"
+        console.log(cypher)
+        let result = await NodesRead(cypher,"n");
+        ctx.body = result;
+    }else{
+        let cypher = "MATCH (P1:DPerson)-[r]-(P2:DPerson) WHERE"
+        for (let i = 0; i < person.length; i++) {
+            cypher += " P1.name = '" + person[i][0] + "' OR P1.name = '" + person[i][1];
+            if (i !== person.length - 1) {
+                cypher += "' OR"
+            }
+        }
+        cypher += "' RETURN r;"
+        console.log(cypher)
+        let result = await NodesRead(cypher,"r");
+        ctx.body = result;
+    }
+
+});
+
 
 process.on("unhandledrejection", (reason, promise) => {
     console.log(reason, promise);
