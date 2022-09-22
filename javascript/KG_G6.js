@@ -2,17 +2,18 @@ let nodes = [];
 let edges = [];
 import getData, {getQueryVariable} from './function.js';
 
+let HPerson_weight = {};
+let getWeight = await getData("sql", "getAllUsers","user");
+for (let person of getWeight) {
+    HPerson_weight[person.name] = person.weight;
+}
+
 
 /**
  * 异步实现网页首次启动时的默认查询
  */
 async function getDatabaseFirst(examID) {
     let set = new Set();
-    let getWeight = await getData("sql", "getAllUsers","user");;
-    let HPerson_weight = {};
-    for (let person of getWeight) {
-        HPerson_weight[person.name] = person.weight;
-    }
     let HPerson_Teams;
     let HPerson_Relation;
     if(examID === "200"){
@@ -57,6 +58,32 @@ async function getDatabaseFirst(examID) {
     }
 }
 
+
+const tooltip = new G6.Tooltip({
+    offsetX: 10,
+    offsetY: 10,
+    fixToNode: [1, 0.5],
+    // the types of items that allow the tooltip show up
+    // 允许出现 tooltip 的 item 类型
+    itemTypes: ['node', 'edge'],
+    // custom the tooltip's content
+    // 自定义 tooltip 内容
+    getContent: (e) => {
+        const outDiv = document.createElement('div');
+        outDiv.style.width = 'fit-content';
+        outDiv.style.height = 'fit-content';
+        const model = e.item.getModel();
+        if (e.item.getType() === 'node') {
+            outDiv.innerHTML = `${model.name}`;
+        } else {
+            const source = e.item.getSource();
+            const target = e.item.getTarget();
+            outDiv.innerHTML = `来源：${source.getModel().name}<br/>去向：${target.getModel().name}`;
+        }
+        return outDiv;
+    },
+});
+
 /**
  * 配置图属性
  */
@@ -65,7 +92,7 @@ const graph = new G6.Graph({
     width: window.screen.availWidth,
     height: 800,
     modes: {
-        default: ['click-select', 'drag-canvas', 'drag-node', 'zoom-canvas'],
+        default: ['click-select', 'drag-canvas', 'drag-node', 'zoom-canvas','activate-relations'],
     },
     layout: {
         type: 'force',
@@ -73,26 +100,14 @@ const graph = new G6.Graph({
         preventOverlap: true,
         linkDistance: 180,
     },
+    plugins: [tooltip],
     defaultNode: {
         size: 60,
         color: '#5B8FF9',
         //TODO: 后期实现边和点的美化 需要实现持久的动画效果
-        //
-        // style: {
-        //     lineWidth: 2,
-        //     fill: '',
-        //     stroke: '',
-        // },
-        // label: 'node-label',
-        // labelCfg: {
-        //     position: 'top',
-        //     style: {
-        //         fill: '#ddd',
-        //     },
-        // }
     },
     defaultEdge: {
-        size: 10,
+        size: 3,
         color: '#4561d3',
         // label: 'node-label',
         labelCfg: {
@@ -104,43 +119,13 @@ const graph = new G6.Graph({
     }
 });
 
-/**
- * 官方文档中存在，但实际不可用，原因未知，使用单独绑定方法替代
- */
-// G6.registerBehavior('node-activate', {
-//     getDefaultCfg() {
-//         return {
-//             multiple: true
-//         };
-//     },
-//     getEvents() {
-//         return {
-//             'node:mouseenter': 'onMouseenter',
-//             'node:dblclick': 'onDblclick',
-//             'node:click': 'onNodeClick'
-//         };
-//     },
-//     onNodeClick(e) {
-//         const graph = this.graph;
-//         const item = e.item;
-//         console.log(item);
-//         if (item.hasState('active')) {
-//             graph.setItemState(item, 'active', false);
-//             return;
-//         }
-//         // this 上即可取到配置，如果不允许多个 'active'，先取消其他节点的 'active' 状态
-//         if (!this.multiple) {
-//             this.removeNodesState();
-//         }
-//         // 置点击的节点状态 'active' 为 true
-//         graph.setItemState(item, 'active', true);
-//     },
-//     removeNodesState() {
-//         graph.findAllByState('node', 'active').forEach(node => {
-//             graph.setItemState(node, 'active', false);
-//         });
-//     }
-// });
+graph.on('node:click', (e)=>{
+    const item = e.item;
+    graph.focusItem(item, true, {
+        easing: 'easeCubic',
+        duration: 500,
+    });
+});
 
 
 /**
@@ -149,6 +134,21 @@ const graph = new G6.Graph({
 graph.on('node:click', (e) => {
     const item = e.item;
     console.log(item._cfg.id);
+})
+
+graph.on('click', async (e) => {
+    const examID = getQueryVariable("examID");
+    const ImportantNode = await getData("WAnode", examID, "ni");
+    for (let node of ImportantNode) {
+        let nodeID = "node-" + node.identity;
+        const item = graph.findById(nodeID);
+        graph.updateItem(item, {
+            style: {
+                stroke: 'red',
+                size: 80,
+            },
+        });
+    }
 })
 
 /**

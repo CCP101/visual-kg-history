@@ -105,7 +105,7 @@ input:focus {
 .sidebar {
     padding-left: 1%;
     color: #eee;
-    width: 24%;
+    width: 5%;
     position: absolute;
     left: 0;
     top: 8%;
@@ -122,7 +122,7 @@ input:focus {
     background-color: #0b2838;
     overflow: hidden;
     position: absolute;
-    left: 25%;
+    left: 5%;
     right: 0;
     top: 8%;
     height: 92%;

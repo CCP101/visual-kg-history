@@ -288,32 +288,22 @@ router.get('/WAnode', async (ctx) => {
         let p2 = log.split("与")[1].split("的")[0];
         person.push([p1,p2]);
     }
-    if (key === "n"){
-        let cypher = "MATCH (n:DPerson) WHERE"
-        for (let i = 0; i < person.length; i++) {
-            cypher += " n.name = '" + person[i][0] + "' OR n.name = '" + person[i][1];
-            if (i !== person.length - 1) {
-                cypher += "' OR"
-            }
+    let cypher = "MATCH (n:DPerson)-[r]-(n2:DPerson) WHERE";
+    for (let i = 0; i < person.length; i++) {
+        cypher += " n.name = '" + person[i][0] + "' OR n.name = '" + person[i][1];
+        if (i !== person.length - 1) {
+            cypher += "' OR"
         }
-        cypher += "' RETURN n;"
-        console.log(cypher)
-        let result = await NodesRead(cypher,"n");
-        ctx.body = result;
-    }else{
-        let cypher = "MATCH (P1:DPerson)-[r]-(P2:DPerson) WHERE"
-        for (let i = 0; i < person.length; i++) {
-            cypher += " P1.name = '" + person[i][0] + "' OR P1.name = '" + person[i][1];
-            if (i !== person.length - 1) {
-                cypher += "' OR"
-            }
-        }
-        cypher += "' RETURN r;"
-        console.log(cypher)
-        let result = await NodesRead(cypher,"r");
-        ctx.body = result;
     }
-
+    let result;
+    if (key === "n") {
+        result = await NodesRead(cypher,"n2");
+    }else if(key === "ni"){
+        result = await NodesRead(cypher,"n");
+    }else{
+        result = await NodesRead(cypher,"r");
+    }
+    ctx.body = result;
 });
 
 
