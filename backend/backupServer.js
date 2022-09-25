@@ -13,6 +13,7 @@ const { registerUser, loginCheck} = require("./userSetting");
 const { saveQuiz } = require("./SaveData");
 const {examGenerateFormMysql} = require("./examCreate");
 const {examCheck} = require("./examCheck");
+const {getExamResultForKG} = require("./quizReview");
 
 const app = new Koa();
 let myHost = '';
@@ -277,17 +278,7 @@ router.get('/examReview', async (ctx) => {
 router.get('/WAnode', async (ctx) => {
     let examID = ctx.query.query;
     let key = ctx.query.key;
-    let sql = "SELECT quiz_save.quiz_question FROM exam_log,quiz_save WHERE quiz_save.quiz_id = exam_log.quiz_id " +
-        "AND exam_log.exam_submit_id = " + `'${examID}'` +
-        "AND quiz_save.quiz_A !=exam_log.quiz_answer"
-    let res = await ConnectMysql(sql);
-    let person = [];
-    for (let i = 0; i < res.length; i++) {
-        let log = res[i]['quiz_question'];
-        let p1 = log.split("与")[0];
-        let p2 = log.split("与")[1].split("的")[0];
-        person.push([p1,p2]);
-    }
+    let person = await getExamResultForKG(examID);
     let cypher = "MATCH (n:DPerson)-[r]-(n2:DPerson) WHERE";
     for (let i = 0; i < person.length; i++) {
         cypher += " n.name = '" + person[i][0] + "' OR n.name = '" + person[i][1];
@@ -297,13 +288,31 @@ router.get('/WAnode', async (ctx) => {
     }
     let result;
     if (key === "n") {
+        cypher += "' RETURN n2";
         result = await NodesRead(cypher,"n2");
     }else if(key === "ni"){
+        cypher += "' RETURN n";
         result = await NodesRead(cypher,"n");
     }else{
+        cypher += "' RETURN r";
         result = await NodesRead(cypher,"r");
     }
     ctx.body = result;
+});
+
+router.get('/WARelation', async (ctx) => {
+    let examID = ctx.query.query;
+    let person = await getExamResultForKG(examID);
+    let relation = [];
+    for (let i = 0; i < person.length; i++) {
+        let cypher = "MATCH (n:DPerson)-[r]-(n2:DPerson) WHERE";
+        cypher += " n.name = '" + person[i][0] + "' AND n2.name = '" + person[i][1] + "' RETURN r";
+        let result = await NodesRead(cypher,"r");
+        for (let j = 0; j < result.length; j++) {
+            relation.push(result[j]);
+        }
+    }
+    ctx.body = relation;
 });
 
 

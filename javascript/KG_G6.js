@@ -33,7 +33,7 @@ async function getDatabaseFirst(examID) {
                 ...node.properties
             },
             // label: node.properties.name.length > 4 ? node.properties.name.substring(0, 4) + "..." : node.properties.name,
-            label: node.properties.name + ":" + HPerson_weight[node.properties.name],
+            label: node.properties.name,
             name: node.properties.name,
             type: node.labels[0],
             // ...nodeConfig[node.labels[0]]
@@ -74,7 +74,7 @@ const tooltip = new G6.Tooltip({
         outDiv.style.height = 'fit-content';
         const model = e.item.getModel();
         if (e.item.getType() === 'node') {
-            outDiv.innerHTML = `${model.name}`;
+            outDiv.innerHTML = `${model.name} : ${HPerson_weight[model.name]}`;
         } else {
             const source = e.item.getSource();
             const target = e.item.getTarget();
@@ -92,7 +92,7 @@ const graph = new G6.Graph({
     width: window.screen.availWidth,
     height: 800,
     modes: {
-        default: ['click-select', 'drag-canvas', 'drag-node', 'zoom-canvas','activate-relations'],
+        default: ['click-select', 'drag-canvas', 'drag-node', 'zoom-canvas', 'activate-relations'],
     },
     layout: {
         type: 'force',
@@ -104,12 +104,11 @@ const graph = new G6.Graph({
     defaultNode: {
         size: 60,
         color: '#5B8FF9',
-        //TODO: 后期实现边和点的美化 需要实现持久的动画效果
     },
     defaultEdge: {
         size: 3,
         color: '#4561d3',
-        // label: 'node-label',
+        type: 'quadratic', // 指定边的形状为二阶贝塞尔曲线
         labelCfg: {
             style: {
                 fill: '#ddd',
@@ -136,12 +135,23 @@ graph.on('node:click', (e) => {
     console.log(item._cfg.id);
 })
 
-graph.on('click', async (e) => {
+graph.on('beforerender', async (e) => {
     const examID = getQueryVariable("examID");
     const ImportantNode = await getData("WAnode", examID, "ni");
+    const ImportantRelation = await getData("WARelation", examID, "r");
     for (let node of ImportantNode) {
         let nodeID = "node-" + node.identity;
         const item = graph.findById(nodeID);
+        graph.updateItem(item, {
+            style: {
+                stroke: 'red',
+                size: 80,
+            },
+        });
+    }
+    for (let rel of ImportantRelation) {
+        let relID = "edge-" + rel.start + "-" + rel.end;
+        const item = graph.findById(relID);
         graph.updateItem(item, {
             style: {
                 stroke: 'red',
