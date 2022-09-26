@@ -115,6 +115,10 @@ const graph = new G6.Graph({
                 stroke: '',
             },
         },
+        style: {
+            endArrow: true,
+            // startArrow: true
+        }
     }
 });
 
@@ -145,6 +149,7 @@ graph.on('beforerender', async (e) => {
         graph.updateItem(item, {
             style: {
                 stroke: 'red',
+                fill: 'orange',   
                 size: 80,
             },
         });
