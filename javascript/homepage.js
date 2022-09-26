@@ -1,8 +1,8 @@
-import getData, {postData} from "../javascript/function.js";
+import getData, {postData, getCookie} from "../javascript/function.js";
 let encryptor = new JSEncrypt();
 let publicKey = await getData("key", "publicKey", "get");
 encryptor.setPublicKey(publicKey);
-
+checkLoginCookies();
 /**
  * 前端登录检查
  * 返回判断：
@@ -74,4 +74,11 @@ async function register(){
         alert("用户名已存在");
     }
 }
-export { login,register };
+
+function checkLoginCookies(){
+    let cookie = getCookie("userLogin");
+    if (cookie !== ""){
+        window.location.href = "examArrangement.html";
+    }
+}
+export { login,register,checkLoginCookies };

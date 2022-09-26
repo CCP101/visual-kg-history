@@ -9,6 +9,8 @@ for (let person of getWeight) {
 }
 
 
+const examID = getQueryVariable("examID");
+
 /**
  * 异步实现网页首次启动时的默认查询
  */
@@ -140,29 +142,31 @@ graph.on('node:click', (e) => {
 })
 
 graph.on('beforerender', async (e) => {
-    const examID = getQueryVariable("examID");
-    const ImportantNode = await getData("WAnode", examID, "ni");
-    const ImportantRelation = await getData("WARelation", examID, "r");
-    for (let node of ImportantNode) {
-        let nodeID = "node-" + node.identity;
-        const item = graph.findById(nodeID);
-        graph.updateItem(item, {
-            style: {
-                stroke: 'red',
-                fill: 'orange',   
-                size: 80,
-            },
-        });
-    }
-    for (let rel of ImportantRelation) {
-        let relID = "edge-" + rel.start + "-" + rel.end;
-        const item = graph.findById(relID);
-        graph.updateItem(item, {
-            style: {
-                stroke: 'red',
-                size: 80,
-            },
-        });
+    if (examID !== false){
+        const examID = getQueryVariable("examID");
+        const ImportantNode = await getData("WAnode", examID, "ni");
+        const ImportantRelation = await getData("WARelation", examID, "r");
+        for (let node of ImportantNode) {
+            let nodeID = "node-" + node.identity;
+            const item = graph.findById(nodeID);
+            graph.updateItem(item, {
+                style: {
+                    stroke: 'red',
+                    fill: 'orange',   
+                    size: 80,
+                },
+            });
+        }
+        for (let rel of ImportantRelation) {
+            let relID = "edge-" + rel.start + "-" + rel.end;
+            const item = graph.findById(relID);
+            graph.updateItem(item, {
+                style: {
+                    stroke: 'red',
+                    size: 80,
+                },
+            });
+        }
     }
 })
 
@@ -170,7 +174,6 @@ graph.on('beforerender', async (e) => {
  * 首次加载载入
  */
 window.onload = async function () {
-    const examID = getQueryVariable("examID");
     if (examID === false){
         await getDatabaseFirst("200");
     }else{

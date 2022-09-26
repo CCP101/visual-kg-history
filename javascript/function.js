@@ -134,4 +134,4 @@ function cookiesCheck(){
 
 
 export default getData;
-export { countdown, postData, getQueryVariable, exitSystem, cookiesCheck };
+export { countdown, postData, getQueryVariable, exitSystem, cookiesCheck,getCookie };
