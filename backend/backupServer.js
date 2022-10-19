@@ -275,6 +275,9 @@ router.get('/examReview', async (ctx) => {
     ctx.body = res;
 });
 
+/**
+ * 对/WAnode GET请求进行监听，获得考试试卷错题所对应的知识图谱
+ */
 router.get('/WAnode', async (ctx) => {
     let examID = ctx.query.query;
     let key = ctx.query.key;
@@ -300,6 +303,9 @@ router.get('/WAnode', async (ctx) => {
     ctx.body = result;
 });
 
+/**
+ * 对/WARelation GET请求进行监听，获得考试试卷错题所对应的知识图谱中的边关系
+ */
 router.get('/WARelation', async (ctx) => {
     let examID = ctx.query.query;
     let person = await getExamResultForKG(examID);
@@ -313,13 +319,6 @@ router.get('/WARelation', async (ctx) => {
         }
     }
     ctx.body = relation;
-});
-
-router.get('/nodeInformation', async (ctx) => {
-    let examID = ctx.query.query;
-    console.log(examID)
-
-    ctx.body = "relation";
 });
 
 

@@ -60,18 +60,21 @@ async function getDatabaseFirst(examID) {
     }
 }
 
-
+/*
+* G6 Tooltip工具 用于显示节点信息与边信息
+* ISSUE#3850 G6无法在Tooltip内部实现同步异步操作 推测应为是资源限制
+*/
 const showProperty = new G6.Tooltip({
     offsetX: 10,
     offsetY: 10,
+    //鼠标移动到实体上就调用
     trigger: 'mousemove',
     fixToNode: [1, 0.5],
-    // the types of items that allow the tooltip show up
-    // 允许出现 tooltip 的 item 类型
     itemTypes: ['node', 'edge'],
     // custom the tooltip's content
     // 自定义 tooltip 内容
     getContent: (e) => {
+        //创新新的内容框 向内部填入HTML内容
         const outDiv = document.createElement('div');
         outDiv.style.width = 'fit-content';
         outDiv.style.height = 'fit-content';
@@ -90,6 +93,7 @@ const showProperty = new G6.Tooltip({
 
 /**
  * 配置图属性
+ * 图基本配置、模式、样式、插件、默认点边样式
  */
 const grid = new G6.Grid();
 const minimap = new G6.Minimap();
@@ -129,23 +133,13 @@ const graph = new G6.Graph({
     }
 });
 
-// graph.on('node:click', async (e)=>{
-//     const item = e.item;
-//     graph.focusItem(item, true, {
-//         easing: 'easeCubic',
-//         duration: 500,
-//     });
-// });
 
-
-/**
- * 在图上绑定事件点击事件
- */
+// 在图上绑定事件点击事件
 graph.on('node:click', async (e) => {
     const item = e.item;
     console.log(item._cfg.id);
 })
-
+// 在第一次渲染图之前渲染需要强调的节点与边
 graph.on('beforerender', async (e) => {
     if (examID !== false){
         const examID = getQueryVariable("examID");
@@ -175,9 +169,7 @@ graph.on('beforerender', async (e) => {
     }
 })
 
-/**
- * 首次加载载入
- */
+// 程序主入口
 window.onload = async function () {
     if (examID === false){
         await getDatabaseFirst("200");
@@ -185,6 +177,7 @@ window.onload = async function () {
         await getDatabaseFirst(examID);
     }
     //过滤无用边
+    //todo 实际上F12内出现多个多边报错 需要进行处理
     let nodeList = [];
     for (let node of nodes) {
         nodeList.push(node.id.toString().replace('node-', ''));

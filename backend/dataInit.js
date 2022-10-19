@@ -45,6 +45,7 @@ async function DataToMysql() {
         let NodeInformation = {name: people, weight: 0, name_id: pointID};
         Nodeset.add(NodeInformation)
     }
+    // 清洗重复数据后重新构造包含ID与人名的全局Set，并将ID写入图数据库中，保持一致唯一性
     console.log(Nodeset.size);
     for (let people of Nodeset) {
         let query = `INSERT INTO people (\`name\`, \`weight\`, \`name_id\`) 
@@ -63,6 +64,7 @@ async function ImportDataToNeo4j() {
     let result = await importInitData("../data/PeopleRelation2.csv");
     // 创建节点
     for (let people of Nodeset) {
+        //写入节点信息，并写入节点与MySQL数据库中共有的ID
         let query = `CREATE (n:DPerson {name: '${people['name']}',id:'${people['name_id']}'})`;
         await NodesWrite(query, "result");
     }
