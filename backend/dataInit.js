@@ -1,5 +1,6 @@
 const { ConnectMysql, NodesWrite, NodesRead, csvRead } = require('./util');
-
+const {v1: uuidv1} = require("uuid");
+let Nodeset = new Set();
 /**
  * CSV文件传值处理
  * @param file_path 文件地址
@@ -17,12 +18,14 @@ async function importInitData(file_path) {
 /**
  * 初始化顺序1：创建MySQL人物记录
  * 单次调用，将数据写入MySQL数据库
+ * 10.19修改 增加点的唯一ID 写入图数据库
  */
 async function DataToMysql() {
     let deleteTable1 = `DROP TABLE IF EXISTS \`people\``;
     let deleteTable2 = `CREATE TABLE \`people\`(
         \`name\`   varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
         \`weight\` double                                                        NULL DEFAULT NULL,
+        \`name_id\` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
         PRIMARY KEY (\`name\`) USING BTREE
     ) ENGINE = InnoDB
       CHARACTER SET = utf8mb4
@@ -31,15 +34,21 @@ async function DataToMysql() {
     await ConnectMysql(deleteTable1);
     await ConnectMysql(deleteTable2);
     let result = await importInitData('../data/PeopleRelation2.csv');
-    let set = new Set();
+    let set1 = new Set();
     for (let row in result) {
-        set.add(result[row][0]);
-        set.add(result[row][1]);
+        set1.add(result[row][0]);
+        set1.add(result[row][1]);
     }
-    console.log(set.size);
-    for (let people of set) {
-        console.log(people);
-        let query = `INSERT INTO people (\`name\`, \`weight\`) VALUES ('${people}',0)`;
+    console.log(set1.size);
+    for (let people of set1) {
+        let pointID = uuidv1();
+        let NodeInformation = {name: people, weight: 0, name_id: pointID};
+        Nodeset.add(NodeInformation)
+    }
+    console.log(Nodeset.size);
+    for (let people of Nodeset) {
+        let query = `INSERT INTO people (\`name\`, \`weight\`, \`name_id\`) 
+                        VALUES ('${people['name']}',0,'${people['name_id']}')`;
         await ConnectMysql(query);
     }
 }
@@ -52,14 +61,9 @@ async function ImportDataToNeo4j() {
     let deleteTable = 'match (n:DPerson) detach delete n';
     await NodesWrite(deleteTable, "result");
     let result = await importInitData("../data/PeopleRelation2.csv");
-    let set = new Set();
-    for (let row in result) {
-        set.add(result[row][0]);
-        set.add(result[row][1]);
-    }
     // 创建节点
-    for (let people of set) {
-        let query = `CREATE (n:DPerson {name: '${people}'})`;
+    for (let people of Nodeset) {
+        let query = `CREATE (n:DPerson {name: '${people['name']}',id:'${people['name_id']}'})`;
         await NodesWrite(query, "result");
     }
     for (let row of result) {
@@ -108,5 +112,4 @@ async function dataInit() {
     await ImportDataToNeo4j();
     await calWeight();
 }
-
 exports.dataInit = dataInit;

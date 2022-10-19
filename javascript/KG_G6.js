@@ -8,7 +8,6 @@ for (let person of getWeight) {
     HPerson_weight[person.name] = person.weight;
 }
 
-
 const examID = getQueryVariable("examID");
 
 /**
@@ -37,6 +36,7 @@ async function getDatabaseFirst(examID) {
             // label: node.properties.name.length > 4 ? node.properties.name.substring(0, 4) + "..." : node.properties.name,
             label: node.properties.name,
             name: node.properties.name,
+            mysqlId:node.properties.id,
             type: node.labels[0],
             // ...nodeConfig[node.labels[0]]
         })
@@ -61,9 +61,10 @@ async function getDatabaseFirst(examID) {
 }
 
 
-const tooltip = new G6.Tooltip({
+const showProperty = new G6.Tooltip({
     offsetX: 10,
     offsetY: 10,
+    trigger: 'mousemove',
     fixToNode: [1, 0.5],
     // the types of items that allow the tooltip show up
     // 允许出现 tooltip 的 item 类型
@@ -77,6 +78,7 @@ const tooltip = new G6.Tooltip({
         const model = e.item.getModel();
         if (e.item.getType() === 'node') {
             outDiv.innerHTML = `${model.name} : ${HPerson_weight[model.name]}`;
+            let node_id = model.mysqlId;
         } else {
             const source = e.item.getSource();
             const target = e.item.getTarget();
@@ -89,10 +91,13 @@ const tooltip = new G6.Tooltip({
 /**
  * 配置图属性
  */
+const grid = new G6.Grid();
+const minimap = new G6.Minimap();
 const graph = new G6.Graph({
     container: 'mountNode',
     width: window.screen.availWidth,
     height: 800,
+    animate: true,
     modes: {
         default: ['click-select', 'drag-canvas', 'drag-node', 'zoom-canvas', 'activate-relations'],
     },
@@ -102,7 +107,7 @@ const graph = new G6.Graph({
         preventOverlap: true,
         linkDistance: 180,
     },
-    plugins: [tooltip],
+    plugins: [showProperty, grid, minimap],
     defaultNode: {
         size: 60,
         color: '#5B8FF9',
@@ -110,7 +115,7 @@ const graph = new G6.Graph({
     defaultEdge: {
         size: 3,
         color: '#4561d3',
-        type: 'quadratic', // 指定边的形状为二阶贝塞尔曲线
+        type: 'quadratic',
         labelCfg: {
             style: {
                 fill: '#ddd',
@@ -124,19 +129,19 @@ const graph = new G6.Graph({
     }
 });
 
-graph.on('node:click', (e)=>{
-    const item = e.item;
-    graph.focusItem(item, true, {
-        easing: 'easeCubic',
-        duration: 500,
-    });
-});
+// graph.on('node:click', async (e)=>{
+//     const item = e.item;
+//     graph.focusItem(item, true, {
+//         easing: 'easeCubic',
+//         duration: 500,
+//     });
+// });
 
 
 /**
  * 在图上绑定事件点击事件
  */
-graph.on('node:click', (e) => {
+graph.on('node:click', async (e) => {
     const item = e.item;
     console.log(item._cfg.id);
 })

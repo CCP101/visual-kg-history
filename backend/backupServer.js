@@ -315,6 +315,13 @@ router.get('/WARelation', async (ctx) => {
     ctx.body = relation;
 });
 
+router.get('/nodeInformation', async (ctx) => {
+    let examID = ctx.query.query;
+    console.log(examID)
+
+    ctx.body = "relation";
+});
+
 
 process.on("unhandledrejection", (reason, promise) => {
     console.log(reason, promise);
