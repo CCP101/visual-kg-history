@@ -1,5 +1,6 @@
 const { ConnectMysql, NodesWrite, NodesRead, csvRead } = require('./util');
 const {v1: uuidv1} = require("uuid");
+const fs = require("fs");
 let Nodeset = new Set();
 /**
  * CSV文件传值处理
@@ -109,9 +110,31 @@ async function calWeight() {
     }
 }
 
+/**
+ * 初始化顺序4：计算权重后写入MySQL数据库
+ * todo:引入外部历史数据库
+ */
+async function dataToJSON() {
+    let query = `SELECT * FROM people`;
+    let result = await ConnectMysql(query);
+    let data = [];
+    for (let row in result) {
+        let obj = {};
+        obj['id'] = result[row]['name_id'];
+        obj['name'] = result[row]['name'];
+        obj['weight'] = result[row]['weight'];
+        obj['text'] = "test";
+        obj['image'] = "photo_name"
+        data.push(obj);
+    }
+    let json = JSON.stringify(data);
+    fs.writeFileSync('../data/json/node_information.json', json);
+}
+
 async function dataInit() {
     await DataToMysql();
     await ImportDataToNeo4j();
     await calWeight();
+    await dataToJSON();
 }
 exports.dataInit = dataInit;

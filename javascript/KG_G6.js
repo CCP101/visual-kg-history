@@ -3,7 +3,10 @@ let edges = [];
 import getData, {getQueryVariable} from './function.js';
 
 let HPerson_weight = {};
+//提前拉取两个非敏感数据文件
 let getWeight = await getData("sql", "getAllUsers","user");
+let getNodeJson = await getData("nodeJSON","node_information","n");
+
 for (let person of getWeight) {
     HPerson_weight[person.name] = person.weight;
 }
@@ -63,6 +66,7 @@ async function getDatabaseFirst(examID) {
 /*
 * G6 Tooltip工具 用于显示节点信息与边信息
 * ISSUE#3850 G6无法在Tooltip内部实现同步异步操作 推测应为是资源限制
+* 使用JSON文件解决 继续走Axios拿数据 但不是同步异步过程
 */
 const showProperty = new G6.Tooltip({
     offsetX: 10,
@@ -71,8 +75,6 @@ const showProperty = new G6.Tooltip({
     trigger: 'mousemove',
     fixToNode: [1, 0.5],
     itemTypes: ['node', 'edge'],
-    // custom the tooltip's content
-    // 自定义 tooltip 内容
     getContent: (e) => {
         //创新新的内容框 向内部填入HTML内容
         const outDiv = document.createElement('div');
@@ -82,6 +84,18 @@ const showProperty = new G6.Tooltip({
         if (e.item.getType() === 'node') {
             outDiv.innerHTML = `${model.name} : ${HPerson_weight[model.name]}`;
             let node_id = model.mysqlId;
+            //配合传入的JSON文件获得相关信息 不从数据库内拉取数据
+            //解决G6 tooltip不支持异步的问题
+            let node_obj = getNodeJson.find(function (obj) {
+                return obj.id === node_id;
+            });
+            let node_txt = node_obj.id;
+            let node_img = "https://github-ccp101.oss-us-west-1.aliyuncs.com/history.jpg"
+            console.log(node_obj);
+            outDiv.innerHTML += "<br>"
+            outDiv.innerHTML += node_txt;
+            outDiv.innerHTML += "<br>"
+            outDiv.innerHTML += "<img src='https://github-ccp101.oss-us-west-1.aliyuncs.com/history.jpg'>"
         } else {
             const source = e.item.getSource();
             const target = e.item.getTarget();
@@ -135,9 +149,14 @@ const graph = new G6.Graph({
 
 
 // 在图上绑定事件点击事件
-graph.on('node:click', async (e) => {
+// graph.on('node:click', async (e) => {
+//     const item = e.item;
+//     console.log(item._cfg.id);
+// })
+graph.on('node:dblclick', async (e) => {
     const item = e.item;
     console.log(item._cfg.id);
+    window.location.href = "../index.html?examID=" + item._cfg.id;
 })
 // 在第一次渲染图之前渲染需要强调的节点与边
 graph.on('beforerender', async (e) => {
@@ -151,7 +170,7 @@ graph.on('beforerender', async (e) => {
             graph.updateItem(item, {
                 style: {
                     stroke: 'red',
-                    fill: 'orange',   
+                    fill: 'orange',
                     size: 80,
                 },
             });

@@ -14,6 +14,7 @@ const { saveQuiz } = require("./SaveData");
 const {examGenerateFormMysql} = require("./examCreate");
 const {examCheck} = require("./examCheck");
 const {getExamResultForKG} = require("./quizReview");
+const fs = require("fs");
 
 const app = new Koa();
 let myHost = '';
@@ -209,6 +210,11 @@ router.get('/examGet', (ctx) => {
         .then(res => {
             ctx.body = res
         })
+});
+
+router.get('/nodeJSON', (ctx) => {
+    let json_filename = ctx.query.query;
+    ctx.body = fs.readFileSync('../data/json/' + json_filename + '.json');
 });
 
 /**
