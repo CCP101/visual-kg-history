@@ -20,7 +20,6 @@ window.onload = async function () {
         let addHTML ="<div class=\"container\">\n" +
                         "<P>" + (i+1) + "." +  data['quiz_question'] + "</P>\n" +
                         "<form id = \"q" + i +"\" name=\"" + data['quiz_id'] + "\">\n"
-        // todo 代码优化
         if (stu_A === "NULL"){
             addHTML += "<i class=\"fa fa-exclamation\" aria-hidden=\"true\"></i> 未作答"
             addHTML += "<div class=\"radio\">\n";
