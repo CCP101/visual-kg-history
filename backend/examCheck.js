@@ -4,9 +4,9 @@ const {ConnectMysql} = require("./util");
 
 
 
-async function examCheck(data){
+async function examCheck(data,username){
     let submit_UUID = uuidv1();
-    let user_id = "TEST";
+    let user_id = username;
     let addTime = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
     let score = 0;
     let mysqlCheck = await examLog(data);

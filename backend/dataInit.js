@@ -112,7 +112,7 @@ async function calWeight() {
 
 /**
  * 初始化顺序4：计算权重后写入MySQL数据库
- * todo:引入外部历史数据库
+ * todo:引入外部历史数据库 属于未来工作 非紧急
  */
 async function dataToJSON() {
     let query = `SELECT * FROM people`;

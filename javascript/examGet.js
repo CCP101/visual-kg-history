@@ -1,7 +1,7 @@
 /*
 * 配套exam.html
-* 根据用户ID及考试号下载试卷
-* TODO：用户ID辨别实现
+* 根据考试号下载试卷
+* TODO：用户ID辨别实现 读取cookies实现
 * */
 
 import getData, {getQueryVariable} from "./function.js";

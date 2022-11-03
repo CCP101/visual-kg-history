@@ -139,17 +139,28 @@ router.get('/node', (ctx) => {
 router.get('/sql', (ctx) => {
     let sql_list = {
         'getAllUsers': 'SELECT * FROM people',
-        'getUserByName': 'SELECT * FROM users WHERE username = ?',
-        'getUserByID': 'SELECT * FROM users WHERE id = ?',
-        'getExamArrangement': 'SELECT * FROM exam_arrangement',
         'getExamUpload': 'SELECT * FROM exam_upload',
-        'getExamLog': 'SELECT * FROM exam_submit_log',
     };
     //从前端访问连接中获得值
     let sql_select = ctx.query.query;
     //包装一层，取出真正的SQL语句，防止直接将MySQL查询接口暴露给前端
     let sql = sql_list[sql_select];
     return ConnectMysql(sql)
+        .then(res => {
+            //获得返回结果后将结果返回给前端
+            ctx.body = res
+        })
+});
+
+router.get('/userSql', (ctx) => {
+    let userLogin = ctx.cookies.get("userLogin") || "No userLogin";
+    let username = ctx.session[userLogin].name
+    let sql_list = {
+        'getExamLog': 'SELECT * FROM exam_submit_log WHERE user_id = ?',
+    };
+    let sql_select = ctx.query.query;
+    let sql = sql_list[sql_select];
+    return ConnectMysql(sql, username)
         .then(res => {
             //获得返回结果后将结果返回给前端
             ctx.body = res
@@ -264,7 +275,9 @@ router.post('/uploadQuiz', async (ctx) => {
  */
 router.post('/examSubmit', async (ctx) => {
     let data = ctx.request.body;
-    ctx.body = await examCheck(data);
+    let userLogin = ctx.cookies.get("userLogin") || "No userLogin";
+    let username = ctx.session[userLogin].name
+    ctx.body = await examCheck(data,username);
 });
 
 /**

@@ -204,11 +204,11 @@ graph.on('beforerender', async (e) => {
 })
 
 /*
-    程序主入口 第一次运行页面时调用该初始化函数
-    首先判断是主页直接访问或错题的图谱访问，获得不同数据
-    注意：windows.onload存在BUG，于部分浏览器上若无法正常发送请求(请求预检失败)
-    本函数不会被调用 并且直接不执行相关的功能
- */
+* 程序主入口 第一次运行页面时调用该初始化函数
+* 首先判断是主页直接访问或错题的图谱访问，获得不同数据
+* 注意：windows.onload存在BUG，于部分浏览器上若无法正常发送请求(请求预检失败)
+* 则本函数不会被调用 并且直接不执行相关的功能
+* */
 window.onload = async function () {
     if (examID === false){
         await getDatabaseFirst("200");

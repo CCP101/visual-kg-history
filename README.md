@@ -6,51 +6,46 @@
 
    ```
    java --version
-   
+
    java 17.0.1 2021-10-19 LTS
    Java(TM) SE Runtime Environment (build 17.0.1+12-LTS-39)
    Java HotSpot(TM) 64-Bit Server VM (build 17.0.1+12-LTS-39, mixed mode, sharing)
    ```
-
 2. 打开Neo4j官网，下载社区版服务器，不要选择桌面版，[下载链接](https://neo4j.com/download-center/#community)，依照跳出的网页对Neo4j进行配置，配置完成后能在命令行工具内调用即可
 
    ```
    neo4j -Verbose
-   
+
    详细信息: Neo4j Server Type is 'Community'
    详细信息: Neo4j Version is '4.2.11'
    详细信息: Neo4j Database Mode is ''
    ```
-
 3. 安装Apache HTTP服务器，搭建本地服务器，[下载地址](https://www.apachehaus.com/cgi-bin/download.plx)，[安装教程](https://www.php.cn/apache/427457.html)，默认开机自启服务，并将**本项目**(Github下载后会自动在文件夹名称后添加"-master",需删除)拷入配置文件中DocumentRoot指向的文件夹地址
 
    或安装http-server包，使用Node进行安装，安装命令“npm i http-server”，使用命令“http-server [path] [options]”激活本地服务器
-
 4. 安装Node.js版本管理服务nvm，[Windows版本链接](https://github.com/coreybutler/nvm-windows)，[安装及使用教程](https://www.runoob.com/w3cnote/nvm-manager-node-versions.html)，配置完成后即可在命令行工具内控制多个Node版本
 
    ```
    nvm list
-   
+
       14.18.1
     * 12.22.7 (Currently using 64-bit executable)
       0.10.15
    ```
-
 5. 通过nvm切换到Node V14/12 LTS版本(本软件需要使用await/async，至少需要12以上的版本)，并检查是否切换成功
 
    ```
    node --version
-   
+
    v12.22.7
    ```
-
 6. 切换到本项目所在的文件目录，安装项目的依赖模块
 
    ```
    npm install --dependencies
-   
+
    up to date in 0.732s
-   
+
    8 packages are looking for funding
      run `npm fund` for details
    ```
@@ -58,9 +53,7 @@
 ## 数据导入教程
 
 1. 在MySQL数据库中创建cq_history数据库，使用sql文件夹内的cq_history.sql文件自动导入表结构与数据（使用MySQL命令行工具或Navicat可视化工具）
-
 2. 修改backend文件夹内的util.js文件，检查Neo4j与MySQL数据库连接密码
-
 3. 修改backend文件夹内的dataInit.js文件，在110行后添加内容，保存并运行该文件，请提前将CSV文件放在指定位置或修改路径，查看数据库及/data/json路径确认是否写入成功
 
    ```
@@ -74,7 +67,6 @@
    ```
    node .\backend\backupServer.js
    ```
-
 2. 在浏览器输入以下地址，即可打开本项目
 
    ```
@@ -83,13 +75,14 @@
    知识图谱页面
    http://localhost/visual-kg-history/web/kg/
    ```
-   项目首次启动后服务端需要显示公匙后才能操作，每次服务器重启时前端页面应亦进行清空缓存的刷新
 
+   项目首次启动后服务端需要显示公匙后才能操作，每次服务器重启时前端页面应亦进行清空缓存的刷新
 
 ## 已知BUG
 
 1. 目前只有春秋战国的知识图谱数据，其他考试无法进行错题的可视化功能，相关逻辑代码初期版本均只针对相关数据，后期优化
 2. 前端部分面条代码优化
 3. 读取Neo4j的过程会读取到多次重复边，会在console窗口出现大量警告，但不影响功能，后期优化
-4. 实现试卷前端生成时的选项随机生成
-5. 前端页面上传文件页面整合，处理BUG
+4. 前端页面上传文件页面整合，处理BUG
+5. 实现试卷前端生成时的选项随机生成
+6. quiz数据库quiz重复 有问题 (已复现问题)
