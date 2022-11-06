@@ -31,21 +31,23 @@ console.log(publicDer);
  * @param query Cypher语句
  * @param args JS ? SQL语句占位符替代实现
  * @return {Promise<any>} 以期约方式返回数据库查询结果
- * Node.js在长期不访问数据库的情况下，可能会报错
+ * 1.Node.js在长期不访问数据库的情况下，可能会报错
  * mysql Error: Connection lost The server closed the connection
  * 需要创建MySQL连接池智能解决该问题
  * 因此原版本代码弃用，改用连接池，问题描述见连接：
  * https://stackoverflow.com/questions/20210522/nodejs-mysql-error-connection-lost-the-server-closed-the-connection
+ * 2.为了防止SQL注入攻击，统一不信任前端的连接与发来的数据
+ * 因此在处理MYSQL查询拼接过程中，统一使用？占位符以及MySQL字符串转义实现来查询
+ * 并且原写法 ...function 会导致无法迭代数据，新写法实现了防止SQL注入功能
+ * 3.原生JS不支持函数重载，如需实现需要手动进行实现
+ * 参考网站 https://juejin.cn/post/6844903933480009741
+ * 或使用TypeScript语言进行编写
  */
 async function ConnectMysql(query,args=null){
     this.query = query;
     this.args = args;
     return new Promise(function (resolve, reject) {
         console.log(query,args);
-        // 原写法 ...function 会导致无法迭代数据，新写法实现了防止SQL注入功能
-        // 原生JS不支持函数重载，如需实现需要手动进行实现
-        // 参考网站 https://juejin.cn/post/6844903933480009741
-        // 或使用TypeScript语言进行编写
         if (typeof args === 'string') {
             mysqlPool.query(query, args, function (err, result) {
                 if (err) {

@@ -1,5 +1,4 @@
 const { ConnectMysql, csvRead } = require('./util');
-const { dataInit } = require('./dataInit');
 const ExcelJS = require('exceljs');
 const workbook = new ExcelJS.Workbook();
 

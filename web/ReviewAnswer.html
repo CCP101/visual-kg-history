@@ -34,6 +34,14 @@
     <script src="../javascript/js/popper.min.js"></script>
     <script src="../javascript/js/bootstrap.min.js"></script>
     <script src="../javascript/js/axios.min.js"></script>
+    <style>
+        .content{
+            user-select: none;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+        }
+    </style>
 </head>
 <body>
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark "><!--顶部导航栏-->
@@ -185,6 +193,31 @@
         }
         window.location.href = "KG/index.html?examID="+examID;
     });
+    // document.body.oncontextmenu = e => {
+    //     return false;
+    //     // e.preventDefault();
+    // };
+    document.body.onselectstart = e => {
+        return false;
+        // e.preventDefault();
+    };
+    document.body.oncopy = e => {
+        return false;
+        // e.preventDefault();
+    };
+    // document.body.oncopy = (event) => {
+    //     // 是否登录，没登陆就禁止转载
+    //     if (!isLogin()) return alert('禁止转载');
+    //     event.preventDefault(); // 取消浏览器原本默认的copy事件
+    //     let authorizationInfo, // 授权信息
+    //         copyText = window.getSelection(0).toString(); // 获取被复制的文本内容，没有dom结构
+    //     if (copyText.length > 20) {
+    //         copyText = `${copyText}\n\n作者：${author}\n链接：${window.location.href}\n来源：${source}\n\n${copyRight}`;
+    //     }
+    //     // 兼容一下ie浏览器，ie中是window，其他浏览器是event
+    //     let clipboardData = event.clipboardData || window.clipboardData;
+    //     clipboardData.setData('text', copyText);
+    // }
 </script>
 </body>
 </html>
