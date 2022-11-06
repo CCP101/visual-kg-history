@@ -1,7 +1,7 @@
 /*
 * 配套ReviewAnswer.html
 * 根据用户ID及考试号查看考试情况
-* TODO：严重垃圾面条代码修改
+* TODO：严重垃圾面条代码修改 彩色实现
 * */
 
 import getData, {getQueryVariable} from "./function.js";
@@ -10,7 +10,6 @@ window.onload = async function () {
     const examID = getQueryVariable("examID");
     console.log(examID)
     const examPaperData = await getData("examReview", examID,"exam");
-    console.log(examPaperData)
     for (let i=0; i < examPaperData.length ;i++) {
         let data = examPaperData[i];
         let stu_A = data.quiz_answer;

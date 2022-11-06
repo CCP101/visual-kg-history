@@ -8,7 +8,7 @@ import {countdown} from "./function.js";
 
 cookiesCheck();
 
-// todo 现阶段默认考试分配到所有学生 非功能性BUG 非紧急
+// fixme 现阶段默认考试分配到所有学生 非功能性BUG 非紧急
 let getWeight = await getData("sql","getExamUpload", 'exam');
 let tbody = document.querySelector('tbody');
 for (let i=0; i < getWeight.length ;i++)

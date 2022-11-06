@@ -17,7 +17,8 @@ const examID = getQueryVariable("examID");
  * 异步实现网页首次启动时的默认查询
  */
 async function getDatabaseFirst(examID) {
-    let set = new Set();
+    let setNodes = new Set();
+    let setEdges = new Set();
     let HPerson_Teams;
     let HPerson_Relation;
     if(examID === "200"){
@@ -30,6 +31,12 @@ async function getDatabaseFirst(examID) {
 
     //Neo4j查询结果转换为G6的数据格式
     for (let node of HPerson_Teams) {
+        let nodeID = "node-" + node.identity;
+        if (setNodes.has(nodeID)) {
+            continue;
+        } else {
+            setNodes.add(nodeID);
+        }
         nodes.push({
             id: "node-" + node.identity,
             value: {
@@ -47,10 +54,10 @@ async function getDatabaseFirst(examID) {
     for (let relation of HPerson_Relation) {
         // 边去重
         let edgeName = "edge-" + relation.start + "-" + relation.end;
-        if (set.has(edgeName)) {
+        if (setEdges.has(edgeName)) {
             continue;
         } else {
-            set.add(edgeName);
+            setEdges.add(edgeName);
         }
         edges.push({
             id: "edge-" + relation.start + "-" + relation.end,
