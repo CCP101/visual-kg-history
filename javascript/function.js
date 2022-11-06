@@ -132,6 +132,24 @@ function cookiesCheck(){
     }
 }
 
+/**
+ * 使用原生sort存在问题，因此使用Fisher–Yates shuffle洗牌算法
+ * 参考知乎链接 https://www.zhihu.com/question/68330851
+ * @returns {Array} 打乱数组
+ */
+Array.prototype.shuffle = function() {
+    let array = this;
+    let m = array.length,
+        t, i;
+    while (m) {
+        i = Math.floor(Math.random() * m--);
+        t = array[m];
+        array[m] = array[i];
+        array[i] = t;
+    }
+    return array;
+};
+
 
 export default getData;
 export { countdown, postData, getQueryVariable, exitSystem, cookiesCheck,getCookie };

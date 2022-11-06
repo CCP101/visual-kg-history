@@ -27,15 +27,19 @@
 // const xlData = xlsx.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
 // let data = [];
 // console.log(xlData)
-obj = {
-    1:{
-        id:1,
-        name:'a',
-    },
-    2:{
-        id:2,
-        name:'b'
-    }
-};
-console.log(JSON.stringify(obj));
+//
+// Array.prototype.shuffle = function() {
+//     var array = this;
+//     var m = array.length,
+//         t, i;
+//     while (m) {
+//         i = Math.floor(Math.random() * m--);
+//         t = array[m];
+//         array[m] = array[i];
+//         array[i] = t;
+//     }
+//     return array;
+// }
+//
+// console.log([1,2,3,4,5].shuffle())
 
