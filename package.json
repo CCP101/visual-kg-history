@@ -36,10 +36,14 @@
     "node-jsencrypt": "^1.0.0",
     "node-rsa": "^1.1.1",
     "uuid": "^8.3.2",
+    "webpack-dev-server": "^4.11.1",
     "xlsx": "^0.18.5"
   },
   "repository": {
     "type": "git",
     "url": "git://https://github.com/CCP101/visual-kg-histroy.git"
+  },
+  "devDependencies": {
+    "webpack": "^5.74.0"
   }
 }

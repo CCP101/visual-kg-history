@@ -2,6 +2,7 @@
 /node_modules/
 /.idea/
 /.vscode/
+/dist/
 /data/
 /server/
 开发指导手册.md
