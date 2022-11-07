@@ -223,7 +223,6 @@ window.onload = async function () {
         await getDatabaseFirst(examID);
     }
     //过滤无用边
-    //todo 实际上F12内出现多个多边报错 需要进行处理
     let nodeList = [];
     for (let node of nodes) {
         nodeList.push(node.id.toString().replace('node-', ''));

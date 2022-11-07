@@ -1,9 +1,7 @@
 /*
 * 配套ReviewAnswer.html
 * 根据用户ID及考试号查看考试情况
-* TODO：严重垃圾面条代码修改 彩色实现
 * */
-
 import getData, {getQueryVariable} from "./function.js";
 
 window.onload = async function () {
@@ -16,6 +14,7 @@ window.onload = async function () {
         let real_A = data.quiz_A;
         let right = false;
         if (stu_A === real_A) {right = true}
+        // TODO: 严重垃圾面条代码修改 彩色实现
         let addHTML ="<div class=\"container\">\n" +
                         "<P>" + (i+1) + "." +  data['quiz_question'] + "</P>\n" +
                         "<form id = \"q" + i +"\" name=\"" + data['quiz_id'] + "\">\n"

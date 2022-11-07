@@ -6,7 +6,7 @@ async function getExamResultForKG(examID){
         "AND quiz_save.quiz_A !=exam_log.quiz_answer"
     let res = await ConnectMysql(sql);
     let person = [];
-    //fixme 临时判断代码 后期修正 只能判断春秋战国考试
+    //FIXME: 临时判断代码 后期修正 只能判断春秋战国考试
     for (let i = 0; i < res.length; i++) {
         let log = res[i]['quiz_question'];
         let p1 = log.split("与")[0];

@@ -5,7 +5,6 @@ const workbook = new ExcelJS.Workbook();
 
 /**
  * 生成试题并输出
- * todo 逻辑更正 A-B关系现有逻辑会生成两次题目 后期针对该问题进行解决 非项目BUG 非紧急
  * @return [] 返回生成的试题
  */
 async function generateText() {
@@ -16,7 +15,7 @@ async function generateText() {
     for (let row in result) {
         set.add(result[row][2]);
     }
-
+    // FIXME: 逻辑更正 A-B关系现有逻辑会生成两次题目 后期针对该问题进行解决 非项目BUG 非紧急
     for (let row in result) {
         let p1 = result[row][0];
         let p2 = result[row][1];
