@@ -1,8 +1,8 @@
 # Project exclude paths
 /node_modules/
 /.idea/
+/.fleet/
 /.vscode/
-/dist/
 /data/
 /server/
 开发指导手册.md
