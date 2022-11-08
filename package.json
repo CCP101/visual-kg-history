@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A historical knowledge map of the Spring and Autumn Period and the Warring States Period supported by the graph database Neo4j",
   "main": "index.js",
+  "private": true,
   "scripts": {
     "start": "node ",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -44,6 +45,13 @@
     "url": "git://https://github.com/CCP101/visual-kg-histroy.git"
   },
   "devDependencies": {
+    "@babel/cli": "^7.19.3",
+    "@babel/core": "^7.20.2",
+    "@babel/plugin-transform-runtime": "^7.19.6",
+    "@babel/preset-env": "^7.20.2",
+    "@babel/preset-stage-2": "^7.8.3",
+    "babel-preset-env": "^1.7.0",
+    "lodash": "^4.17.21",
     "webpack": "^5.74.0"
   }
 }

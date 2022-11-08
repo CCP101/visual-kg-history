@@ -344,3 +344,11 @@ router.get('/WARelation', async (ctx) => {
 process.on("unhandledrejection", (reason, promise) => {
     console.log(reason, promise);
 })
+
+
+// 后期Babel打包预留
+// 该项目使用Babel7打包 请使用@bable 安装 否则会报错
+// babel 文档链接 https://www.babeljs.cn/docs/
+// require("babel-core").transform("code", {
+//     plugins: ["transform-runtime"]
+// });

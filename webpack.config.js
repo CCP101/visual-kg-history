@@ -1,6 +1,6 @@
 // webpack.config.js
-// webpack从零开始第1课:安装webpack和webpack-dev-server
 // https://segmentfault.com/a/1190000012536871
+// https://webpack.docschina.org/guides/getting-started/#basic-setup
 
 var path = require('path')
 
