@@ -40,13 +40,13 @@ body {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    border: 1px solid #999;
-    background: #efefef;
+    /* border: 1px solid #999;
+    background: #efefef; */
     cursor: default;
     overflow: auto;
-    -webkit-box-shadow: 1px 4px 3px rgba(50, 50, 50, 0.64);
-    -moz-box-shadow: 1px 4px 3px rgba(50, 50, 50, 0.64);
-    box-shadow: 1px 4px 3px rgba(50, 50, 50, 0.64);
+    /* -webkit-box-shadow: 1px 4px 3px rgba(50, 50, 50, 0.64);
+    -moz-box-shadow: 1px 4px 3px rgba(50, 50, 50, 0.64); 
+    box-shadow: 1px 4px 3px rgba(50, 50, 50, 0.64);  */
 }
 
 .autocomplete-suggestion {
@@ -65,7 +65,7 @@ body {
 
 .autocomplete-suggestions strong {
     font-weight: bold;
-    color: #000;
+    /* color: #000; */
 }
 
 .autocomplete-group {
@@ -75,9 +75,9 @@ body {
 .autocomplete-group strong {
     font-weight: bold;
     font-size: 16px;
-    color: #000;
+    /* color: #000; */
     display: block;
-    border-bottom: 1px solid #000;
+    /* border-bottom: 1px solid #000; */
 }
 
 #input_div {
@@ -93,7 +93,7 @@ input:focus {
     margin: auto;
     line-height: 40px;
     width: 40%;
-    background: #efefef;
+    /* background: #efefef; */
     border-radius: 40px;
     border: none;
 }
@@ -118,16 +118,16 @@ input:focus {
     font-size: small;
 }
 
-.main {
+/* .main {
     background-color: #0b2838;
     overflow: hidden;
     position: absolute;
-    left: 5%;
+    left: ;
     right: 0;
     top: 8%;
     height: 92%;
     transition: all 0.2s ease 0s;
-}
+} */
 
 .big-page .sidebar {
     left: -25%;
@@ -137,14 +137,14 @@ input:focus {
     left: 0;
 }
 
-#banner {
+/* #banner {
     color: #fff;
     width: 100%;
     background: #0d1c25;
     height: 8%;
     display: block;
     opacity: 0.85;
-}
+} */
 
 canvas {
     background-color: #0f3564;
@@ -166,7 +166,7 @@ canvas {
 .entity_btn,
 .rela_btn,
 .entity_rela_btn,
-.banner_btn {
+/* .banner_btn {
     width: 30%;
     border-radius: 5px;
     color: #efefef;
@@ -177,13 +177,13 @@ canvas {
     border: 2px solid transparent;
     cursor: pointer;
 
-}
+} */
 
-.banner_btn {
+/* .banner_btn {
     width: 120px;
     display: inline-block;
     font-weight: bolder;
-}
+} */
 
 .selected {
     margin: 10px;
