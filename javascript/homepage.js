@@ -66,7 +66,7 @@ async function register(){
         let getData = await postData("register", data);
         if (getData === 200){
             alert("注册成功");
-            window.location.href = "index.html";
+            window.location.href = "login.html";
         }else{
             alert("注册失败");
         }

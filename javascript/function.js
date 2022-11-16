@@ -99,7 +99,7 @@ async function exitSystem() {
     let response = await getData("exit");
     if (response === 200){
         alert("退出成功");
-        window.location.href = "index.html";
+        window.location.href = "login.html";
     }else{
         alert("退出失败");
     }
