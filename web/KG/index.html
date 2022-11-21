@@ -1,36 +1,73 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+    <head>
+        <meta charset="UTF-8" />
+        <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no" name="viewport">
+        <link href="../assets/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+        <title>Knowledge Base</title>
+        <script src="../../javascript/js/jquery.min.js"></script>
+        <script src="../../javascript/js/bootstrap.min.js"></script>
+        <link href="../assets/favicon.ico" rel="apple-touch-icon">
+        <link href="../../css/font-awesome.css" rel="stylesheet">
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/kg.css" rel="stylesheet">
+    </head>
+    <body>
+    <script src="../../javascript/js/canvs.js" type="text/javascript"></script>
+    <script src="../../javascript/js/g6.min.js" type="text/javascript"></script>
+    <script src="../../javascript/js/axios.min.js" type="text/javascript"></script>
+    <script src="../../javascript/KG_G6.js" type="module" ></script>
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
-    <link rel="shortcut icon" href="../assets/favicon.ico" type="image/x-icon" />
-    <title>Knowledge Base</title>
-    <link rel="stylesheet" type="text/css" href="../../css/kg.css">
-</head>
+    <!-- /* 图的画布容器 */ -->
+    <nav class="navbar" >
+        <a class="navbar-brand" href="../index.html"><img height="40px" src="../assets/logo.png" width="40px"></a>
+        <form class="form-inline">
+            <div id="input_div">
+                <label for="autocomplete"></label>
+                <input class="form-control mr-sm-2" id="autocomplete" name="country" placeholder="请输入查询项" type="text" />
+            </div>
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+    </nav>
+    <div id="mountNode"></div>
 
-
-<body>
-<script type="text/javascript" src="../../javascript/js/g6.min.js"></script>
-<script type="text/javascript" src="../../javascript/js/axios.min.js"></script>
-<script type="module" src="../../javascript/KG_G6.js" ></script>
-
-<!-- /* 图的画布容器 */ -->
-<div id="banner">
-    <h1>学科知识图谱学习平台系统</h1>
-    <div class="link">
-        <button class="banner_btn selected" id="side_change">Sidebar</button>
-    </div>
-</div>
-<div>
-    
-    <div class="main">
-        <div id="input_div">
-            <label for="autocomplete"></label>
-            <input type="text" placeholder="请输入查询项" name="country" id="autocomplete" />
-        </div>
-        <div id="mountNode"></div>
-    </div>
-</div>
-</body>
+    </body>
 </html>
+
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">-->
+
+<!--<head>-->
+<!--    <meta charset="UTF-8" />-->
+<!--    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">-->
+<!--    <link rel="shortcut icon" href="../assets/favicon.ico" type="image/x-icon" />-->
+<!--    <title>Knowledge Base</title>-->
+<!--    <link rel="stylesheet" type="text/css" href="../../css/kg.css">-->
+<!--</head>-->
+
+
+<!--<body>-->
+<!--<script type="text/javascript" src="../../javascript/js/g6.min.js"></script>-->
+<!--<script type="text/javascript" src="../../javascript/js/axios.min.js"></script>-->
+<!--<script type="module" src="../../javascript/KG_G6.js" ></script>-->
+
+<!--&lt;!&ndash; /* 图的画布容器 */ &ndash;&gt;-->
+<!--<div id="banner">-->
+<!--    <h1>学科知识图谱学习平台系统</h1>-->
+<!--    <div class="link">-->
+<!--        <button class="banner_btn selected" id="side_change">Sidebar</button>-->
+<!--    </div>-->
+<!--</div>-->
+<!--<div>-->
+
+<!--    <div class="main">-->
+<!--        <div id="input_div">-->
+<!--            <label for="autocomplete"></label>-->
+<!--            <input type="text" placeholder="请输入查询项" name="country" id="autocomplete" />-->
+<!--        </div>-->
+<!--        <div id="mountNode"></div>-->
+<!--    </div>-->
+<!--</div>-->
+<!--</body>-->
+<!--</html>-->

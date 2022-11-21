@@ -1,5 +1,7 @@
 // webpack.config.js
 // https://webpack.docschina.org/guides/getting-started/#basic-setup
+// 同步配套babel进行编译
+// babel需要保证全部统一为babel 7版本 安装时为安装@bable版本
 
 let path = require('path')
 
