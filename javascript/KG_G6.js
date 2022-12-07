@@ -131,11 +131,11 @@ const showPropertyEdge = new G6.Tooltip({
  * 配置图属性
  * 图基本配置、模式、样式、插件、默认点边样式
  */
-const grid = new G6.Grid();
 const minimap = new G6.Minimap();
+// const grid = new G6.Grid();
 const graph = new G6.Graph({
     container: 'mountNode',
-    width: window.screen.availWidth,
+    width: window.innerWidth,
     height: 800,
     animate: true,
     modes: {
@@ -147,7 +147,7 @@ const graph = new G6.Graph({
         preventOverlap: true,
         linkDistance: 180,
     },
-    plugins: [showPropertyNode,showPropertyEdge, grid, minimap],
+    plugins: [showPropertyNode,showPropertyEdge, minimap],
     defaultNode: {
         size: 60,
         color: '#5B8FF9',

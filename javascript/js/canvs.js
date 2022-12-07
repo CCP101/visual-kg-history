@@ -3,11 +3,11 @@ window.onload = function () {
     document.body.style.margin = "0";
     document.body.style.background = "#30333F";
     //创建canvas画布
-    document.body.appendChild(document.createElement('canvas'));
+    // document.body.appendChild(document.createElement('canvas'));
     var canvas = document.querySelector('canvas'),
         ctx = canvas.getContext('2d') //ctx返回一个在canvas上画图的api/dom
     canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    canvas.height = window.innerHeight*2;
     canvas.style.position = 'fixed';
     ctx.lineWidth = .3;
     ctx.strokeStyle = (new Color(150)).style;

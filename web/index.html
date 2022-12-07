@@ -1,128 +1,170 @@
-<!doctype html>
-<!--TODO: 前端应重新设置为主页 登录页设置为子页面 -->
-<!--其他页面跳转到本页面时因需要判断用户身份会导致一定的页面留存影像影响用户体验-->
-<html lang="zn">
+<!DOCTYPE HTML>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>用户登录</title>
-  <link rel="apple-touch-icon" href="assets/favicon.ico">
-  <link rel="stylesheet" href="../css/font-awesome.css">
-  <link href="../css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    html, body {
-      height: 100%;
-    }
-
-    body {
-      display: -ms-flexbox;
-      display: -webkit-box;
-      display: flex;
-      -ms-flex-align: center;
-      -ms-flex-pack: center;
-      -webkit-box-align: center;
-      align-items: center;
-      -webkit-box-pack: center;
-      justify-content: center;
-      padding-top: 40px;
-      padding-bottom: 40px;
-      background-color: #f5f5f5;
-    }
-
-    .form-signin {
-      width: 100%;
-      max-width: 330px;
-      padding: 15px;
-      margin: 0 auto;
-    }
-
-    .form-signin .checkbox {
-      font-weight: 400;
-    }
-
-    .form-signin .form-control {
-      position: relative;
-      box-sizing: border-box;
-      height: auto;
-      padding: 10px;
-      font-size: 16px;
-    }
-
-    .form-signin .form-control:focus {
-      z-index: 2;
-    }
-
-    .form-signin input[type="email"] {
-      margin-bottom: -1px;
-      border-bottom-right-radius: 0;
-      border-bottom-left-radius: 0;
-    }
-
-    .form-signin input[type="password"] {
-      margin-bottom: 10px;
-      border-top-left-radius: 0;
-      border-top-right-radius: 0;
-    }
-  </style>
-  <script src="../javascript/js/jquery.min.js"></script>
-  <script src="../javascript/js/popper.min.js"></script>
-  <script src="../javascript/js/axios.min.js"></script>
-  <script src="../javascript/js/bootstrap.min.js"></script>
-  <script src="../javascript/js/jsencrypt.min.js"></script>
-
+    <title>历史知识图谱</title>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <meta content="" name="description" />
+    <meta content="" name="keywords" />
+    <script src="../javascript/js/jquery1.min.js"></script>
+    <script src="../javascript/js/jquery.scrolly.min.js"></script>
+    <script src="../javascript/js/jquery.dropotron.min.js"></script>
+    <script src="../javascript/js/jquery.scrollex.min.js"></script>
+    <script src="../javascript/js/skel.min.js"></script>
+    <script src="../javascript/js/skel-layers.min.js"></script>
+    <script src="../javascript/js/init.js"></script>
+    <style>
+        *{
+            margin: 0px;
+            padding: 0px;
+        }
+        video{
+            position: absolute;
+            right: 0px;
+            bottom: 0px;
+            min-width: 100%;
+            min-height: 100%;
+            height: auto;
+            width: auto;
+            /*加滤镜*/
+            /*filter: blur(15px); //背景模糊设置 */
+            /*-webkit-filter: grayscale(100%);*/
+            /*filter:grayscale(100%); //背景灰度设置*/
+        }
+        source{
+            min-width: 100%;
+            min-height: 100%;
+            height: auto;
+            width: auto;
+        }
+    </style>
 </head>
-
-<body class="text-center">
-<div class="container">
-  <div class="row">
-    <div class="col-xl-12 col-md-12 col-sm-12">
-      <form class="form-signin" role="form" action="" method="post" id="login_form">
-        <img class="mb-4" src="assets/favicon2.ico" alt="" width="72" height="72">
-        <h1 class="h3 mb-3 font-weight-normal">
-          账号登录
-        </h1>
-        <div class="row ">
-          <div class="col-12">
-            <div class="form-group">
-              <label for="username">用户名：</label>
-              <input type="text" id="username" name="username" class="form-control">
-            </div>
-          </div>
-          <div class="col-12">
-            <div class="form-group">
-              <label for="password">密码：</label>
-              <input type="password" id="password" name="password" class="form-control">
-            </div>
-          </div>
-          <div class="col-12">
-            <div class="checkbox pull-left">
-              <label><input type="checkbox" id="rememberMm">记住用户名</label>
-            </div>
-          </div>
-          <div class="col-12 center-block text-center">
-            <button class="btn btn btn-primary center-block" type="button" id="login">登录</button>
-          </div>
-          <div class="col-12 font-weight-normal">
-            没有帐号？<a href="register.html">注册</a>
-          </div>
-          <script type="module">
-            import {login} from '../javascript/homepage.js';
-            $("#login").click(function(){
-              login();
-            });
-          </script>
-        </div>
-        <p class="mt-5 mb-2 text-muted">© TUST</p>
-      </form>
+<body class="landing">
+<!-- 导航 -->
+<header id="header">
+    <h1 id="logo"><a href="index.html"><img height="40px" src="assets/logo.png" width="40px"></a></h1>
+</header>
+<!-- 主屏 -->
+<section id="banner">
+    <video autoplay id="v1" loop >
+        <source src="assets/HO4.mp4"/>
+    </video>
+    <div class="content">
+        <a class="image button special" data-type="page-transition"  href="index1.html"></a>
+        <header>
+            <h2>欢迎来到历史的世界</h2>
+            <p>在这里，你将获得你所想知的一切</p>
+        </header>
+        <a class="image button special" href="KG/index.html"></a>
     </div>
-  </div>
-</div>
+</section>
+
+<!-- 团队介绍 -->
+<section class="spotlight style1 bottom" id="one">
+    <div class="content">
+        <div class="container">
+            <div class="row">
+                <div class="4u 12u$(medium)">
+                    <header>
+                        <h2>网站与项目介绍</h2>
+                        <p>********************************</p>
+                    </header>
+                </div>
+                <div class="4u 12u$(medium)">
+                    <p>****************************************</p>
+                </div>
+                <div class="4u$ 12u$(medium)">
+                    <p>************************************</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a class="goto-next scrolly" href="#two">Next</a>
+</section>
 
 
-<script type="module">
+<!-- 成员 -->
+<!--<section id="two" class="wrapper style1 special fade-up">-->
+<!--    <div class="container">-->
+<!--        <header class="major">-->
+<!--            <h2>团队成员</h2>-->
+<!--            <p>一群带有梦想的青年</p>-->
+<!--        </header>-->
+<!--        <div class="box alt">-->
+<!--            <div class="row uniform">-->
+<!--                <section class="4u 6u(medium) 12u$(xsmall)">-->
+<!--                    <span class="icon alt major "></span>-->
+<!--                    <h3>姓名</h3>-->
+<!--                    <p>简介</p>-->
+<!--                </section>-->
+<!--                <section class="4u 6u(medium) 12u$(xsmall)">-->
+<!--                    <span class="icon alt major "></span>-->
+<!--                    <h3>姓名</h3>-->
+<!--                    <p>简介</p>-->
+<!--                </section>-->
+<!--                <section class="4u 6u(medium) 12u$(xsmall)">-->
+<!--                    <span class="icon alt major "></span>-->
+<!--                    <h3>姓名</h3>-->
+<!--                    <p>简介</p>-->
+<!--                </section>-->
+<!--                <section class="4u 6u(medium) 12u$(xsmall)">-->
+<!--                    <span class="icon alt major "></span>-->
+<!--                    <h3>姓名</h3>-->
+<!--                    <p>简介</p>-->
+<!--                </section>-->
+<!--                <section class="4u 6u(medium) 12u$(xsmall)">-->
+<!--                    <span class="icon alt major "></span>-->
+<!--                    <h3>姓名</h3>-->
+<!--                    <p>简介</p>-->
+<!--                </section>-->
+<!--                <section class="4u 6u(medium) 12u$(xsmall)">-->
+<!--                    <span class="icon alt major "></span>-->
+<!--                    <h3>姓名</h3>-->
+<!--                    <p>简介</p>-->
+<!--                </section>-->
+<!--            </div>-->
+<!--            <div class="row uniform">-->
+<!--                <section class="4u 6u(medium) 12u$(xsmall)">-->
+<!--                    <span class="icon alt major "></span>-->
+<!--                    <h3>姓名</h3>-->
+<!--                    <p>简介</p>-->
+<!--                </section>-->
+<!--                <section class="4u 6u$(medium) 12u$(xsmall)">-->
+<!--                    <span class="icon alt major "></span>-->
+<!--                    <h3>姓名</h3>-->
+<!--                    <p>简介</p>-->
+<!--                </section>-->
+<!--                <section class="4u$ 6u(medium) 12u$(xsmall)">-->
+<!--                    <span class="icon alt major "></span>-->
+<!--                    <h3>姓名</h3>-->
+<!--                    <p>简介</p>-->
+<!--                </section>-->
+<!--            </div>-->
+<!--            <div class="row uniform">-->
+<!--                <section class="4u 6u$(medium) 12u$(xsmall)">-->
+<!--                    <span class="icon alt major "></span>-->
+<!--                    <h3>姓名</h3>-->
+<!--                    <p>简介</p>-->
+<!--                </section>-->
+<!--                <section class="4u 6u(medium) 12u$(xsmall)">-->
+<!--                    <span class="icon alt major "></span>-->
+<!--                    <h3>姓名</h3>-->
+<!--                    <p>简介</p>-->
+<!--                </section>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</section>-->
 
-</script>
-<script type="text/javascript" color="255,0,0" pointColor="255,0,0" opacity='0.7' zIndex="-2" count="150"
-        src="../javascript/js/canvas-nest.js"></script>
-<script type="text/javascript" src="../javascript/js/canvas-nest.umd.js"></script>
+<!-- 底部 -->
+<footer id="footer">
+    <ul class="icons">
+        <li><a class="icon alt fa-github" href="https://github.com/CCP101/visual-kg-history"><span class="label">GitHub</span></a></li>
+        <li><a class="icon alt fa-envelope" href="#"><span class="label">Email</span></a></li>
+    </ul>
+    <ul class="copyright">
+        <li>&copy; 天津科技大学物联网与信息安全团队</li>
+    </ul>
+</footer>
+
 </body>
 </html>

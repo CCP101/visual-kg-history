@@ -59,6 +59,7 @@
     "lodash": "^4.17.21",
     "style-loader": "^3.3.1",
     "vue-loader": "^17.0.1",
-    "webpack": "^5.74.0"
+    "webpack": "^5.74.0",
+    "webpack-cli": "^5.0.1"
   }
 }
