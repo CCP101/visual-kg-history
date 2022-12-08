@@ -42,12 +42,14 @@ console.log(publicDer);
  * 3.原生JS不支持函数重载，如需实现需要手动进行实现
  * 参考网站 https://juejin.cn/post/6844903933480009741
  * 或使用TypeScript语言进行编写
+ * 4.MySQL8可能存在连接问题，需要在MySQL8中配置
+ * ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'ROOT';
  */
 async function ConnectMysql(query,args=null){
     this.query = query;
     this.args = args;
     return new Promise(function (resolve, reject) {
-        console.log(query,args);
+        console.log(query);
         if (typeof args === 'string') {
             mysqlPool.query(query, args, function (err, result) {
                 if (err) {
