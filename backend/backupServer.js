@@ -140,6 +140,7 @@ router.get('/sql', (ctx) => {
     let sql_list = {
         'getAllUsers': 'SELECT * FROM people',
         'getExamUpload': 'SELECT * FROM exam_upload',
+        'getAllExam': 'SELECT * FROM exam_arrangement',
     };
     //从前端访问连接中获得值
     let sql_select = ctx.query.query;

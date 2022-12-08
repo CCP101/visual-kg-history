@@ -216,7 +216,7 @@ graph.on('beforerender', async (e) => {
 * 注意：windows.onload存在BUG，于部分浏览器上若无法正常发送请求(请求预检失败)
 * 则本函数不会被调用 并且直接不执行相关的功能
 * */
-window.onload = async function () {
+async function initNeo4j() {
     if (examID === false){
         await getDatabaseFirst("200");
     }else{
@@ -241,3 +241,5 @@ window.onload = async function () {
     });
     graph.render();
 }
+
+initNeo4j().then(r => {});

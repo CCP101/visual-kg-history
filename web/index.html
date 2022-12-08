@@ -1,170 +1,74 @@
-<!DOCTYPE HTML>
-<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>历史知识图谱</title>
-    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
-    <meta content="" name="description" />
-    <meta content="" name="keywords" />
-    <script src="../javascript/js/jquery1.min.js"></script>
-    <script src="../javascript/js/jquery.scrolly.min.js"></script>
-    <script src="../javascript/js/jquery.dropotron.min.js"></script>
-    <script src="../javascript/js/jquery.scrollex.min.js"></script>
-    <script src="../javascript/js/skel.min.js"></script>
-    <script src="../javascript/js/skel-layers.min.js"></script>
-    <script src="../javascript/js/init.js"></script>
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.css" rel="stylesheet" >
     <style>
-        *{
-            margin: 0px;
-            padding: 0px;
+        .view{
+            text-align: center !important;
         }
-        video{
-            position: absolute;
-            right: 0px;
-            bottom: 0px;
-            min-width: 100%;
-            min-height: 100%;
-            height: auto;
-            width: auto;
-            /*加滤镜*/
-            /*filter: blur(15px); //背景模糊设置 */
-            /*-webkit-filter: grayscale(100%);*/
-            /*filter:grayscale(100%); //背景灰度设置*/
+        td{
+            vertical-align: middle !important;
         }
-        source{
-            min-width: 100%;
-            min-height: 100%;
-            height: auto;
-            width: auto;
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
         }
     </style>
+    <script src="../javascript/js/jquery.min.js"></script>
+    <script src="../javascript/js/popper.min.js"></script>
+    <script src="../javascript/js/bootstrap.min.js"></script>
+    <script src="../javascript/js/axios.min.js"></script>
 </head>
-<body class="landing">
-<!-- 导航 -->
-<header id="header">
-    <h1 id="logo"><a href="index.html"><img height="40px" src="assets/logo.png" width="40px"></a></h1>
-</header>
-<!-- 主屏 -->
-<section id="banner">
-    <video autoplay id="v1" loop >
-        <source src="assets/HO4.mp4"/>
-    </video>
-    <div class="content">
-        <a class="image button special" data-type="page-transition"  href="index1.html"></a>
-        <header>
-            <h2>欢迎来到历史的世界</h2>
-            <p>在这里，你将获得你所想知的一切</p>
-        </header>
-        <a class="image button special" href="KG/index.html"></a>
+<body>
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark "><!--顶部导航栏-->
+    <a class="navbar-brand" href="#"> <img alt="Logo" src="../web/assets/favicon2.ico" style="width:40px;"> </a>
+    <span class="navbar-text">
+    在线学习中心
+  </span>
+    <div class="nav-item dropdown ml-auto">
+        <li class="breadcrumb-item active"><a href="./login.html">登录</a></li>
     </div>
-</section>
+</nav><!--顶部导航栏-->
 
-<!-- 团队介绍 -->
-<section class="spotlight style1 bottom" id="one">
-    <div class="content">
-        <div class="container">
-            <div class="row">
-                <div class="4u 12u$(medium)">
-                    <header>
-                        <h2>网站与项目介绍</h2>
-                        <p>********************************</p>
-                    </header>
-                </div>
-                <div class="4u 12u$(medium)">
-                    <p>****************************************</p>
-                </div>
-                <div class="4u$ 12u$(medium)">
-                    <p>************************************</p>
-                </div>
+<ol class="breadcrumb">
+    <li class="breadcrumb-item active"><a href="#">首页</a></li>
+</ol>
+<div class="container">
+    <h2>测试安排</h2>
+    <div class="row no-gutters">
+        <div class="input-group col-xl-5">
+            <label for="mail"></label>
+            <input class="form-control" id="mail" name="email" placeholder="输入测试名称" type="text">
+            <div class="input-group-append">
+                <button class="btn btn-primary"><i aria-hidden="true" class="fa fa-search"></i></button>
             </div>
         </div>
     </div>
-    <a class="goto-next scrolly" href="#two">Next</a>
-</section>
-
-
-<!-- 成员 -->
-<!--<section id="two" class="wrapper style1 special fade-up">-->
-<!--    <div class="container">-->
-<!--        <header class="major">-->
-<!--            <h2>团队成员</h2>-->
-<!--            <p>一群带有梦想的青年</p>-->
-<!--        </header>-->
-<!--        <div class="box alt">-->
-<!--            <div class="row uniform">-->
-<!--                <section class="4u 6u(medium) 12u$(xsmall)">-->
-<!--                    <span class="icon alt major "></span>-->
-<!--                    <h3>姓名</h3>-->
-<!--                    <p>简介</p>-->
-<!--                </section>-->
-<!--                <section class="4u 6u(medium) 12u$(xsmall)">-->
-<!--                    <span class="icon alt major "></span>-->
-<!--                    <h3>姓名</h3>-->
-<!--                    <p>简介</p>-->
-<!--                </section>-->
-<!--                <section class="4u 6u(medium) 12u$(xsmall)">-->
-<!--                    <span class="icon alt major "></span>-->
-<!--                    <h3>姓名</h3>-->
-<!--                    <p>简介</p>-->
-<!--                </section>-->
-<!--                <section class="4u 6u(medium) 12u$(xsmall)">-->
-<!--                    <span class="icon alt major "></span>-->
-<!--                    <h3>姓名</h3>-->
-<!--                    <p>简介</p>-->
-<!--                </section>-->
-<!--                <section class="4u 6u(medium) 12u$(xsmall)">-->
-<!--                    <span class="icon alt major "></span>-->
-<!--                    <h3>姓名</h3>-->
-<!--                    <p>简介</p>-->
-<!--                </section>-->
-<!--                <section class="4u 6u(medium) 12u$(xsmall)">-->
-<!--                    <span class="icon alt major "></span>-->
-<!--                    <h3>姓名</h3>-->
-<!--                    <p>简介</p>-->
-<!--                </section>-->
-<!--            </div>-->
-<!--            <div class="row uniform">-->
-<!--                <section class="4u 6u(medium) 12u$(xsmall)">-->
-<!--                    <span class="icon alt major "></span>-->
-<!--                    <h3>姓名</h3>-->
-<!--                    <p>简介</p>-->
-<!--                </section>-->
-<!--                <section class="4u 6u$(medium) 12u$(xsmall)">-->
-<!--                    <span class="icon alt major "></span>-->
-<!--                    <h3>姓名</h3>-->
-<!--                    <p>简介</p>-->
-<!--                </section>-->
-<!--                <section class="4u$ 6u(medium) 12u$(xsmall)">-->
-<!--                    <span class="icon alt major "></span>-->
-<!--                    <h3>姓名</h3>-->
-<!--                    <p>简介</p>-->
-<!--                </section>-->
-<!--            </div>-->
-<!--            <div class="row uniform">-->
-<!--                <section class="4u 6u$(medium) 12u$(xsmall)">-->
-<!--                    <span class="icon alt major "></span>-->
-<!--                    <h3>姓名</h3>-->
-<!--                    <p>简介</p>-->
-<!--                </section>-->
-<!--                <section class="4u 6u(medium) 12u$(xsmall)">-->
-<!--                    <span class="icon alt major "></span>-->
-<!--                    <h3>姓名</h3>-->
-<!--                    <p>简介</p>-->
-<!--                </section>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</section>-->
-
-<!-- 底部 -->
-<footer id="footer">
-    <ul class="icons">
-        <li><a class="icon alt fa-github" href="https://github.com/CCP101/visual-kg-history"><span class="label">GitHub</span></a></li>
-        <li><a class="icon alt fa-envelope" href="#"><span class="label">Email</span></a></li>
-    </ul>
-    <ul class="copyright">
-        <li>&copy; 天津科技大学物联网与信息安全团队</li>
-    </ul>
-</footer>
-
+    <br>
+    <table class="table table-hover table-bordered table-responsive-xl text-center vertical-alignment" id="table" style="background-color: white">
+        <thead class="thead-light text-center">
+        <tr>
+            <th>测试名称</th>
+            <th>测试编号</th>
+            <th>测试时间</th>
+        </tr>
+        </thead>
+        <tbody>
+            <script src="../javascript/indexpage.js" type="module"></script>
+        </tbody>
+    </table>
+    <button class="btn btn-primary" id="btn">退出系统</button>
+    <button class="btn btn-primary" id="btn2" onclick="window.location.href='./examArrangement.html'">参加测试</button>
+    <button class="btn btn-primary" id="btn3" onclick="window.location.href='./examLog.html'">答题结果</button>
+    <button class="btn btn-primary" id="btn4" onclick="window.location.href='./kg/index.html'">知识图谱</button>
+    <button class="btn btn-primary" id="btn5" onclick="window.location.href='./examUpload.html'">上传资料</button>
+</div>
+<script color="255,100,0" count="150" opacity='0.7' pointColor="255,0,0" src="../javascript/js/canvas-nest.js" type="text/javascript" zIndex="-2"></script>
+<script src="../javascript/js/canvas-nest.umd.js" type="text/javascript"></script>
 </body>
-</html>

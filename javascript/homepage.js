@@ -1,4 +1,4 @@
-import getData, {postData, getCookie} from "../javascript/function.js";
+import getData, {postData, getCookie,} from "../javascript/function.js";
 let encryptor = new JSEncrypt();
 let publicKey = await getData("key", "publicKey", "get");
 encryptor.setPublicKey(publicKey);
@@ -28,7 +28,7 @@ async function login(){
     let getData = await postData("login", data);
     if (getData === 200){
         alert("登陆成功");
-        window.location.href = "examArrangement.html";
+        window.location.href = "index.html";
     }
     if (getData === 500){
         alert("用户名或密码错误");
@@ -66,7 +66,7 @@ async function register(){
         let getData = await postData("register", data);
         if (getData === 200){
             alert("注册成功");
-            window.location.href = "login.html";
+            window.location.href = "index.html";
         }else{
             alert("注册失败");
         }
@@ -78,7 +78,7 @@ async function register(){
 function checkLoginCookies(){
     let cookie = getCookie("userLogin");
     if (cookie !== ""){
-        window.location.href = "examArrangement.html";
+        window.location.href = "index.html";
     }
 }
 export { login,register,checkLoginCookies };
