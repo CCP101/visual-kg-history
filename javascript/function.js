@@ -96,12 +96,17 @@ function getQueryVariable(variable)
  * 退出系统并销毁session与cookies
  */
 async function exitSystem() {
-    let response = await getData("exit");
-    if (response === 200){
-        alert("退出成功");
-        window.location.href = "login.html";
+    let userStatus = getCookie("userLogin");
+    if (userStatus === ""){
+        alert("当前未登录");
     }else{
-        alert("退出失败");
+        let response = await getData("exit");
+        if (response === 200){
+            alert("退出成功");
+            window.location.href = "index.html";
+        }else{
+            alert("退出失败");
+        }
     }
 }
 

@@ -6,7 +6,7 @@
 let path = require('path')
 
 module.exports = {
-    entry: ['./src/index.js'],
+    entry: ['./javascript/KG_G6.js'],
     mode: 'production',
     target: ['web', 'es5'],
     output: {
