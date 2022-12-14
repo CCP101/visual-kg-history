@@ -1,5 +1,5 @@
 {
-  "name": "visual-kg-histroy",
+  "name": "visual-kg-history",
   "version": "1.0.0",
   "description": "A historical knowledge map of the Spring and Autumn Period and the Warring States Period supported by the graph database Neo4j",
   "main": "index.js",

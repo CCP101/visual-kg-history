@@ -61,5 +61,3 @@ for (let i=0; i < getWeight.length ;i++)
         "                </button>"
     tr.appendChild(td6);
 }
-
-document.getElementById("btn").addEventListener("click", exitSystem);
