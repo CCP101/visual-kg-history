@@ -1,0 +1,83 @@
+<head>
+  <meta charset="UTF-8">
+  <title>测试记录</title>
+  <link href="../css/bootstrap.min.css" rel="stylesheet">
+  <link href="../css/font-awesome.css" rel="stylesheet" >
+  <style>
+    .view{
+      text-align: center !important;
+    }
+    td{
+      vertical-align: middle !important;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+  <script src="../javascript/js/jquery.min.js"></script>
+  <script src="../javascript/js/popper.min.js"></script>
+  <script src="../javascript/js/bootstrap.min.js"></script>
+  <script src="../javascript/js/axios.min.js"></script>
+</head>
+<body>
+<div class="contain p-3  bg-dark">
+  <nav class="navbar navbar-expand-sm bg-dark navbar-dark "><!--顶部导航栏-->
+    <a class="navbar-brand" href="#"> <img alt="Logo" src="*.jpg" style="width:40px;"> </a>
+    <span class="navbar-text">
+        在线学习中心
+      </span>
+    <div class="nav-item dropdown ml-auto">
+      <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" id="navbardrop">
+        学生姓名
+      </a>
+      <div class="dropdown-menu ">
+        <a class="dropdown-item" href="studentpage.html">主页</a>
+        <a class="dropdown-item" href="#">退出</a>
+      </div>
+    </div>
+  </nav>
+  <div class="text-center mt-5 mb-5">
+    <img alt="..." class="rounded" src="assets/logo.png">
+  </div>
+</div><!--顶部导航栏-->
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item active"><a href="#">首页</a></li>
+  <li class="breadcrumb-item"><a href="#">测试记录</a></li>
+</ol>
+<div class="container">
+  <h2>测试记录</h2>
+  <div class="row no-gutters">
+    <div class="input-group col-xl-5">
+      <label for="mail"></label>
+      <input class="form-control" id="mail" name="email" placeholder="输入测试名称" type="text">
+      <div class="input-group-append">
+        <button class="btn btn-primary"><i aria-hidden="true" class="fa fa-search"></i></button>
+      </div>
+    </div>
+  </div>
+  <br>
+  <table class="table table-hover table-bordered table-responsive-xl text-center vertical-alignment" id="table" style="background-color: white">
+    <thead class="thead-light text-center">
+    <tr>
+      <th>试卷编号</th>
+      <th>测试时间</th>
+      <th>测试编号</th>
+      <th>成绩</th>
+      <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    <script src="../javascript/examLog.js" type="module"></script>
+    </tbody>
+  </table>
+</div>
+<script color="255,100,0" count="150" opacity='0.7' pointColor="255,0,0" src="../javascript/js/canvas-nest.js" type="text/javascript" zIndex="-2"></script>
+<script src="../javascript/js/canvas-nest.umd.js" type="text/javascript"></script>
+</body>

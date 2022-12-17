@@ -5,6 +5,8 @@ html {
 body {
     height: 100%;
     margin: 0;
+    background: url(../web/images/KGbackground.png) no-repeat;
+    background-size:100%;
 }
 
 #property {
@@ -81,7 +83,7 @@ body {
 }
 
 #input_div {
-    padding: 2% 2% 2% 2%;
+    /*padding: 2% 2% 2% 0%;*/
     text-align: center;
     font-size: 16px;
 }
@@ -96,10 +98,6 @@ input:focus {
     /* background: #efefef; */
     border-radius: 40px;
     border: none;
-}
-
-.btn {
-    width: 8%;
 }
 
 .sidebar {
@@ -146,9 +144,9 @@ input:focus {
     opacity: 0.85;
 } */
 
-canvas {
-    background-color: #0f3564;
-}
+/*canvas {*/
+/*    background-color: #0f3564;*/
+/*}*/
 
 .link {
     margin-top: 10px;
