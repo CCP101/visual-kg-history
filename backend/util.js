@@ -23,13 +23,13 @@ const mysqlPool = mysql.createPool({
 const key = new NodeRSA({b: 512});
 key.setOptions({encryptionScheme: 'pkcs1'});
 const publicDer = key.exportKey('pkcs8-public');
-const privateDer = key.exportKey('pkcs8-private');
+// const privateDer = key.exportKey('pkcs8-private');
 console.log(publicDer);
 
 /**
  * JS连接MySQL数据库实现
- * @param query Cypher语句
- * @param args JS ? SQL语句占位符替代实现
+ * @param {string} query Cypher语句
+ * @param {string/null} args JS ? SQL语句占位符替代实现
  * @return {Promise<any>} 以期约方式返回数据库查询结果
  * 1.Node.js在长期不访问数据库的情况下，可能会报错
  * mysql Error: Connection lost The server closed the connection
@@ -43,11 +43,10 @@ console.log(publicDer);
  * 参考网站 https://juejin.cn/post/6844903933480009741
  * 或使用TypeScript语言进行编写
  * 4.MySQL8可能存在连接问题，需要在MySQL8中配置
- * ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'ROOT';
+ * ALTER USER 'root'@'localhost' IDENTIFIED
+ * WITH mysql_native_password BY 'ROOT';
  */
 async function connectMysql(query, args=null) {
-  this.query = query;
-  this.args = args;
   return new Promise(function(resolve, reject) {
     console.log(query);
     if (typeof args === 'string') {
@@ -75,8 +74,8 @@ async function connectMysql(query, args=null) {
 /**
  * Neo4j数据库写入实现
  * 不带查询的写入/删除等操作
- * @param query Cypher语句
- * @param key 关键字
+ * @param {string} query Cypher语句
+ * @param {string} key 关键字
  * @return {Promise<[]>} 以期约方式返回写入结果
  */
 async function nodesWrite(query, key) {
@@ -109,8 +108,8 @@ async function nodesWrite(query, key) {
 /**
  * Neo4j数据库查询返回实现
  * 全部返回仅返回数据库查询状态，必须分次拦截处理后返回
- * @param query Cypher语句
- * @param key 关键字
+ * @param {string} query Cypher语句
+ * @param {string} key 关键字
  * @return {Promise<[]>} 以期约方式返回查询结果
  */
 async function nodesRead(query, key) {
@@ -143,12 +142,13 @@ async function nodesRead(query, key) {
 
 /**
  * CSV文件读取实现，代码重用交由下游处理
- * @return {Promise<>} 以期约方式返回CSV文件结果
+ * @param {string} filePath 文件路径
+ * @return {Promise<[]>} 以期约方式返回CSV文件结果
  */
-async function csvRead(file_path) {
+async function csvRead(filePath) {
   return new Promise(function(resolve, reject) {
     const result = [];
-    fs.createReadStream(file_path)
+    fs.createReadStream(filePath)
         .pipe(parse({delimiter: ',', from_line: 2}))
         .on('data', function(row) {
           // console.log(row);
@@ -167,9 +167,9 @@ async function csvRead(file_path) {
 
 /**
  * 像前端发送服务器的公匙
- * @return {Promise<>} 以期约方式返回公匙
+ * @return {Promise<[]>} 以期约方式返回公匙
  */
-function ReturnServerKey() {
+function returnServerKey() {
   return new Promise(function(resolve, reject) {
     resolve(publicDer);
   });
@@ -177,31 +177,33 @@ function ReturnServerKey() {
 
 /**
  * 解密前端发送的密文
- * @return {Promise<>} 以期约方式返回解密结果
+ * @param {string} pwd 密文
+ * @return {Promise<[]>} 以期约方式返回解密结果
  */
 function decrypt(pwd) {
   return new Promise(function(resolve, reject) {
-    const real_pwd = key.decrypt(pwd, 'utf8');
-    resolve(real_pwd);
+    const realPwd = key.decrypt(pwd, 'utf8');
+    resolve(realPwd);
   });
 }
 
 /**
- * @param username 检查用户名
- * @return {Promise<>} 以期约方式返回查询结果
+ * @param {string} username 检查用户名
+ * @return {Promise<[]>} 以期约方式返回查询结果
  * 检查用户名是否存在
  */
-async function UsernameCheck(username) {
+async function userNameCheck(username) {
   return new Promise(async function(resolve, reject) {
     const query = 'SELECT * FROM users WHERE username = \'' + username + '\'';
-    const result = await ConnectMysql(query);
+    const result = await connectMysql(query);
     console.log(result);
     resolve(result);
   });
 }
 
 /**
- * @param delay 毫秒数
+ * @param {int} delay 毫秒数
+ * @return {Promise<[]>} 以期约方式返回延时结果
  * JS没有默认的sleep函数，需要自己实现
  */
 function sleep(delay) {

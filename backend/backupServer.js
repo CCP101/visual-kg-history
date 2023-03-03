@@ -10,7 +10,7 @@ const os = require('os');
 
 const fs = require('fs');
 const {nodesRead, connectMysql} = require('./util');
-const {ReturnServerKey, UsernameCheck} = require('./util');
+const {returnServerKey, userNameCheck} = require('./util');
 const {registerUser, loginCheck} = require('./userSetting');
 const {saveQuiz} = require('./SaveData');
 const {examGenerateFormMysql} = require('./examCreate');
@@ -25,7 +25,8 @@ let myHost = '';
  */
 function getIPAdd() {
   const ifAces = os.networkInterfaces();
-  for (var dev in ifAces) {
+  let dev = '';
+  for (dev in ifAces) {
     if (dev.includes('WLAN')) {
       break;
     }
@@ -111,10 +112,9 @@ router.get('/node', (ctx) => {
     }
     cypherQuery = ctx.query.query;
     key = ctx.query.key;
-  }
-  // 限制访问范围，生产环境可以用来拦截外部来的访问
-  // 开发环境建议不修改方便调试，如只允许本机访问需修正else内的代码
-  else if (clientHost.includes(myHost) || clientHost === '::1') {
+    // 限制访问范围，生产环境可以用来拦截外部来的访问
+    // 开发环境建议不修改方便调试，如只允许本机访问需修正else内的代码
+  } else if (clientHost.includes(myHost) || clientHost === '::1') {
     console.log(`${clientHost}正在访问3000端口并请求`);
     cypherQuery = ctx.query.query;
     key = ctx.query.key;
@@ -173,7 +173,7 @@ router.get('/userSql', (ctx) => {
  * 对/key GET请求进行监听，发送服务器生成的公匙
  * @return res RSA公匙
  */
-router.get('/key', (ctx) => ReturnServerKey()
+router.get('/key', (ctx) => returnServerKey()
     .then((res) => {
       ctx.body = res;
     }));
@@ -192,7 +192,7 @@ router.get('/userCheck', (ctx) => {
   // 测试设置的cookies与session是否成功
   console.log(`cookies:  ${userLogin}`);
   console.log(`session:  ${userSession}`);
-  return UsernameCheck(username)
+  return userNameCheck(username)
       .then((res) => {
         ctx.body = res;
       });
@@ -233,7 +233,7 @@ router.get('/nodeJSON', (ctx) => {
  * 通过ctx.body解析POST内容
  * ctx.session 创建用户session
  * ctx.cookies 创建用户cookies
- * @return res 检查结果
+ * @return {number} res 检查结果
  */
 router.post('/login', async (ctx) => {
   const data = ctx.request.body;
@@ -294,12 +294,14 @@ router.post('/examSubmit', async (ctx) => {
 router.get('/examReview', async (ctx) => {
   const key = ctx.query.query;
   // 多表查询
-  const sql = 'SELECT \tquiz_save.quiz_A, quiz_save.quiz_id, exam_log.quiz_answer, quiz_save.quiz_question, ' +
-        'quiz_save.quiz_c1, quiz_save.quiz_c2, quiz_save.quiz_c3, quiz_save.quiz_c4 FROM exam_log,quiz_save ' +
-        'WHERE quiz_save.quiz_id = exam_log.quiz_id AND exam_log.exam_submit_id = ' +
+  const sql = 'SELECT \tquiz_save.quiz_A, quiz_save.quiz_id, ' +
+      'exam_log.quiz_answer, quiz_save.quiz_question, ' +
+      'quiz_save.quiz_c1, quiz_save.quiz_c2, quiz_save.quiz_c3, ' +
+      'quiz_save.quiz_c4 FROM exam_log,quiz_save ' +
+      'WHERE quiz_save.quiz_id = exam_log.quiz_id ' +
+      'AND exam_log.exam_submit_id = ' +
         `'${key}'`;
-  const res = await connectMysql(sql);
-  ctx.body = res;
+  ctx.body = await connectMysql(sql);
 });
 
 /**
@@ -339,7 +341,8 @@ router.get('/WARelation', async (ctx) => {
   const relation = [];
   for (let i = 0; i < person.length; i++) {
     let cypher = 'MATCH (n:DPerson)-[r]-(n2:DPerson) WHERE';
-    cypher += ` n.name = '${person[i][0]}' AND n2.name = '${person[i][1]}' RETURN r`;
+    cypher += ` n.name = '${person[i][0]}' 
+      AND n2.name = '${person[i][1]}' RETURN r`;
     const result = await nodesRead(cypher, 'r');
     for (let j = 0; j < result.length; j++) {
       relation.push(result[j]);
