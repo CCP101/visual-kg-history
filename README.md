@@ -39,16 +39,52 @@
 
    v12.22.7
    ```
-6. 切换到本项目所在的文件目录，安装项目的依赖模块
+6. 切换到本项目所在的文件目录，安装PNPM包管理工具
 
    ```
-   npm install --dependencies
-
-   up to date in 0.732s
-
-   8 packages are looking for funding
-     run `npm fund` for details
+   npm install -g pnpm
    ```
+7. 切换到本项目所在的文件目录，安装项目的依赖模块
+
+   ```
+   pnpm install
+
+   Lockfile is up to date, resolution step is skipped
+   Packages: +900
+   Packages are hard linked from the content-addressable store to the virtual store.
+   Content-addressable store is at: D:\.pnpm-store\v3
+   Virtual store is at:             node_modules/.pnpm
+   Progress: resolved 900, reused 900, downloaded 0, added 900, done
+
+   dependencies:
+     + @antv/g6 4.8.7
+     + @babel/runtime-corejs3 7.21.0
+     + @mysql/xdevapi 8.0.32
+     + cookie-parser 1.4.6
+     + cors 2.8.5
+     + csv 6.2.7
+     + csv-parse 5.3.5
+     + exceljs 4.3.0
+     + express 4.18.2
+     + jsencrypt 3.3.2
+     + koa 2.14.1
+     + koa-body 5.0.0
+     + koa-bodyparser 4.3.0
+     + koa-multer 1.0.2
+     + koa-router 12.0.0
+     + koa-session 6.4.0
+     + koa2-cors 2.0.6
+     + koa2-formidable 1.0.3
+     + moment 2.29.4
+     + mongodb 5.1.0
+     + mysql 2.18.1
+     + neo4j-driver 5.6.0
+     + node-jsencrypt 1.0.0
+     + node-rsa 1.1.1
+     + uuid 9.0.0
+     + webpack-dev-server 4.11.1
+     + xlsx 0.18.5
+        ```
 
 ## 数据导入教程
 

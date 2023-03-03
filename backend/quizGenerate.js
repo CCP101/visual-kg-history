@@ -1,29 +1,35 @@
-const {ConnectMysql, csvRead} = require('./util');
+const {connectMysql, csvRead} = require('./util');
 const ExcelJS = require('exceljs');
+const {dataInit} = require('./dataInit');
 const workbook = new ExcelJS.Workbook();
 
 
 /**
  * 生成试题并输出
- * @return [] 返回生成的试题
+ * @return {Promise<[]>} 生成试题
  */
 async function generateText() {
-  const file_path = '../data/PeopleRelation2.csv';
+  const filePath = '../data/PeopleRelation2.csv';
   const quizList = [];
-  const result = await csvRead(file_path);
+  const result = await csvRead(filePath);
   const set = new Set();
   for (const row in result) {
-    set.add(result[row][2]);
+    if (row !== '') {
+      set.add(result[row][2]);
+    }
   }
   // FIXME: 逻辑更正 A-B关系现有逻辑会生成两次题目 后期针对该问题进行解决 非项目BUG 非紧急
   for (const row in result) {
+    if (row === '') {
+      continue;
+    }
     const p1 = result[row][0];
     const p2 = result[row][1];
     const rel = result[row][2];
     const query1 = `SELECT people.weight FROM people WHERE name = "${p1}"`;
     const query2 = `SELECT people.weight FROM people WHERE name = "${p2}"`;
-    const weight1 = await ConnectMysql(query1);
-    const weight2 = await ConnectMysql(query2);
+    const weight1 = await connectMysql(query1);
+    const weight2 = await connectMysql(query2);
     // MATCH (n:DPerson{name:'赵孝成王'})-[r]-(n1:DPerson) return r
     // let results = JSON.parse(JSON.stringify(weight1))
     const p1v = weight1[0].weight;
@@ -41,17 +47,19 @@ async function generateText() {
     const wa1 = tempArray[0];
     const wa2 = tempArray[1];
     const wa3 = tempArray[2];
-    const quiz = `${p1}与${p2}的关系是(?)，${rel}，${p1}，${p1v}，${p2}，${p2v}，${wa1}，${wa2}，${wa3}`;
+    const quiz = `${p1}与${p2}的关系是(?)，
+    ${rel}，${p1}，${p1v}，${p2}，${p2v}，${wa1}，${wa2}，${wa3}`;
     console.log(quiz);
     quizList.push(quiz);
   }
   return quizList;
 }
 
+
 /**
  * 对生成的试题进行处理并将结果存入Excel文件
  */
-async function ExcelOutput() {
+async function excelOutput() {
   const quizResult = await generateText();
   workbook.creator = 'Me';
   workbook.created = new Date(2022, 5, 17);
@@ -69,6 +77,9 @@ async function ExcelOutput() {
     {header: 'wa3', key: 'wa3', width: 25},
   ];
   for (const quiz in quizResult) {
+    if (quiz === '') {
+      continue;
+    }
     const quizSplit = quizResult[quiz].split('，');
     const qui = quizSplit[0];
     const ans = quizSplit[1];
@@ -79,7 +90,8 @@ async function ExcelOutput() {
     const wa1 = quizSplit[6];
     const wa2 = quizSplit[7];
     const wa3 = quizSplit[8];
-    sheet.addRow({qui: qui, ans: ans, p1: p1, wei1: wei1, p2: p2, wei2: wei2, wa1: wa1, wa2: wa2, wa3: wa3});
+    sheet.addRow({qui: qui, ans: ans, p1: p1, wei1: wei1,
+      p2: p2, wei2: wei2, wa1: wa1, wa2: wa2, wa3: wa3});
   }
   workbook.xlsx.writeFile('../data/Quiz.xlsx').then(function() {
     console.log('done');
@@ -91,9 +103,9 @@ async function ExcelOutput() {
  * main函数入口，dataInit为初始化权重计算，ExcelOutput为生成试题并输出
  * 两条指令同时执行需指定时序，否则会出现异常
  */
-// dataInit().then(r => {
-//     console.log(r);
-// })
-// ExcelOutput().then(r => {
-//     console.log(r);
-// });
+dataInit().then((r) => {
+  console.log(r);
+});
+excelOutput().then((r) => {
+  console.log(r);
+});

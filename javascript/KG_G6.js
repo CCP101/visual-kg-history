@@ -1,73 +1,76 @@
-let nodes = [];
-let edges = [];
+const nodes = [];
+const edges = [];
 import getData, {getQueryVariable} from './function.js';
 
-let HPerson_weight = {};
-//提前拉取两个非敏感数据文件
-let getWeight = await getData("sql", "getAllUsers","user");
-let getNodeJson = await getData("nodeJSON","node_information","n");
+const HPersonWeight = {};
+// 提前拉取两个非敏感数据文件
+const getWeight = await getData('sql', 'getAllUsers', 'user');
+const getNodeJson = await getData('nodeJSON', 'node_information', 'n');
 
-for (let person of getWeight) {
-    HPerson_weight[person.name] = person.weight;
+for (const person of getWeight) {
+  HPersonWeight[person.name] = person.weight;
 }
 
-const examID = getQueryVariable("examID");
+const examID = getQueryVariable('examID');
 
 /**
  * 异步实现网页首次启动时的默认查询
+ * @param {string} examID 考试ID
  */
 async function getDatabaseFirst(examID) {
-    let setNodes = new Set();
-    let setEdges = new Set();
-    let HPerson_Teams;
-    let HPerson_Relation;
-    if(examID === "200"){
-        HPerson_Teams = await getData("node","selectPeople","n");
-        HPerson_Relation = await getData("node","selectRelation","r");
-    }else{
-        HPerson_Teams = await getData("WAnode",examID,"n");
-        HPerson_Relation = await getData("WAnode",examID,"r");
-    }
+  const setNodes = new Set();
+  const setEdges = new Set();
+  let HPersonTeams;
+  let HPersonRelation;
+  if (examID === '200') {
+    HPersonTeams = await getData('node', 'selectPeople', 'n');
+    HPersonRelation = await getData('node', 'selectRelation', 'r');
+  } else {
+    HPersonTeams = await getData('WAnode', examID, 'n');
+    HPersonRelation = await getData('WAnode', examID, 'r');
+  }
 
-    //Neo4j查询结果转换为G6的数据格式
-    for (let node of HPerson_Teams) {
-        let nodeID = "node-" + node.identity;
-        if (setNodes.has(nodeID)) {
-            continue;
-        } else {
-            setNodes.add(nodeID);
-        }
-        nodes.push({
-            id: "node-" + node.identity,
-            value: {
-                type: node.labels[0],
-                ...node.properties
-            },
-            // label: node.properties.name.length > 4 ? node.properties.name.substring(0, 4) + "..." : node.properties.name,
-            label: node.properties.name,
-            name: node.properties.name,
-            mysqlId:node.properties.id,
-            type: node.labels[0],
-            // ...nodeConfig[node.labels[0]]
-        })
+  // Neo4j查询结果转换为G6的数据格式
+  for (const node of HPersonTeams) {
+    const nodeID = 'node-' + node.identity;
+    if (setNodes.has(nodeID)) {
+      continue;
+    } else {
+      setNodes.add(nodeID);
     }
-    for (let relation of HPerson_Relation) {
-        // 边去重
-        let edgeName = "edge-" + relation.start + "-" + relation.end;
-        if (setEdges.has(edgeName)) {
-            continue;
-        } else {
-            setEdges.add(edgeName);
-        }
-        edges.push({
-            id: "edge-" + relation.start + "-" + relation.end,
-            source: "node-" + relation.start,
-            target: "node-" + relation.end,
-            label: relation.type.length > 4 ? relation.type.substring(0, 4) + "..." : relation.type,
-            name: relation.type,
-            // ...edgeConfig[relation.type]
-        });
+    nodes.push({
+      id: 'node-' + node.identity,
+      value: {
+        type: node.labels[0],
+        ...node.properties,
+      },
+      // label: node.properties.name.length > 4 ?
+      // node.properties.name.substring(0, 4) + "..." : node.properties.name,
+      label: node.properties.name,
+      name: node.properties.name,
+      mysqlId: node.properties.id,
+      type: node.labels[0],
+      // ...nodeConfig[node.labels[0]]
+    });
+  }
+  for (const relation of HPersonRelation) {
+    // 边去重
+    const edgeName = 'edge-' + relation.start + '-' + relation.end;
+    if (setEdges.has(edgeName)) {
+      continue;
+    } else {
+      setEdges.add(edgeName);
     }
+    edges.push({
+      id: 'edge-' + relation.start + '-' + relation.end,
+      source: 'node-' + relation.start,
+      target: 'node-' + relation.end,
+      label: relation.type.length > 4 ?
+          relation.type.substring(0, 4) + '...' : relation.type,
+      name: relation.type,
+      // ...edgeConfig[relation.type]
+    });
+  }
 }
 
 /*
@@ -76,55 +79,56 @@ async function getDatabaseFirst(examID) {
 * 使用JSON文件解决 继续走Axios拿数据 但不是同步异步过程
 */
 const showPropertyNode = new G6.Tooltip({
-    offsetX: 10,
-    offsetY: 10,
-    //鼠标点击实体上后调用
-    trigger: 'click',
-    fixToNode: [1, 0.5],
-    itemTypes: ['node'],
-    getContent: (e) => {
-        //创新新的内容框 向内部填入HTML内容
-        const outDiv = document.createElement('div');
-        outDiv.style.width = 'fit-content';
-        outDiv.style.height = 'fit-content';
-        const model = e.item.getModel();
-        //if (e.item.getType() === 'node') {}
-        outDiv.innerHTML = `${model.name} : ${HPerson_weight[model.name]}`;
-        let node_id = model.mysqlId;
-        //配合传入的JSON文件获得相关信息 不从数据库内拉取数据
-        //解决G6 tooltip不支持异步的问题
-        let node_obj = getNodeJson.find(function (obj) {
-            return obj.id === node_id;
-        });
-        let node_txt = node_obj.id;
-        let node_img = "https://github-ccp101.oss-us-west-1.aliyuncs.com/history.jpg"
-        console.log(node_obj);
-        outDiv.innerHTML += "<br>"
-        outDiv.innerHTML += node_txt;
-        outDiv.innerHTML += "<br>"
-        outDiv.innerHTML += "<img src='"+ node_img +"'>"
-        return outDiv;
-    },
+  offsetX: 10,
+  offsetY: 10,
+  // 鼠标点击实体上后调用
+  trigger: 'click',
+  fixToNode: [1, 0.5],
+  itemTypes: ['node'],
+  getContent: (e) => {
+    // 创新新的内容框 向内部填入HTML内容
+    const outDiv = document.createElement('div');
+    outDiv.style.width = 'fit-content';
+    outDiv.style.height = 'fit-content';
+    const model = e.item.getModel();
+    // if (e.item.getType() === 'node') {}
+    outDiv.innerHTML = `${model.name} : ${HPersonWeight[model.name]}`;
+    const nodeId = model.mysqlId;
+    // 配合传入的JSON文件获得相关信息 不从数据库内拉取数据
+    // 解决G6 tooltip不支持异步的问题
+    const nodeObj = getNodeJson.find(function(obj) {
+      return obj.id === nodeId;
+    });
+    const nodeTxt = nodeObj.id;
+    const nodeImg = 'https://github-ccp101.oss-us-west-1.aliyuncs.com/history.jpg';
+    console.log(nodeObj);
+    outDiv.innerHTML += '<br>';
+    outDiv.innerHTML += nodeTxt;
+    outDiv.innerHTML += '<br>';
+    outDiv.innerHTML += '<img src=\''+ nodeImg +'\'>';
+    return outDiv;
+  },
 });
 
 
 const showPropertyEdge = new G6.Tooltip({
-    offsetX: 10,
-    offsetY: 10,
-    //鼠标浮动到实体上就调用
-    trigger: 'mousemove',
-    fixToNode: [1, 0.5],
-    itemTypes: ['edge'],
-    getContent: (e) => {
-        //创新新的内容框 向内部填入HTML内容
-        const outDiv = document.createElement('div');
-        outDiv.style.width = 'fit-content';
-        outDiv.style.height = 'fit-content';
-        const source = e.item.getSource();
-        const target = e.item.getTarget();
-        outDiv.innerHTML = `来源：${source.getModel().name}<br/>去向：${target.getModel().name}`;
-        return outDiv;
-    },
+  offsetX: 10,
+  offsetY: 10,
+  // 鼠标浮动到实体上就调用
+  trigger: 'mousemove',
+  fixToNode: [1, 0.5],
+  itemTypes: ['edge'],
+  getContent: (e) => {
+    // 创新新的内容框 向内部填入HTML内容
+    const outDiv = document.createElement('div');
+    outDiv.style.width = 'fit-content';
+    outDiv.style.height = 'fit-content';
+    const source = e.item.getSource();
+    const target = e.item.getTarget();
+    outDiv.innerHTML = `来源：${source.getModel().name}
+        <br/>去向：${target.getModel().name}`;
+    return outDiv;
+  },
 });
 
 /**
@@ -134,39 +138,40 @@ const showPropertyEdge = new G6.Tooltip({
 const minimap = new G6.Minimap();
 const grid = new G6.Grid();
 const graph = new G6.Graph({
-    container: 'mountNode',
-    width: window.innerWidth,
-    height: window.innerHeight * 0.75,
-    animate: true,
-    modes: {
-        default: ['click-select', 'drag-canvas', 'drag-node', 'zoom-canvas', 'activate-relations'],
+  container: 'mountNode',
+  width: window.innerWidth,
+  height: window.innerHeight * 0.75,
+  animate: true,
+  modes: {
+    default: ['click-select', 'drag-canvas',
+      'drag-node', 'zoom-canvas', 'activate-relations'],
+  },
+  layout: {
+    type: 'force',
+    center: [window.screen.availWidth * 0.45, document.body.clientHeight * 0.4],
+    preventOverlap: true,
+    linkDistance: 180,
+  },
+  plugins: [grid, showPropertyNode, showPropertyEdge, minimap],
+  defaultNode: {
+    size: 60,
+    color: '#5B8FF9',
+  },
+  defaultEdge: {
+    size: 3,
+    color: '#4561d3',
+    type: 'quadratic',
+    labelCfg: {
+      style: {
+        fill: '#ddd',
+        stroke: '',
+      },
     },
-    layout: {
-        type: 'force',
-        center: [window.screen.availWidth * 0.45, document.body.clientHeight * 0.4],
-        preventOverlap: true,
-        linkDistance: 180,
+    style: {
+      endArrow: true,
+      // startArrow: true
     },
-    plugins: [grid,showPropertyNode,showPropertyEdge, minimap],
-    defaultNode: {
-        size: 60,
-        color: '#5B8FF9',
-    },
-    defaultEdge: {
-        size: 3,
-        color: '#4561d3',
-        type: 'quadratic',
-        labelCfg: {
-            style: {
-                fill: '#ddd',
-                stroke: '',
-            },
-        },
-        style: {
-            endArrow: true,
-            // startArrow: true
-        }
-    }
+  },
 });
 
 
@@ -176,70 +181,70 @@ const graph = new G6.Graph({
 //     console.log(item._cfg.id);
 // })
 graph.on('node:dblclick', async (e) => {
-    const item = e.item;
-    console.log(item._cfg.id);
-    window.location.href = "../index.html?examID=" + item._cfg.id;
-})
+  const item = e.item;
+  console.log(item._cfg.id);
+  window.location.href = '../index.html?examID=' + item._cfg.id;
+});
 // 在第一次渲染图之前渲染需要强调的节点与边
 graph.on('beforerender', async (e) => {
-    if (examID !== false){
-        const examID = getQueryVariable("examID");
-        const ImportantNode = await getData("WAnode", examID, "ni");
-        const ImportantRelation = await getData("WARelation", examID, "r");
-        for (let node of ImportantNode) {
-            let nodeID = "node-" + node.identity;
-            const item = graph.findById(nodeID);
-            graph.updateItem(item, {
-                style: {
-                    stroke: 'red',
-                    fill: 'orange',
-                    size: 80,
-                },
-            });
-        }
-        for (let rel of ImportantRelation) {
-            let relID = "edge-" + rel.start + "-" + rel.end;
-            const item = graph.findById(relID);
-            graph.updateItem(item, {
-                style: {
-                    stroke: 'red',
-                    size: 80,
-                },
-            });
-        }
+  if (examID !== false) {
+    const examID = getQueryVariable('examID');
+    const ImportantNode = await getData('WAnode', examID, 'ni');
+    const ImportantRelation = await getData('WARelation', examID, 'r');
+    for (const node of ImportantNode) {
+      const nodeID = 'node-' + node.identity;
+      const item = graph.findById(nodeID);
+      graph.updateItem(item, {
+        style: {
+          stroke: 'red',
+          fill: 'orange',
+          size: 80,
+        },
+      });
     }
-})
+    for (const rel of ImportantRelation) {
+      const relID = 'edge-' + rel.start + '-' + rel.end;
+      const item = graph.findById(relID);
+      graph.updateItem(item, {
+        style: {
+          stroke: 'red',
+          size: 80,
+        },
+      });
+    }
+  }
+});
 
-/*
+/**
 * 程序主入口 第一次运行页面时调用该初始化函数
 * 首先判断是主页直接访问或错题的图谱访问，获得不同数据
 * 注意：windows.onload存在BUG，于部分浏览器上若无法正常发送请求(请求预检失败)
 * 则本函数不会被调用 并且直接不执行相关的功能
 * */
 async function initNeo4j() {
-    if (examID === false){
-        await getDatabaseFirst("200");
-    }else{
-        await getDatabaseFirst(examID);
+  if (examID === false) {
+    await getDatabaseFirst('200');
+  } else {
+    await getDatabaseFirst(examID);
+  }
+  // 过滤无用边
+  const nodeList = [];
+  for (const node of nodes) {
+    nodeList.push(node.id.toString().replace('node-', ''));
+  }
+  const edgesReal = [];
+  for (const edge of edges) {
+    const leftNode = edge.source.toString().replace('node-', '');
+    const rightNode = edge.target.toString().replace('node-', '');
+    if (nodeList.includes(leftNode) && nodeList.includes(rightNode)) {
+      edgesReal.push(edge);
     }
-    //过滤无用边
-    let nodeList = [];
-    for (let node of nodes) {
-        nodeList.push(node.id.toString().replace('node-', ''));
-    }
-    let edgesReal = [];
-    for (let edge of edges) {
-        let leftNode = edge.source.toString().replace('node-', '');
-        let rightNode = edge.target.toString().replace('node-', '');
-        if (nodeList.includes(leftNode) && nodeList.includes(rightNode)) {
-            edgesReal.push(edge);
-        }
-    }
-    graph.data({
-        "nodes": nodes,
-        "edges": edgesReal
-    });
-    graph.render();
+  }
+  graph.data({
+    'nodes': nodes,
+    'edges': edgesReal,
+  });
+  graph.render();
 }
 
-initNeo4j().then(r => {});
+initNeo4j().then((r) => {});
