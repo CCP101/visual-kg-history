@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ZN-CH">
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+  <link href="css/font-awesome.css" rel="stylesheet">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <script src="javascript/js/jquery.min.js"></script>
+  <script src="javascript/js/popper.min.js"></script>
+  <script src="javascript/js/bootstrap.min.js"></script>
+  <script src="javascript/js/axios.min.js"></script>
+  <link href="css/style-zhu.css" id="attirant-style-css" media="all" rel="stylesheet" type="text/css">
+  <link href="css/main.css" id="attirant-main-skin-css" media="all" rel="stylesheet" type="text/css">
+  <link href="css/font-awesome.min.css" id="attirant-font-awesome-css" rel="stylesheet" type="text/css">
+  <script src="javascript/js/jquery-migrate.min.js"></script>
+  <script src="javascript/js/custom.js"></script>
+  <script src="javascript/js/jquery.slicknav.min.js"></script>
+  <script src="javascript/js/jquery.bxslider.js"></script>
+  <title>文章主页</title>
+</head>
+
+<body class="home blog hfeed">
+  <nav class="navbar navbar-expand-sm bg-dark navbar-dark "><!--顶部导航栏-->
+    <a class="navbar-brand" href="#"> <img alt="Logo" src="web/assets/favicon2.ico" style="width:40px;"> </a>
+    <span class="navbar-text">
+      在线学习中心
+    </span>
+    <div class="nav-item dropdown ml-auto">
+      <li class="breadcrumb-item active"><a href="web/login.html">登录</a></li>
+    </div>
+  </nav><!--顶部导航栏-->
+  <header class="site-header" id="masthead" role="banner">
+    <div class="site-branding" style="left: 25%;">
+      <div class="right-site-branding" style="float: left">
+        <h1 class="site-title"><a href="#" rel="home" style="color: #1c1d26">Atlas of Chinese Historical Knowledge</a></h1>
+        <p class="site-description" style="font-size:2rem">中国历史知识图谱</p>
+      </div>
+    </div>
+
+    <div id="nav-button">
+      <i class="fa fa-bars fa-inverse"></i>
+    </div>
+    <nav class="main-navigation" id="site-navigation" role="navigation">
+      <div id="menu-container">
+        <div id="navigation-menu">
+          <h4>Menu</h4>
+        </div>
+      </div>
+      <button aria-controls="primary-menu" aria-expanded="false" class="menu-toggle">Primary Menu</button>
+      <div id="real-menu">
+        <ul>
+          <li><a href="web/KG/index.html">开放图谱</a></li>
+          <li><a href="web/examList.html">学习系统</a></li>
+<!--          <li><a href="web/">资源分类</a></li>-->
+          <li><a href="web/aboutUs.html">联系我们</a></li>
+          <li><a href="web/aboutUs.html">关于我们</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="social-icons">
+      <a target="_blank" title="开放图谱">
+        <i class="fa fa-database"></i>
+      </a>
+      <a target="_blank" title="学习系统">
+        <i class="fa fa-gavel"></i>
+      </a>
+      <a target="_blank" title="资源分类">
+        <i class="fa fa-tags"></i>
+      </a>
+      <a target="_blank" title="联系我们">
+        <i class="fa fa-user-plus"></i>
+      </a>
+      <a target="_blank" title="关于我们">
+        <i class="fa fa-info"></i>
+      </a>
+    </div>
+    <div class="header-image"><img src = 'web/images/zhuye1.jpg'></div>
+  </header><!-- #masthead -->
+
+  <div class="contain mx-5">
+    <div class="d-flex flex-row bd-highlight mb-3 mt-5 mx-5 ">
+      <div class="d-flex flex-column bd-highlight mb-3">
+        <a style="color:black;"><h5>历史上的今天</h5></a>
+        <div class="d-flex flex-column bd-highlight">
+          <a href="#" style="color:blue;">
+            <script>
+              const date = new Date();
+              const month = date.getMonth() + 1;
+              const day = date.getDate();
+              const today = month + "月" + day + "日";
+              document.write(today);
+            </script>
+          </a>
+        </div >
+        <div class="d-flex flex-column bd-highlight" id="HT">
+          <script type="module">
+            import {getHT} from "./javascript/pageIndexArticle.js";
+            getHT();
+          </script>
+        </div>
+        <div class="d-flex flex-column bd-highlight" id="HTD">
+          <a href="#" style="color:black;"><h5>热门话题</h5></a>
+            <script type="module">
+              import {getHotTopic} from "./javascript/pageIndexArticle.js";
+              getHotTopic();
+            </script>
+        </div>
+      </div>
+      <div class="d-flex flex-column bd-highlight mb-3 ml-5">
+        <h2>最新文章</h2>
+        <div class="card-columns" id="LA">
+          <script type="module">
+            import {getLatestArticle} from "./javascript/pageIndexArticle.js";
+            getLatestArticle();
+          </script>
+      </div>
+    </div>
+  </div>
+  <div class="powered-by">
+    <div class="inner">
+      <div id="copyright">
+        <p><a href="#" style="color:white">天津科技大学物联网与信息安全团队</a></p>
+      </div>
+    </div>
+  </div>
+  </div>
+</body>
+</html>
