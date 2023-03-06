@@ -4,11 +4,10 @@
 
 1. Fork [此仓库](https://github.com/CCP101/visual-kg-history)，从 `main` 创建分支
 2. 按照`README.md`所述配置本项目
-3. 使用 `npm install pnpm ` 安装 `pnpm` 工具
-4. 确保您的编译器使用了`ESLint`，并使用本项目的`.eslintrc.yml`作为代码规范文件
-5. 对代码库进行更改。如果适用的话，请确保进行了相应的测试
-6. 提交 git commit, 请同时遵守 [Commit 规范](#commit-指南)
-7. 提交 `pull request`
+3. 确保您的编译器使用了`ESLint`，并使用本项目的`.eslintrc.yml`作为代码规范文件
+4. 对代码库进行更改，请确保进行了相应的测试
+5. 提交 git commit, 请同时遵守 [Commit 规范](#commit-指南)
+6. 提交 `pull request`
 
 ## Commit 指南
 

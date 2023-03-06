@@ -138,10 +138,17 @@ router.get('/node', (ctx) => {
  * @return res MySQL查询结果
  */
 router.get('/sql', (ctx) => {
+  const date = new Date();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const today = `${month}/${day}`;
   const sqlList = {
     getAllUsers: 'SELECT * FROM people',
     getExamUpload: 'SELECT * FROM exam_upload',
     getAllExam: 'SELECT * FROM exam_arrangement',
+    getAllHT: 'SELECT * FROM history_today WHERE DATE = \''+ today +'\'',
+    getHotTopic: 'SELECT * FROM hot_topic',
+    getArticle: 'SELECT * FROM article_storage LIMIT 15',
   };
   // 从前端访问连接中获得值
   const sqlSelect = ctx.query.query;

@@ -136,7 +136,7 @@ function cookiesCheck() {
   const userStatus = getCookie('userLogin');
   if (userStatus === '') {
     alert('请先登录');
-    window.location.href = 'index.html';
+    window.location.href = '../index.html';
   }
 }
 
