@@ -37,7 +37,7 @@
 </nav><!--顶部导航栏-->
 
 <ol class="breadcrumb">
-    <li class="breadcrumb-item active"><a href="#">首页</a></li>
+    <li class="breadcrumb-item active"><a href="../index.html">首页</a></li>
 </ol>
 <div class="container">
     <h2>测试安排</h2>
@@ -46,7 +46,13 @@
             <label for="mail"></label>
             <input class="form-control" id="mail" name="email" placeholder="输入测试名称" type="text">
             <div class="input-group-append">
-                <button class="btn btn-primary"><i aria-hidden="true" class="fa fa-search"></i></button>
+                <script type="module">
+                  import {highlight} from "../javascript/function.js";
+                  document.getElementById("btn1").addEventListener("click", highlight, false)
+                </script>
+                <button class="btn btn-primary" id="btn1">
+                    <i aria-hidden="true" class="fa fa-search"></i>
+                </button>
             </div>
         </div>
     </div>

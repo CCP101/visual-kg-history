@@ -141,6 +141,27 @@ function cookiesCheck() {
 }
 
 /**
+ * 实现页面搜索功能
+ * */
+function highlight() {
+  // 清除页面中的黄底效果
+  const table = document.getElementById('table');
+  const cells = table.getElementsByTagName('td');
+  for (let i = 0; i < cells.length; i++) {
+    cells[i].innerHTML = cells[i].innerHTML.replace(new RegExp(
+        '<span style="background-color: yellow">', 'g'), '');
+    cells[i].innerHTML = cells[i].innerHTML.replace(new RegExp(
+        '</span>', 'g'), '');
+  }
+  // 添加黄底效果
+  const text = document.getElementById('mail').value;
+  for (let i = 0; i < cells.length; i++) {
+    cells[i].innerHTML = cells[i].innerHTML.replace(new RegExp(text, 'g'),
+        '<span style=\'background-color: yellow\'>' + text + '</span>');
+  }
+}
+
+/**
  * 使用原生sort存在问题，因此使用Fisher–Yates shuffle洗牌算法
  * 参考知乎链接 https://www.zhihu.com/question/68330851
  * @return {Array} 打乱数组
@@ -162,4 +183,4 @@ Array.prototype.shuffle = function() {
 
 export default getData;
 export {countdown, postData, getQueryVariable,
-  exitSystem, cookiesCheck, getCookie};
+  exitSystem, cookiesCheck, getCookie, highlight};
