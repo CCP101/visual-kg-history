@@ -1,6 +1,6 @@
 const nodes = [];
 const edges = [];
-import getData, {getQueryVariable} from './function.js';
+import {getData, getQueryVariable} from './function.js';
 
 const HPersonWeight = {};
 // 提前拉取两个非敏感数据文件

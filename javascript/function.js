@@ -1,6 +1,5 @@
 const config = {
-  ip: 'http://' + window.location.hostname.toString(),
-  port: 3000,
+  ip: 'https://sklpserver.nichijou-lab.com',
 };
 
 
@@ -14,11 +13,9 @@ const config = {
 async function getData(link, query, key) {
   return new Promise((resolve, reject) => {
     let novelist = [];
+    axios.defaults.crossDomain = true;
     axios.defaults.withCredentials = true;
-    axios.get(`${config.ip}:${config.port}/${link}?query=${query}&key=${key}`, {
-      headers: {
-        'withCredentials': true,
-      }})
+    axios.get(`${config.ip}/${link}?query=${query}&key=${key}`)
         .then(function(response) {
           novelist = response.data;
           resolve(novelist);
@@ -40,10 +37,9 @@ function postData(link, postData) {
   return new Promise((resolve, reject) => {
     // 控制axios可传递cookie
     axios.defaults.withCredentials = true;
-    axios.post(`${config.ip}:${config.port}/${link}`, postData, {
-      headers: {
-        'withCredentials': true,
-      }})
+    axios.defaults.crossDomain = true;
+    axios.defaults.withCredentials = true;
+    axios.post(`${config.ip}/${link}`, postData)
         .then(function(res) {
           const data = res.data;
           console.log(res);
@@ -181,6 +177,5 @@ Array.prototype.shuffle = function() {
 };
 
 
-export default getData;
-export {countdown, postData, getQueryVariable,
-  exitSystem, cookiesCheck, getCookie, highlight};
+export {getData, postData, getQueryVariable,
+  exitSystem, cookiesCheck, getCookie, highlight, countdown};

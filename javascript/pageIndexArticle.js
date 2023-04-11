@@ -1,4 +1,4 @@
-import getData from './function.js';
+import {getData} from './function.js';
 
 /**
  * 读取MySQL数据库中的历史上的今天
@@ -45,8 +45,9 @@ async function getLatestArticle() {
       addHTML += '<img alt="..." class="card-img-top" ' +
         'src="'+LatestArticle[i].photo+'">';
       addHTML += '            <div class="card-body">';
-      addHTML += '              <h5 class="card-title"><b>'+
-        LatestArticle[i].shortname + '</b></h5>';
+      addHTML += '              <h5 class="card-title">' +
+        '<a href="' +LatestArticle[i].link + '"><b>'+
+        LatestArticle[i].shortname + '</b></a></h5>';
       addHTML += '<p class="card-text">' +LatestArticle[i].introduce +'</p>';
       addHTML += '            </div>\n' +
         '          </div>';

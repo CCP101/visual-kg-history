@@ -1,4 +1,4 @@
-import getData, {postData, getCookie} from '../javascript/function.js';
+import {getData, postData, getCookie} from '../javascript/function.js';
 const encryptor = new JSEncrypt();
 const publicKey = await getData('key', 'publicKey', 'get');
 encryptor.setPublicKey(publicKey);

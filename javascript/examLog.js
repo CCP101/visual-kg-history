@@ -1,4 +1,4 @@
-import getData, {cookiesCheck} from '../javascript/function.js';
+import {getData, cookiesCheck} from '../javascript/function.js';
 // import {countdown} from './function.js';
 cookiesCheck();
 const getLog = await getData('userSql', 'getExamLog', 'exam');

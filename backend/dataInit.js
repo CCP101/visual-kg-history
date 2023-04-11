@@ -160,3 +160,5 @@ async function dataInit() {
   await dataToJSON();
 }
 exports.dataInit = dataInit;
+
+dataInit();

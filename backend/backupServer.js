@@ -43,16 +43,12 @@ getIPAdd();
 
 /**
  * 本项目技术栈大坑-前端Axios默认不处理服务器端修改cookies的请求
- * 此处要对应设置KOA的CORS配置，允许本地调试时跨域
- * 正式服务器上线时理论上不需要考虑本问题，但仍需测试
  */
 app.use(cors({
-  credentials: true,
-  // web前端服务器地址，本地调试使用
-  origin: 'http://localhost',
-  // 防止浏览器端进行恶意篡改
-  methods: ['GET', 'POST'],
+  origin: 'https://tust.nichijou-lab.com', // 指定允许访问的域名
+  credentials: true, // 允许跨域携带cookie
 }));
+
 
 /**
  * KOA框架配置session
@@ -68,7 +64,7 @@ app.use(bodyParser());
 app.keys = ['TUST'];
 app.use(router.routes());
 app.use(router.allowedMethods());
-app.listen(3000);
+app.listen(3050);
 
 app.use(async (ctx, next) => {
   try {
@@ -142,13 +138,15 @@ router.get('/sql', (ctx) => {
   const month = date.getMonth() + 1;
   const day = date.getDate();
   const today = `${month}/${day}`;
+  const key = ctx.query.key;
   const sqlList = {
     getAllUsers: 'SELECT * FROM people',
     getExamUpload: 'SELECT * FROM exam_upload',
     getAllExam: 'SELECT * FROM exam_arrangement',
-    getAllHT: 'SELECT * FROM history_today WHERE DATE = \''+ today +'\'',
+    getAllHT: 'SELECT * FROM history_today WHERE DATE = \''+ today + '\'',
     getHotTopic: 'SELECT * FROM hot_topic',
     getArticle: 'SELECT * FROM article_storage LIMIT 15',
+    getArtcleSpecify: 'SELECT * FROM article_storage WHERE id = \''+ key + '\'',
   };
   // 从前端访问连接中获得值
   const sqlSelect = ctx.query.query;
@@ -231,6 +229,7 @@ router.get('/examGet', (ctx) => {
 });
 
 router.get('/nodeJSON', (ctx) => {
+  console.log(`正在请求${ctx.query.query}.json`);
   const jsonFileName = ctx.query.query;
   ctx.body = fs.readFileSync(`../data/json/${jsonFileName}.json`);
 });
@@ -253,13 +252,15 @@ router.post('/login', async (ctx) => {
     ctx.cookies.set(
         'userLogin',
         userID,
-        {maxAge: 1000 * 60 * 60 * 2, signed: true, httpOnly: false},
+        {domain: 'nichijou-lab.com', maxAge: 1000 * 60 * 60 * 2,
+          signed: true, httpOnly: false, overwrite: true},
     );
   } else if (returnCode === 200 && data.rememberCheck === true) {
     ctx.cookies.set(
         'userLogin',
         userID,
-        {maxAge: 1000 * 60 * 60 * 24 * 7, signed: true, httpOnly: false},
+        {domain: 'nichijou-lab.com', maxAge: 1000 * 60 * 60 * 24 * 7,
+          signed: true, httpOnly: false, overwrite: true},
     );
   }
   ctx.body = returnCode;
@@ -291,6 +292,7 @@ router.post('/uploadQuiz', async (ctx) => {
 router.post('/examSubmit', async (ctx) => {
   const data = ctx.request.body;
   const userLogin = ctx.cookies.get('userLogin') || 'No userLogin';
+  console.log(userLogin);
   const username = ctx.session[userLogin].name;
   ctx.body = await examCheck(data, username);
 });

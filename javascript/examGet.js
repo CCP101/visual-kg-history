@@ -3,7 +3,7 @@
 * 根据考试号下载试卷
 * */
 
-import getData, {getQueryVariable} from './function.js';
+import {getData, getQueryVariable} from './function.js';
 
 window.onload = async function() {
   const examID = getQueryVariable('examID');

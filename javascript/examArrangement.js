@@ -3,7 +3,7 @@
 * 实现查询用户考试安排
 * */
 
-import getData, {cookiesCheck} from '../javascript/function.js';
+import {getData, cookiesCheck} from '../javascript/function.js';
 import {countdown} from './function.js';
 
 cookiesCheck();

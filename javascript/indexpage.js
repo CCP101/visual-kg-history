@@ -1,4 +1,4 @@
-import getData, {exitSystem} from './function.js';
+import {getData, exitSystem} from './function.js';
 
 const getWeight = await getData('sql', 'getAllExam', 'exam');
 const tbody = document.querySelector('tbody');

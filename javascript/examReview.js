@@ -2,7 +2,7 @@
 * 配套ReviewAnswer.html
 * 根据用户ID及考试号查看考试情况
 * */
-import getData, {getQueryVariable} from './function.js';
+import {getData, getQueryVariable} from './function.js';
 
 window.onload = async function() {
   const examID = getQueryVariable('examID');
