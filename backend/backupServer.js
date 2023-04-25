@@ -7,7 +7,6 @@ const session = require('koa-session');
 const router = require('koa-router')();
 const {v1: uuidv1} = require('uuid');
 const os = require('os');
-
 const fs = require('fs');
 const {nodesRead, connectMysql} = require('./util');
 const {returnServerKey, userNameCheck} = require('./util');
@@ -43,6 +42,7 @@ getIPAdd();
 
 /**
  * 本项目技术栈大坑-前端Axios默认不处理服务器端修改cookies的请求
+ * 服务器端与本次测试不同，需单独配置
  */
 app.use(cors({
   origin: 'https://tust.nichijou-lab.com', // 指定允许访问的域名
@@ -315,6 +315,7 @@ router.get('/examReview', async (ctx) => {
 
 /**
  * 对/WAnode GET请求进行监听，获得考试试卷错题所对应的知识图谱
+ * TODO: 代码优化，优化该部分代码 从题库中分析出错题及正确选项
  */
 router.get('/WAnode', async (ctx) => {
   const examID = ctx.query.query;
