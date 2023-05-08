@@ -2,6 +2,8 @@ const mysql = require('mysql');
 const neo4j = require('neo4j-driver');
 const NodeRSA = require('node-rsa');
 const fs = require('fs');
+const log4js = require('log4js');
+const logger = log4js.getLogger('SKLP');
 const {parse} = require('csv-parse');
 // 在此配置数据库连接参数,config配置解决JS关于数字类型的转换问题
 const driver = neo4j.driver('neo4j://localhost', neo4j.auth.basic('neo4j', 'neo4j'),
@@ -24,7 +26,7 @@ const key = new NodeRSA({b: 512});
 key.setOptions({encryptionScheme: 'pkcs1'});
 const publicDer = key.exportKey('pkcs8-public');
 // const privateDer = key.exportKey('pkcs8-private');
-console.log(publicDer);
+logger.info(publicDer);
 
 /**
  * JS连接MySQL数据库实现
@@ -48,11 +50,11 @@ console.log(publicDer);
  */
 async function connectMysql(query, args=null) {
   return new Promise(function(resolve, reject) {
-    console.log(query);
+    logger.info(query);
     if (typeof args === 'string') {
       mysqlPool.query(query, args, function(err, result) {
         if (err) {
-          console.log(err);
+          logger.error(err);
           reject(err);
         } else {
           resolve(result);
@@ -61,7 +63,7 @@ async function connectMysql(query, args=null) {
     } else {
       mysqlPool.query(query, function(err, result) {
         if (err) {
-          console.log(err);
+          logger.error(err);
           reject(err);
         } else {
           resolve(result);
@@ -99,7 +101,7 @@ async function nodesWrite(query, key) {
             resolve(result);
           },
           onError: (error) => {
-            console.log(error);
+            logger.error(error);
           },
         });
   });
@@ -116,6 +118,7 @@ async function nodesRead(query, key) {
   return new Promise((resolve, reject) => {
     const session = driver.session({defaultAccessMode: neo4j.session.READ});
     const res = [];
+    logger.info(query);
     session
         .run(query)
         .subscribe({
@@ -155,12 +158,12 @@ async function csvRead(filePath) {
           result.push(row);
         })
         .on('end', function() {
-          console.log('CSV finished');
+          logger.info('CSV finished');
           // console.log(result);
           resolve(result);
         })
         .on('error', function(error) {
-          console.log(error.message);
+          logger.error(error.message);
         });
   });
 }
@@ -196,7 +199,7 @@ async function userNameCheck(username) {
   return new Promise(async function(resolve, reject) {
     const query = 'SELECT * FROM users WHERE username = \'' + username + '\'';
     const result = await connectMysql(query);
-    console.log(result);
+    logger.info(result);
     resolve(result);
   });
 }

@@ -136,12 +136,16 @@ const showPropertyEdge = new G6.Tooltip({
  * 图基本配置、模式、样式、插件、默认点边样式
  */
 const minimap = new G6.Minimap();
-const grid = new G6.Grid();
+// const grid = new G6.Grid();
 const graph = new G6.Graph({
   container: 'mountNode',
   width: window.innerWidth,
   height: window.innerHeight * 0.75,
   animate: true,
+  // animateCfg: {
+  //   duration: 5000, // Number，一次动画的时长
+  //   easing: 'linearEasing', // String，动画函数
+  // },
   modes: {
     default: ['click-select', 'drag-canvas',
       'drag-node', 'zoom-canvas', 'activate-relations'],
@@ -152,7 +156,7 @@ const graph = new G6.Graph({
     preventOverlap: true,
     linkDistance: 180,
   },
-  plugins: [grid, showPropertyNode, showPropertyEdge, minimap],
+  plugins: [showPropertyNode, showPropertyEdge, minimap],
   defaultNode: {
     size: 60,
     color: '#5B8FF9',
@@ -186,6 +190,7 @@ graph.on('node:dblclick', async (e) => {
   window.location.href = '../index.html?examID=' + item._cfg.id;
 });
 // 在第一次渲染图之前渲染需要强调的节点与边
+// 考虑到错误答案可能是随机选用，因此不强调错误边，除强调的正确边其余全部为普通颜色
 graph.on('beforerender', async (e) => {
   if (examID !== false) {
     const examID = getQueryVariable('examID');
@@ -207,7 +212,7 @@ graph.on('beforerender', async (e) => {
       const item = graph.findById(relID);
       graph.updateItem(item, {
         style: {
-          stroke: 'red',
+          stroke: 'green',
           size: 80,
         },
       });

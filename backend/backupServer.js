@@ -7,6 +7,9 @@ const session = require('koa-session');
 const router = require('koa-router')();
 const {v1: uuidv1} = require('uuid');
 const os = require('os');
+const log4js = require('log4js');
+const logger = log4js.getLogger('SKLP');
+
 
 const fs = require('fs');
 const {nodesRead, connectMysql} = require('./util');
@@ -17,6 +20,7 @@ const {examGenerateFormMysql} = require('./examCreate');
 const {examCheck} = require('./examCheck');
 const {getExamResultForKG} = require('./quizReview');
 
+logger.level = 'debug';
 const app = new Koa();
 let myHost = '';
 
@@ -74,7 +78,7 @@ app.use(async (ctx, next) => {
   try {
     await next();
   } catch (e) {
-    console.log(e);
+    logger.error(e);
   }
 });
 
@@ -115,16 +119,16 @@ router.get('/node', (ctx) => {
     // 限制访问范围，生产环境可以用来拦截外部来的访问
     // 开发环境建议不修改方便调试，如只允许本机访问需修正else内的代码
   } else if (clientHost.includes(myHost) || clientHost === '::1') {
-    console.log(`${clientHost}正在访问3000端口并请求`);
+    logger.debug(`${clientHost}正在访问3000端口并请求`);
     cypherQuery = ctx.query.query;
     key = ctx.query.key;
   } else {
-    console.log(`${clientHost}正在从外部访问3000端口并请求`);
+    logger.debug(`${clientHost}正在从外部访问3000端口并请求`);
     cypherQuery = ctx.query.query;
     key = ctx.query.key;
   }
   // 打印当前查询
-  console.log(cypherList[cypherQuery]);
+  logger.debug(cypherList[cypherQuery]);
   return nodesRead(cypherList[cypherQuery], key)
       .then((res) => {
         ctx.body = res;
@@ -197,8 +201,8 @@ router.get('/userCheck', (ctx) => {
     userSession = ctx.session[userLogin].name;
   }
   // 测试设置的cookies与session是否成功
-  console.log(`cookies:  ${userLogin}`);
-  console.log(`session:  ${userSession}`);
+  logger.debug(`cookies:  ${userLogin}`);
+  logger.debug(`session:  ${userSession}`);
   return userNameCheck(username)
       .then((res) => {
         ctx.body = res;
@@ -211,7 +215,7 @@ router.get('/userCheck', (ctx) => {
  */
 router.get('/exit', (ctx) => {
   const userLogin = ctx.cookies.get('userLogin');
-  console.log(`user ${ctx.session[userLogin].name} exit`);
+  logger.debug(`user ${ctx.session[userLogin].name} exit`);
   ctx.cookies.set('name', '', {signed: false, maxAge: 0});
   ctx.cookies.set('userLogin', '', {signed: false, maxAge: 0});
   ctx.session = null;
@@ -359,7 +363,7 @@ router.get('/WARelation', async (ctx) => {
 });
 
 process.on('unhandledrejection', (reason, promise) => {
-  console.log(reason, promise);
+  logger.error(reason, promise);
 });
 
 // 后期Babel打包预留
