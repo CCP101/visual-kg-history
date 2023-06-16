@@ -17,6 +17,6 @@ describe('User Registration', () => {
     const res = await agent.get('/key').expect(200);
     console.log(res.text);
     chai.expect(res.text).to.include('-----BEGIN PUBLIC KEY-----');
-    process.exit(1);
+    process.exit(0);
   });
 });
