@@ -159,4 +159,7 @@ async function dataInit() {
   await calWeight();
   await dataToJSON();
 }
+
+dataInit();
+
 exports.dataInit = dataInit;

@@ -12,6 +12,7 @@ mocha.run(async function(failures) {
     process.exitCode = failures ? 1 : 0;
   } catch (err) {
     console.error(err);
+    // TODO 继续完善Github CI工具与Mocha测试框架的配合
     process.exit(0);
   }
 });
