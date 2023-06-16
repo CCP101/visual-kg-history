@@ -373,3 +373,5 @@ process.on('unhandledrejection', (reason, promise) => {
 // require("babel-core").transform("code", {
 //     plugins: ["transform-runtime"]
 // });
+
+module.exports = app.listen(3050);
