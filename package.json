@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "start": "node ",
-    "test": "",
+    "test": "node ./test/test-runner.js",
     "babelDevBuild": "babel src -d dist",
     "WebpackBuild": "webpack --config webpack.config.js"
   },
