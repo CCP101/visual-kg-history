@@ -7,6 +7,11 @@ const mocha = new Mocha();
 mocha.addFile('./test/test.js');
 
 // 运行测试
-mocha.run(function(failures) {
-  process.exitCode = failures ? 1 : 0;
+mocha.run(async function(failures) {
+  try {
+    process.exitCode = failures ? 1 : 0;
+  } catch (err) {
+    console.error(err);
+    process.exit(1);
+  }
 });
