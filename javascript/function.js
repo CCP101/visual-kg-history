@@ -131,6 +131,7 @@ function getCookie(cookieName) {
 
 /**
  * 检查用户是否登录 若无登录信息跳回登录页
+ * 检查管理页面是否为管理员 若不是管理员跳回登录页
  */
 function cookiesCheck() {
   const userStatus = getCookie('userLogin');
@@ -138,6 +139,7 @@ function cookiesCheck() {
     alert('请先登录');
     window.location.href = '../index.html';
   }
+  // TODO 管理员权限检查
 }
 
 /**

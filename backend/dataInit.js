@@ -1,6 +1,7 @@
 const {connectMysql, nodesWrite, nodesRead, csvRead} = require('./util');
 const {v1: uuidv1} = require('uuid');
 const fs = require('fs');
+const {exit} = require('process');
 const Nodeset = new Set();
 /**
  * CSV文件传值处理
@@ -59,6 +60,7 @@ async function dataToMysql() {
                         VALUES ('${people['name']}',0,'${people['name_id']}')`;
     await connectMysql(query);
   }
+  console.log('Write to MySQL Finish!');
 }
 
 /**
@@ -100,7 +102,7 @@ async function importDataToNeo4j() {
       // await NodesPromise(query2, "result");
     }
   }
-  console.log('Write to Neo4j Success!');
+  console.log('Write to Neo4j Finish!');
 }
 
 /**
@@ -124,10 +126,11 @@ async function calWeight() {
               WHERE name = "${people}"`;
     await connectMysql(query);
   }
+  console.log('Write weight to MySQL Finish!');
 }
 
 /**
- * 初始化顺序4：计算权重后写入MySQL数据库
+ * 初始化顺序4：写入JSON文件
  */
 async function dataToJSON() {
   // TODO: 引入外部历史数据库 属于未来工作 非紧急
@@ -148,6 +151,7 @@ async function dataToJSON() {
   }
   const json = JSON.stringify(data);
   fs.writeFileSync('../data/json/node_information.json', json);
+  console.log('Write to JSON Finish!');
 }
 
 /**
@@ -158,6 +162,8 @@ async function dataInit() {
   await importDataToNeo4j();
   await calWeight();
   await dataToJSON();
+  console.log('Data Init Finish!');
+  exit(0);
 }
 
 dataInit();

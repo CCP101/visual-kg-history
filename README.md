@@ -24,7 +24,7 @@
 
 3. 安装MySQL数据库，本系统默认使用MySQL8进行开发，[下载链接](https://dev.mysql.com/downloads/installer/)，安装方法不再赘述
 
-   **注意：**本系统在MySQL8环境下开发，目前已知MySQL5不支持8的utf8mb4_0900_ai_ci字符集，必须全部更换后运行
+   **注意：** 本系统在MySQL8环境下开发，目前已知MySQL5不支持8的utf8mb4_0900_ai_ci字符集，必须全部更换后运行
 
 4. 安装Apache HTTP服务器，搭建本地服务器，[下载地址](https://www.apachehaus.com/cgi-bin/download.plx)，[安装教程](https://www.php.cn/apache/427457.html)，默认开机自启服务，并将**本项目**(Github下载后会自动在文件夹名称后添加"-master",需删除)拷入配置文件中DocumentRoot指向的文件夹地址
 
@@ -40,7 +40,7 @@
       0.10.15
    ```
 
-6. 通过nvm切换到Node V18/16/14/12 LTS版本(本软件需要使用await/async，至少需要12以上的版本)，并检查是否切换成功
+6. 通过nvm切换到Node V18/16 LTS版本(本软件需要使用await/async，并开启对ESLint的支持，至少需要16以上的版本)，并检查是否切换成功
 
    ```bash
    node --version
@@ -74,21 +74,24 @@
 3. 新建data文件夹，并新建二级文件夹json，考入系统所需要的三元组信息及节点信息
 4. 运行代码以自动将数据导入系统
 
-   ```
+   ```bash
    cd .\backend\
    node .\dataInit.js
    ```
+
+**注意：** 因为部分代码依赖于相对路径，如果以 `node .\backend\dataInit.js` 的方式运行代码会导致运行过程中出错
 
 ## 运行教程
 
 1. 运行服务端程序，在当前目录下输入以下代码，并保证3000端口无程序占用，保持持久化运行
 
-   ```
+   ```bash
    node .\backupServer.js
    ```
+
 2. 在浏览器输入以下地址，即可打开本项目
 
-   ```
+   ```bash
    项目主页
    http://localhost/visual-kg-history/web/
    知识图谱页面
@@ -96,3 +99,15 @@
    ```
 
    项目首次启动后服务端需要显示公匙后才能操作，每次服务器重启时前端页面应亦进行清空缓存的刷新
+
+## 测试系统运行教程
+
+目前系统不对用户身份进行识别区分，但已预埋设置以供后期改造优化
+
+用户登录后打开页面进行试卷上传，试卷格式见 `SaveData.js` 文件中的 `quizSavetoSQL`函数
+
+```
+http://localhost/visual-kg-history/web/examUpload.html
+```
+
+目前系统默认将所有的测试分配给用户，等待优化
