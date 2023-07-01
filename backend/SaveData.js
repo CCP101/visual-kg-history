@@ -31,6 +31,12 @@ async function saveQuiz(file, type, id) {
     console.log('NOT SUCCESS');
     return '500';
   }
+  // FIXME: 试卷可能处理失败，但仍然会向表内增添记录
+  // TODO: 数据库外键关系优化
+  const isDirectoryExists = fs.existsSync('../server/upload/xlsx/');
+  if (!isDirectoryExists) {
+    fs.mkdirSync('../server/upload/xlsx/', {recursive: true});
+  }
   const filePath = path.join(__dirname, '../server/upload/xlsx/' + newFileName);
   const reader = fs.createReadStream(file.path);
   const upStream = fs.createWriteStream(filePath);
