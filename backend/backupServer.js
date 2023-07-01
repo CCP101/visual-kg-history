@@ -149,7 +149,7 @@ router.get('/sql', (ctx) => {
   const sqlList = {
     getAllUsers: 'SELECT * FROM people',
     getExamUpload: 'SELECT * FROM exam_upload',
-    // TODO 未来工作：将考试安排与测试分离
+    // TODO: 未来工作：将考试安排与测试分离
     getAllExam: 'SELECT * FROM exam_arrangement',
     getAllHT: 'SELECT * FROM history_today WHERE DATE = \''+ today +'\'',
     getHotTopic: 'SELECT * FROM hot_topic',

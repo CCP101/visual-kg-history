@@ -139,7 +139,7 @@ function cookiesCheck() {
     alert('请先登录');
     window.location.href = '../index.html';
   }
-  // TODO 管理员权限检查
+  // TODO: 管理员权限检查
 }
 
 /**

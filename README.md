@@ -70,7 +70,7 @@
 ## 数据导入教程
 
 1. 在MySQL数据库中创建cq_history数据库，使用sql文件夹内的cq_history.sql文件自动导入表结构与数据（使用MySQL命令行工具或Navicat可视化工具）
-2. 修改backend文件夹内的util.js文件，检查Neo4j与MySQL数据库连接密码
+2. 打开backend文件夹，复制 `.env.example` 文件并重命名为 `.env` 文件，并修改其中MySQL与Neo4j的密码
 3. 新建data文件夹，并新建二级文件夹json，考入系统所需要的三元组信息及节点信息
 4. 运行代码以自动将数据导入系统
 

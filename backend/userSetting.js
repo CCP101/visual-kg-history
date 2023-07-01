@@ -34,7 +34,7 @@ async function loginCheck(data) {
  * @return {Promise<number>} returnCode 注册用户响应代码
  */
 async function registerUser(data) {
-  // TODO 注册用户生成UUID
+  // TODO: 注册用户生成UUID
   const username = data.username;
   const password = data.password;
   const addTime = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');

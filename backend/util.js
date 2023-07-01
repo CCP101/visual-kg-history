@@ -5,14 +5,20 @@ const fs = require('fs');
 const log4js = require('log4js');
 const logger = log4js.getLogger('SKLP');
 const {parse} = require('csv-parse');
+const dotenv = require('dotenv');
+
+dotenv.config();
+
 // 在此配置数据库连接参数,config配置解决JS关于数字类型的转换问题
-const driver = neo4j.driver('neo4j://localhost', neo4j.auth.basic('neo4j', 'neo4j'),
+const driver = neo4j.driver(
+    process.env.NEO4J_URL,
+    neo4j.auth.basic(process.env.NEO4J_USERNAME, process.env.NEO4J_PASSWORD),
     {disableLosslessIntegers: true});
 const mysqlPool = mysql.createPool({
-  host: 'localhost',
-  user: 'root',
-  password: 'ROOT',
-  database: 'cq_history',
+  host: process.env.MYSQL_HOST,
+  user: process.env.MYSQL_USER,
+  password: process.env.MYSQL_PASSWORD,
+  database: process.env.MYSQL_DATABASE,
 });
 
 /**
