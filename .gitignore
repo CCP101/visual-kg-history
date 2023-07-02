@@ -6,5 +6,4 @@
 /data/
 /server/
 /DevManual/
-*.env
 /backend/*.env
