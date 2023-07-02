@@ -9,8 +9,6 @@ const {v1: uuidv1} = require('uuid');
 const os = require('os');
 const log4js = require('log4js');
 const logger = log4js.getLogger('SKLP');
-
-
 const fs = require('fs');
 const {nodesRead, connectMysql} = require('./util');
 const {returnServerKey, userNameCheck} = require('./util');

@@ -2,6 +2,8 @@ const request = require('supertest');
 const app = require('../backend/backupServer.js');
 const chai = require('chai');
 const chaiString = require('chai-string');
+require('dotenv').config();
+
 
 chai.use(chaiString);
 

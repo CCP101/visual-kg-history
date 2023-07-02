@@ -111,3 +111,7 @@ http://localhost/visual-kg-history/web/examUpload.html
 ```
 
 目前系统默认将所有的测试分配给用户，等待优化
+
+## 系统测试教程
+
+目前系统内继承了mocha测试框架，但请注意由于.env文件的配置，在测试时应同步拷贝至测试运行地址供测试框架读取

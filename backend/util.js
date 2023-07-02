@@ -1,11 +1,11 @@
 const mysql = require('mysql');
-const neo4j = require('neo4j-driver');
 const NodeRSA = require('node-rsa');
 const fs = require('fs');
 const log4js = require('log4js');
 const logger = log4js.getLogger('SKLP');
 const {parse} = require('csv-parse');
 const dotenv = require('dotenv');
+const neo4j = require('neo4j-driver');
 
 dotenv.config();
 
