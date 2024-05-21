@@ -5,8 +5,9 @@ html {
 body {
     height: 100%;
     margin: 0;
-    background: url(../web/images/KGbackground.png) no-repeat;
-    background-size:100%;
+    /*background: url(../web/images/KGbackground.png) no-repeat;*/
+    background: rgba(245, 251, 245) no-repeat;
+    background-size: 100%;
 }
 
 #property {
@@ -164,24 +165,24 @@ input:focus {
 .entity_btn,
 .rela_btn,
 .entity_rela_btn,
-/* .banner_btn {
-    width: 30%;
-    border-radius: 5px;
-    color: #efefef;
-    padding: 8px 20px;
-    margin: 8px 5px;
-    background-color: #0b2838;
-    text-decoration: none;
-    border: 2px solid transparent;
-    cursor: pointer;
+    /* .banner_btn {
+        width: 30%;
+        border-radius: 5px;
+        color: #efefef;
+        padding: 8px 20px;
+        margin: 8px 5px;
+        background-color: #0b2838;
+        text-decoration: none;
+        border: 2px solid transparent;
+        cursor: pointer;
 
-} */
+    } */
 
-/* .banner_btn {
-    width: 120px;
-    display: inline-block;
-    font-weight: bolder;
-} */
+    /* .banner_btn {
+        width: 120px;
+        display: inline-block;
+        font-weight: bolder;
+    } */
 
 .selected {
     margin: 10px;

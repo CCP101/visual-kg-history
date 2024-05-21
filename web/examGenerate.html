@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+  <link href="../css/bootstrap.min.css" rel="stylesheet">
+  <link href="../css/font-awesome.css" rel="stylesheet" >
+
+
+  <title>教师端试题生成</title>
+  <style>
+    #sidebar {
+      height: 1000px;
+      background: #212529;
+    }
+
+    #content {
+      height: 600px;
+      margin-top: 15px;
+    }
+
+    .user-panel {
+      padding: 10px 10px 10px 60px;
+      border-bottom: 1px solid #4f5962;
+    }
+
+    .user-panel > figure > img {
+      width: 160px;
+      height: 160px;
+    }
+
+    .user-panel > figure > figcaption {
+      font-size: large;
+    }
+
+    .function > ul > li > a {
+      font-size: 20px;
+      color: gainsboro;
+      text-align: left;
+      margin-bottom: 20px;
+    }
+
+    .card-group {
+      margin-bottom: 20px;
+    }
+
+  </style>
+  <script src="../javascript/js/jquery.min.js"></script>
+  <script src="../javascript/js/popper.min.js"></script>
+  <script src="../javascript/js/bootstrap.min.js"></script>
+  <script src="../javascript/js/axios.min.js"></script>
+</head>
+<body>
+<!--导航栏-->
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark navbar-dark">
+  <div class="container-fluid">
+    <!--    图标LOGO-->
+    <a class="navbar-brand" href="login.html"><img alt="Logo" src="../web/assets/favicon2.ico" style="width:40px;"> </a>
+    <span class="navbar-text">
+      在线学习中心
+    </span>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item dropdown">
+<!--          <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle" data-toggle="dropdown"-->
+<!--             href="#"-->
+<!--             id="navbarDropdown2" role="button">-->
+<!--            登录|退出-->
+<!--          </a>-->
+<!--          <div aria-labelledby="navbarDropdown" class="dropdown-menu">-->
+<!--            <a class="dropdown-item" href="#">登录</a>-->
+<!--            <div class="dropdown-divider"></div>-->
+<!--            <a class="dropdown-item" href="#">退出</a>-->
+<!--          </div>-->
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container-fluid">
+  <div class="row" id="row-main">
+    <!--        主体部分-->
+    <div class="col-md-10 col-sm-12" id="content">
+      <div class="row">
+        <!--                目录-->
+        <div class="breadcrumb col-md-12 col-sm-12 col-lg-12">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="../index.html">首页</a></li>
+              <li class="breadcrumb-item"><a href="#">试题生成</a></li>
+            </ol>
+          </nav>
+        </div>
+
+        <div class="col-md-12 col-sm-12 col-lg-12">
+          <hr>
+        </div>
+
+        <div class="col-3"></div>
+        <!--                文件上传-->
+        <div class="col-lg-5" id="file-upload">
+          <!--                            标题-->
+          <div class="card card-dark">
+            <div class="card-header">
+              <h3 class="card-title"> 试题生成</h3>
+            </div>
+            <!--                            内容-->
+            <div class="card-body">
+              <!--                课程类型选择-->
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <div class="card-group">
+                    <label for="validationDefault04">试题所属学科</label>
+                    <select class="custom-select" id="validationDefault04" required>
+                      <option disabled selected value="">请选择...</option>
+                      <option>春秋战国</option>
+                      <option>经济学</option>
+                      <option>党史</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <div class="card-group">
+                    <label for="validationDefault04">提问方法</label>
+                    <select class="custom-select" id="validationDefault04" required>
+                      <option disabled selected value="">单要素/多要素</option>
+                      <option>春秋战国</option>
+                      <option>经济学</option>
+                      <option>党史</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <div class="card-group">
+                    <label for="validationDefault04">生成策略</label>
+                    <select class="custom-select" id="validationDefault04" required>
+                      <option disabled selected value="">混合/图结构/LLM</option>
+                      <option>春秋战国</option>
+                      <option>经济学</option>
+                      <option>党史</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <div class="card-group">
+                    <label for="validationDefault04">生成类别</label>
+                    <select class="custom-select" id="validationDefault04" required>
+                      <option disabled selected value="">混合/选择题/判断题</option>
+                      <option>春秋战国</option>
+                      <option>经济学</option>
+                      <option>党史</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <div class="card-group">
+                    <label for="validationDefault03">数量</label>
+                    <input class="form-control" id="validationDefault03" placeholder="请输入生成数量" required type="text">
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-5"></div>
+                <div class="col-7">
+                  <button class="btn btn-primary" id="examXLS" type="submit">
+                    提交生成请求
+                  </button>
+                </div>
+              </div>
+              <div class="card-group">
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-3"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script type="module">
+  import {uploadFile} from '../javascript/examUpload.js';
+  $("#examXLS").click(function(){
+    uploadFile();
+  });
+
+</script>
+
+</body>
+</html>
+
+

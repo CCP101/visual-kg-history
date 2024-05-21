@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EDEDF1">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/head_background"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:background="@drawable/img">
+
+        <TextView
+            android:id="@+id/text1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="中国历史"
+            android:textColor="@color/black"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="知识图谱"
+            android:textColor="@color/black"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text1" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/rounded_half_corner">
+
+        <!--答题记录-->
+        <LinearLayout
+            android:id="@+id/test_record"
+            style="@style/Mine_Item_Style">
+
+            <ImageView
+                style="@style/Mine_Image_Style"
+                android:src="@mipmap/mr_mine3" />
+
+            <LinearLayout
+                android:id="@+id/line_jilu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                >
+                <TextView
+                    style="@style/Mine_Text_Style"
+                    android:text="答题记录" />
+                <View
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray" /> <!-- 灰色分隔线 -->
+            </LinearLayout>
+
+            <ImageView
+                style="@style/Mine_Image_Style"
+                android:src="@mipmap/mr_right_to" />
+        </LinearLayout>
+        <!--药品登记-->
+        <LinearLayout
+            android:id="@+id/open_graph"
+            style="@style/Mine_Item_Style">
+
+            <ImageView
+                style="@style/Mine_Image_Style"
+                android:src="@mipmap/mr_mine4" />
+
+            <LinearLayout
+                android:id="@+id/line_tupu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <TextView
+                    style="@style/Mine_Text_Style"
+                    android:text="开放图谱" />
+
+            </LinearLayout>
+
+            <ImageView
+                style="@style/Mine_Image_Style"
+                android:src="@mipmap/mr_right_to" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_weight="1"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:layout_height="0dp">
+        <!-- 账号安全 -->
+        <LinearLayout
+            android:id="@+id/accountsafety"
+            style="@style/Mine_Item_Style"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                style="@style/Mine_Image_Style"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="@dimen/dp_10"
+                android:src="@drawable/accountsafety" />
+
+            <LinearLayout
+                android:id="@+id/line_accout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/Mine_Text_Style"
+                    android:text="账号设置" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:background="@android:color/darker_gray" /> <!-- 灰色分隔线 -->
+
+            </LinearLayout>
+
+            <ImageView
+                style="@style/Mine_Image_Style"
+                android:src="@mipmap/mr_right_to" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/aboutUs"
+            style="@style/Mine_Item_Style"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/accountsafety">
+
+            <ImageView
+                style="@style/Mine_Image_Style"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="@dimen/dp_10"
+                android:src="@drawable/aboutus" />
+
+            <LinearLayout
+                android:id="@+id/line_about"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/Mine_Text_Style"
+                    android:text="关于我们" />
+
+            </LinearLayout>
+
+
+            <ImageView
+                style="@style/Mine_Image_Style"
+                android:src="@mipmap/mr_right_to" />
+        </LinearLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
+

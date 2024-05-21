@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<LinearLayout xmlns:tools="http://schemas.android.com/tools"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="140dp"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    android:background="@android:color/transparent"-->
+<!--    xmlns:android="http://schemas.android.com/apk/res/android">-->
+
+<!--    <RelativeLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:background="@drawable/rounded_corner"-->
+<!--        android:layout_height="130dp">-->
+
+<!--        <ImageView-->
+<!--            android:id="@+id/event_view"-->
+<!--            android:layout_width="100dp"-->
+<!--            android:layout_height="100dp"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            android:layout_marginTop="20dp"-->
+<!--            android:layout_marginLeft="10dp"-->
+<!--            />-->
+<!--        <TextView-->
+<!--            android:id="@+id/test_name"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="明朝"-->
+<!--            android:layout_toRightOf="@+id/event_view"-->
+<!--            android:layout_marginLeft="@dimen/dp_20"-->
+<!--            android:textSize="20sp"-->
+<!--            android:lines="1"-->
+<!--            android:singleLine="true"-->
+<!--            android:textStyle="bold"-->
+<!--            />-->
+
+
+<!--        <TextView-->
+<!--            android:id="@+id/test_duration"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text=""-->
+<!--            android:textSize="20sp"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="@id/test_name" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/event_content"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="16dp"-->
+<!--            android:layout_toRightOf="@+id/event_view"-->
+<!--            android:layout_marginLeft="@dimen/dp_20"-->
+<!--            android:maxLines="4"-->
+<!--            android:enabled="true"-->
+<!--            android:layout_below="@+id/test_name"-->
+<!--            android:text="明朝（1368年1月23日－1644年4月25日）是中国历史上最后由汉族建立的大一统王朝， 历经12世、16位皇帝，国祚276年。初代皇帝是明太祖朱元璋，末代皇帝则是明思宗朱由检。"-->
+<!--             />-->
+<!--    </RelativeLayout>-->
+<!--</LinearLayout>-->
+
+<LinearLayout xmlns:tools="http://schemas.android.com/tools"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="140dp"
+              android:background="@android:color/transparent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:background="@drawable/rounded_corner"
+            android:layout_height="130dp">
+
+        <ImageView
+                android:id="@+id/event_view"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/mingchao"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="10dp"
+        />
+        <TextView
+                android:id="@+id/test_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="明朝"
+                android:layout_marginLeft="@dimen/dp_20"
+                app:layout_constraintTop_toTopOf="@id/event_view"
+                app:layout_constraintStart_toEndOf="@+id/event_view"
+                android:textSize="20sp"
+                android:textStyle="bold"
+        />
+
+        <TextView
+                android:id="@+id/test_duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:text="1368年-1644年"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/test_name"
+                android:layout_marginRight="16dp"/>
+
+        <TextView
+                android:id="@+id/event_content"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="16dp"
+                android:text="明朝（1368年1月23日－1644年4月25日）是中国历史上最后由汉族建立的大一统王朝， 历经12世、16位皇帝，国祚276年。初代皇帝是明太祖朱元璋，末代皇帝则是明思宗朱由检。"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/test_duration"
+                app:layout_constraintStart_toEndOf="@+id/event_view"
+                app:layout_constraintTop_toBottomOf="@+id/test_name"
+                android:layout_marginLeft="16dp"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

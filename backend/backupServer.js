@@ -41,6 +41,7 @@ function getIPAdd() {
     }
   });
 }
+
 getIPAdd();
 
 /**
@@ -105,7 +106,7 @@ router.get('/node', (ctx) => {
     selectPeople: 'MATCH (n:DPerson) RETURN n LIMIT 100',
     selectRelation: 'MATCH (P1:DPerson)-[r]-(P2:DPerson) RETURN r ',
     selectRelationByName:
-        'MATCH (P1:DPerson)-[r]-(P2:DPerson) WHERE P1.name = {name} RETURN r ',
+      'MATCH (P1:DPerson)-[r]-(P2:DPerson) WHERE P1.name = {name} RETURN r ',
   };
   // 从主页访问的情况
   if (ctx.req.headers.origin) {
@@ -128,9 +129,9 @@ router.get('/node', (ctx) => {
   // 打印当前查询
   logger.debug(cypherList[cypherQuery]);
   return nodesRead(cypherList[cypherQuery], key)
-      .then((res) => {
-        ctx.body = res;
-      });
+    .then((res) => {
+      ctx.body = res;
+    });
 });
 
 /**
@@ -149,7 +150,7 @@ router.get('/sql', (ctx) => {
     getExamUpload: 'SELECT * FROM exam_upload',
     // TODO: 未来工作：将考试安排与测试分离
     getAllExam: 'SELECT * FROM exam_arrangement',
-    getAllHT: 'SELECT * FROM history_today WHERE DATE = \''+ today +'\'',
+    getAllHT: 'SELECT * FROM history_today WHERE DATE = \'' + today + '\'',
     getHotTopic: 'SELECT * FROM hot_topic',
     getArticle: 'SELECT * FROM article_storage LIMIT 15',
   };
@@ -158,10 +159,10 @@ router.get('/sql', (ctx) => {
   // 包装一层，取出真正的SQL语句，防止直接将MySQL查询接口暴露给前端
   const sql = sqlList[sqlSelect];
   return connectMysql(sql)
-      .then((res) => {
+    .then((res) => {
       // 获得返回结果后将结果返回给前端
-        ctx.body = res;
-      });
+      ctx.body = res;
+    });
 });
 
 router.get('/userSql', (ctx) => {
@@ -173,10 +174,10 @@ router.get('/userSql', (ctx) => {
   const sqlSelect = ctx.query.query;
   const sql = sqlList[sqlSelect];
   return connectMysql(sql, username)
-      .then((res) => {
+    .then((res) => {
       // 获得返回结果后将结果返回给前端
-        ctx.body = res;
-      });
+      ctx.body = res;
+    });
 });
 
 /**
@@ -184,9 +185,9 @@ router.get('/userSql', (ctx) => {
  * @return res RSA公匙
  */
 router.get('/key', (ctx) => returnServerKey()
-    .then((res) => {
-      ctx.body = res;
-    }));
+  .then((res) => {
+    ctx.body = res;
+  }));
 
 /**
  * 对/userCheck GET请求进行监听，检查注册ID是否可用
@@ -203,9 +204,9 @@ router.get('/userCheck', (ctx) => {
   logger.debug(`cookies:  ${userLogin}`);
   logger.debug(`session:  ${userSession}`);
   return userNameCheck(username)
-      .then((res) => {
-        ctx.body = res;
-      });
+    .then((res) => {
+      ctx.body = res;
+    });
 });
 
 /**
@@ -228,9 +229,9 @@ router.get('/exit', (ctx) => {
 router.get('/examGet', (ctx) => {
   const examID = ctx.query.query;
   return examGenerateFormMysql(examID)
-      .then((res) => {
-        ctx.body = res;
-      });
+    .then((res) => {
+      ctx.body = res;
+    });
 });
 
 router.get('/nodeJSON', (ctx) => {
@@ -254,15 +255,15 @@ router.post('/login', async (ctx) => {
   // cookies写入ctx传回前端设置
   if (returnCode === 200 && data.rememberCheck === false) {
     ctx.cookies.set(
-        'userLogin',
-        userID,
-        {maxAge: 1000 * 60 * 60 * 2, signed: true, httpOnly: false},
+      'userLogin',
+      userID,
+      {maxAge: 1000 * 60 * 60 * 2, signed: true, httpOnly: false},
     );
   } else if (returnCode === 200 && data.rememberCheck === true) {
     ctx.cookies.set(
-        'userLogin',
-        userID,
-        {maxAge: 1000 * 60 * 60 * 24 * 7, signed: true, httpOnly: false},
+      'userLogin',
+      userID,
+      {maxAge: 1000 * 60 * 60 * 24 * 7, signed: true, httpOnly: false},
     );
   }
   ctx.body = returnCode;
@@ -305,12 +306,12 @@ router.get('/examReview', async (ctx) => {
   const key = ctx.query.query;
   // 多表查询
   const sql = 'SELECT \tquiz_save.quiz_A, quiz_save.quiz_id, ' +
-      'exam_log.quiz_answer, quiz_save.quiz_question, ' +
-      'quiz_save.quiz_c1, quiz_save.quiz_c2, quiz_save.quiz_c3, ' +
-      'quiz_save.quiz_c4 FROM exam_log,quiz_save ' +
-      'WHERE quiz_save.quiz_id = exam_log.quiz_id ' +
-      'AND exam_log.exam_submit_id = ' +
-        `'${key}'`;
+    'exam_log.quiz_answer, quiz_save.quiz_question, ' +
+    'quiz_save.quiz_c1, quiz_save.quiz_c2, quiz_save.quiz_c3, ' +
+    'quiz_save.quiz_c4 FROM exam_log,quiz_save ' +
+    'WHERE quiz_save.quiz_id = exam_log.quiz_id ' +
+    'AND exam_log.exam_submit_id = ' +
+    `'${key}'`;
   ctx.body = await connectMysql(sql);
 });
 

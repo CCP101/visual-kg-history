@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <corners android:topLeftRadius="@dimen/dp_20" android:topRightRadius="@dimen/dp_20"/>
+    <solid android:color="#ffffff" /> <!-- 设置填充颜色，可以根据需要调整 -->
+</shape>

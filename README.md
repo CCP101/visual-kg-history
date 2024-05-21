@@ -2,7 +2,9 @@
 
 ## 安装教程
 
-1. 安装Java SDK 11，下载前需要登录Oracle账号，[下载链接](https://www.oracle.com/java/technologies/javase/jdk11-archive-downloads.html#license-lightbox)，[安装教程](https://www.runoob.com/java/java-environment-setup.html)，测试是否能在命令行工具调用java
+1. 安装Java SDK
+   11，下载前需要登录Oracle账号，[下载链接](https://www.oracle.com/java/technologies/javase/jdk11-archive-downloads.html#license-lightbox)，[安装教程](https://www.runoob.com/java/java-environment-setup.html)
+   ，测试是否能在命令行工具调用java
 
    ```bash
    java --version
@@ -12,7 +14,8 @@
    Java HotSpot(TM) 64-Bit Server VM (build 17.0.1+12-LTS-39, mixed mode, sharing)
    ```
 
-2. 打开Neo4j官网，下载社区版服务器，不要选择桌面版，[下载链接](https://neo4j.com/download-center/#community)，依照跳出的网页对Neo4j进行配置，配置完成后能在命令行工具内调用即可
+2. 打开Neo4j官网，下载社区版服务器，不要选择桌面版，[下载链接](https://neo4j.com/download-center/#community)
+   ，依照跳出的网页对Neo4j进行配置，配置完成后能在命令行工具内调用即可
 
    ```bash
    neo4j -Verbose
@@ -26,19 +29,24 @@
 
    **注意：** 本系统在MySQL8环境下开发，目前已知MySQL5不支持8的utf8mb4_0900_ai_ci字符集，必须全部更换后运行
 
-4. 安装Apache HTTP服务器，搭建本地服务器，[下载地址](https://www.apachehaus.com/cgi-bin/download.plx)，[安装教程](https://www.php.cn/apache/427457.html)，默认开机自启服务，并将**本项目**(Github下载后会自动在文件夹名称后添加"-master",需删除)拷入配置文件中DocumentRoot指向的文件夹地址
+4. 安装Apache
+   HTTP服务器，搭建本地服务器，[下载地址](https://www.apachehaus.com/cgi-bin/download.plx)，[安装教程](https://www.php.cn/apache/427457.html)
+   ，默认开机自启服务，并将**本项目**(Github下载后会自动在文件夹名称后添加"-master",需删除)拷入配置文件中DocumentRoot指向的文件夹地址
 
    或安装http-server包，使用Node进行安装，安装命令“npm i http-server”，使用命令“http-server [path] [options]”激活本地服务器
 
-5. 安装Node.js版本管理服务nvm，[Windows版本链接](https://github.com/coreybutler/nvm-windows)，[安装及使用教程](https://www.runoob.com/w3cnote/nvm-manager-node-versions.html)，配置完成后即可在命令行工具内控制多个Node版本
+5.
 
-   ```bash
-   nvm list
-   
-      14.18.1
-    * 12.22.7 (Currently using 64-bit executable)
-      0.10.15
-   ```
+安装Node.js版本管理服务nvm，[Windows版本链接](https://github.com/coreybutler/nvm-windows)，[安装及使用教程](https://www.runoob.com/w3cnote/nvm-manager-node-versions.html)
+，配置完成后即可在命令行工具内控制多个Node版本
+
+```bash
+nvm list
+
+   14.18.1
+ * 12.22.7 (Currently using 64-bit executable)
+   0.10.15
+```
 
 6. 通过nvm切换到Node V18/16 LTS版本(本软件需要使用await/async，并开启对ESLint的支持，至少需要16以上的版本)，并检查是否切换成功
 

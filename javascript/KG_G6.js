@@ -66,7 +66,7 @@ async function getDatabaseFirst(examID) {
       source: 'node-' + relation.start,
       target: 'node-' + relation.end,
       label: relation.type.length > 4 ?
-          relation.type.substring(0, 4) + '...' : relation.type,
+        relation.type.substring(0, 4) + '...' : relation.type,
       name: relation.type,
       // ...edgeConfig[relation.type]
     });
@@ -96,7 +96,7 @@ const showPropertyNode = new G6.Tooltip({
     const nodeId = model.mysqlId;
     // 配合传入的JSON文件获得相关信息 不从数据库内拉取数据
     // 解决G6 tooltip不支持异步的问题
-    const nodeObj = getNodeJson.find(function(obj) {
+    const nodeObj = getNodeJson.find(function (obj) {
       return obj.id === nodeId;
     });
     const nodeTxt = nodeObj.id;
@@ -105,7 +105,7 @@ const showPropertyNode = new G6.Tooltip({
     outDiv.innerHTML += '<br>';
     outDiv.innerHTML += nodeTxt;
     outDiv.innerHTML += '<br>';
-    outDiv.innerHTML += '<img src=\''+ nodeImg +'\'>';
+    outDiv.innerHTML += '<img src=\'' + nodeImg + '\'>';
     return outDiv;
   },
 });
@@ -167,7 +167,7 @@ const graph = new G6.Graph({
     type: 'quadratic',
     labelCfg: {
       style: {
-        fill: '#ddd',
+        fill: '#4561d3',
         stroke: '',
       },
     },
@@ -221,11 +221,11 @@ graph.on('beforerender', async (e) => {
 });
 
 /**
-* 程序主入口 第一次运行页面时调用该初始化函数
-* 首先判断是主页直接访问或错题的图谱访问，获得不同数据
-* 注意：windows.onload存在BUG，于部分浏览器上若无法正常发送请求(请求预检失败)
-* 则本函数不会被调用 并且直接不执行相关的功能
-* */
+ * 程序主入口 第一次运行页面时调用该初始化函数
+ * 首先判断是主页直接访问或错题的图谱访问，获得不同数据
+ * 注意：windows.onload存在BUG，于部分浏览器上若无法正常发送请求(请求预检失败)
+ * 则本函数不会被调用 并且直接不执行相关的功能
+ * */
 async function initNeo4j() {
   if (examID === false) {
     await getDatabaseFirst('200');
@@ -252,4 +252,5 @@ async function initNeo4j() {
   graph.render();
 }
 
-initNeo4j().then((r) => {});
+initNeo4j().then((r) => {
+});

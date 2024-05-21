@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <Button
+        android:layout_width="100dp"
+        android:text="跳转到视频"
+        android:id="@+id/btn_video"
+        android:visibility="gone"
+        android:layout_height="50dp"></Button>
+    <FrameLayout
+        android:id="@+id/mFrameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true">
+
+            <WebView
+                android:id="@+id/help_web"
+                android:scrollbars="none"
+                android:overScrollMode="never"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            </WebView>
+
+            <TextView
+                android:id="@+id/help_web_nonet"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textSize="60px"
+                android:visibility="gone"
+                android:textColor="#666666"
+                android:layout_centerInParent="true"
+                android:text="请检查网络连接..."/>
+        </RelativeLayout>
+    </FrameLayout>
+</RelativeLayout>

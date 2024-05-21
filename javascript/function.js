@@ -18,15 +18,16 @@ async function getData(link, query, key) {
     axios.get(`${config.ip}:${config.port}/${link}?query=${query}&key=${key}`, {
       headers: {
         'withCredentials': true,
-      }})
-        .then(function(response) {
-          novelist = response.data;
-          resolve(novelist);
-        })
-        .catch(function(err) {
-          console.log(err);
-          reject(new Error(err));
-        });
+      }
+    })
+      .then(function (response) {
+        novelist = response.data;
+        resolve(novelist);
+      })
+      .catch(function (err) {
+        console.log(err);
+        reject(new Error(err));
+      });
   });
 }
 
@@ -43,16 +44,17 @@ function postData(link, postData) {
     axios.post(`${config.ip}:${config.port}/${link}`, postData, {
       headers: {
         'withCredentials': true,
-      }})
-        .then(function(res) {
-          const data = res.data;
-          console.log(res);
-          resolve(data);
-        })
-        .catch(function(err) {
-          console.log(err);
-          reject(new Error(err));
-        });
+      }
+    })
+      .then(function (res) {
+        const data = res.data;
+        console.log(res);
+        resolve(data);
+      })
+      .catch(function (err) {
+        console.log(err);
+        reject(new Error(err));
+      });
   });
 }
 
@@ -70,10 +72,10 @@ function countdown(time) {
     return '已开始';
   }
   const leftTime = time.getTime() - timeNow.getTime(); // 距离结束时间的毫秒数
-  const leftD = Math.floor(leftTime/(1000*60*60*24)); // 计算天数
-  const leftH = Math.floor(leftTime/(1000*60*60)%24); // 计算小时数
-  const leftM = Math.floor(leftTime/(1000*60)%60); // 计算分钟数
-  const leftS = Math.floor(leftTime/1000%60); // 计算秒数
+  const leftD = Math.floor(leftTime / (1000 * 60 * 60 * 24)); // 计算天数
+  const leftH = Math.floor(leftTime / (1000 * 60 * 60) % 24); // 计算小时数
+  const leftM = Math.floor(leftTime / (1000 * 60) % 60); // 计算分钟数
+  const leftS = Math.floor(leftTime / 1000 % 60); // 计算秒数
   return leftD + '天' + leftH + ':' + leftM + ':' + leftS; // 返回倒计时的字符串
 }
 
@@ -85,7 +87,7 @@ function countdown(time) {
 function getQueryVariable(variable) {
   const query = window.location.search.substring(1);
   const vars = query.split('&');
-  for (let i=0; i<vars.length; i++) {
+  for (let i = 0; i < vars.length; i++) {
     const pair = vars[i].split('=');
     if (pair[0] === variable) {
       return pair[1];
@@ -151,15 +153,15 @@ function highlight() {
   const cells = table.getElementsByTagName('td');
   for (let i = 0; i < cells.length; i++) {
     cells[i].innerHTML = cells[i].innerHTML.replace(new RegExp(
-        '<span style="background-color: yellow">', 'g'), '');
+      '<span style="background-color: yellow">', 'g'), '');
     cells[i].innerHTML = cells[i].innerHTML.replace(new RegExp(
-        '</span>', 'g'), '');
+      '</span>', 'g'), '');
   }
   // 添加黄底效果
   const text = document.getElementById('mail').value;
   for (let i = 0; i < cells.length; i++) {
     cells[i].innerHTML = cells[i].innerHTML.replace(new RegExp(text, 'g'),
-        '<span style=\'background-color: yellow\'>' + text + '</span>');
+      '<span style=\'background-color: yellow\'>' + text + '</span>');
   }
 }
 
@@ -169,10 +171,11 @@ function highlight() {
  * @return {Array} 打乱数组
  */
 // eslint-disable-next-line no-extend-native
-Array.prototype.shuffle = function() {
+Array.prototype.shuffle = function () {
   const array = this;
   let m = array.length;
-  let t; let i;
+  let t;
+  let i;
   while (m) {
     i = Math.floor(Math.random() * m--);
     t = array[m];
@@ -184,5 +187,7 @@ Array.prototype.shuffle = function() {
 
 
 export default getData;
-export {countdown, postData, getQueryVariable,
-  exitSystem, cookiesCheck, getCookie, highlight};
+export {
+  countdown, postData, getQueryVariable,
+  exitSystem, cookiesCheck, getCookie, highlight
+};
